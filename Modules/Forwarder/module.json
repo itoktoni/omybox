@@ -1,0 +1,14 @@
+{
+    "name": "Forwarder",
+    "alias": "forwarder",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Forwarder\\Providers\\ModuleServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

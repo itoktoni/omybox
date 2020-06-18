@@ -1,0 +1,40 @@
+{
+    "name": "themsaid/laravel-mail-preview",
+    "description": "Adds a 'preview' mail driver for testing emails in laravel.",
+    "keywords": ["laravel", "mail"],
+    "homepage": "https://github.com/themsaid/laravel-preview-mail-driver",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mohamed Said",
+            "email": "theMohamedSaid@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "illuminate/support": "~5.5||^6.0",
+        "illuminate/mail": "~5.5||^6.0",
+        "illuminate/filesystem": "~5.5||^6.0"
+
+    },
+    "require-dev": {
+        "mockery/mockery": "~0.9.2||~1.0.0",
+        "phpunit/phpunit" : "~6.0||~7.0||~8.0",
+        "orchestra/testbench": "~3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Themsaid\\MailPreview\\": "src"
+        },
+        "classmap": [
+            "tests"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Themsaid\\MailPreview\\MailPreviewServiceProvider"
+            ]
+        }
+    }
+}

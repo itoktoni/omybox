@@ -1,0 +1,23 @@
+{
+    "name": "itoktoni/forwarder",
+    "description": "for creating forwarder",
+    "authors": [{
+        "name": "Itok toni laksono",
+        "email": "itok.toni@gmail.com"
+    }],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Forwarder\\Providers\\ModuleServiceProvider"
+            ],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Forwarder\\": ""
+        }
+    }
+}

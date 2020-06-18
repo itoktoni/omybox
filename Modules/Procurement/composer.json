@@ -1,0 +1,23 @@
+{
+    "name": "itoktoni/procurement",
+    "description": "for creating procurement",
+    "authors": [{
+        "name": "Itok toni laksono",
+        "email": "itok.toni@gmail.com"
+    }],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Procurement\\Providers\\ModuleServiceProvider"
+            ],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Procurement\\": ""
+        }
+    }
+}

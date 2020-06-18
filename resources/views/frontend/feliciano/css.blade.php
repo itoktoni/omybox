@@ -1,0 +1,11 @@
+<link rel="stylesheet" href="{{ Helper::frontend('css/open-iconic-bootstrap.min.css') }}" />
+<link rel="stylesheet" href="{{ Helper::frontend('css/animate.css') }}" />
+<link rel="stylesheet" href="{{ Helper::frontend('css/owl.carousel.min.css') }}" />
+<link rel="stylesheet" href="{{ Helper::frontend('css/owl.theme.default.min.css') }}" />
+<link rel="stylesheet" href="{{ Helper::frontend('css/magnific-popup.css') }}" />
+<link rel="stylesheet" href="{{ Helper::frontend('css/aos.css') }}" />
+<link rel="stylesheet" href="{{ Helper::frontend('css/ionicons.min.css') }}" />
+<link rel="stylesheet" href="{{ Helper::frontend('css/bootstrap-datepicker.css') }}" />
+<link rel="stylesheet" href="{{ Helper::frontend('css/jquery.timepicker.css') }}" />
+<link rel="stylesheet" href="{{ Helper::frontend('css/icomoon.css') }}" />
+<link rel="stylesheet" href="{{ Helper::frontend('css/style.css') }}" />

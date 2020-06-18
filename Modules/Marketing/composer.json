@@ -1,0 +1,23 @@
+{
+    "name": "itoktoni/marketing",
+    "description": "for creating marketing",
+    "authors": [{
+        "name": "Itok toni laksono",
+        "email": "itok.toni@gmail.com"
+    }],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Marketing\\Providers\\ModuleServiceProvider"
+            ],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Marketing\\": ""
+        }
+    }
+}
