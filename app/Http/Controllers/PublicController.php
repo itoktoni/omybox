@@ -732,9 +732,8 @@ class PublicController extends Controller
                                 'name' => $data->marketing_promo_name,
                             )
                         ));
+                            Cart::condition($condition);
                         }
-                        
-                        Cart::condition($condition);
                     }
                 } else {
                     $validate->getMessageBag()->add('code', 'Voucher Not Valid !');
