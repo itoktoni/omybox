@@ -87,181 +87,23 @@
                                                     class="btn btn-primary add-cart">Order now</a>
                                                 <hr>
 
-                                                <div class="container">
-                                                    <p class="text-right">
-                                                        {{ $item_product->brand->item_brand_name ?? '' }} - {{ $item_product->brand->item_brand_description ?? '' }}
-                                                    </p>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <h6 class="text-right">
+                                                            {{ $item_product->brand->item_brand_name ?? '' }} -
+                                                            {{ $item_product->brand->item_brand_description ?? '' }}
+                                                        </h6>
+                                                    </div>
                                                 </div>
 
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
 
                                 @endforeach
                                 @endforeach
 
-                                {{-- <div class="col-md-12 col-lg-6 d-flex align-self-stretch">
-                                    <div class="menus d-sm-flex ftco-animate align-items-stretch">
-                                        <div class="menu-img img"
-                                            style="background-image: url(public/frontend/feliciano/images/breakfast-2.jpg);">
-                                        </div>
-                                        <div class="text d-flex align-items-center">
-                                            <div>
-                                                <div class="d-flex">
-                                                    <div class="one-half">
-                                                        <h3>Grilled Beef with potatoes</h3>
-                                                    </div>
-                                                    <div class="one-forth">
-                                                        <span class="price">$29</span>
-                                                    </div>
-                                                </div>
-                                                <p><span>Meat</span>, <span>Potatoes</span>, <span>Rice</span>,
-                                                    <span>Tomatoe</span></p>
-                                                <p><a href="#" class="btn btn-primary">Order now</a></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12 col-lg-6 d-flex align-self-stretch">
-                                    <div class="menus d-sm-flex ftco-animate align-items-stretch">
-                                        <div class="menu-img img order-md-last"
-                                            style="background-image: url(public/frontend/feliciano/images/breakfast-3.jpg);">
-                                        </div>
-                                        <div class="text d-flex align-items-center">
-                                            <div>
-                                                <div class="d-flex">
-                                                    <div class="one-half">
-                                                        <h3>Grilled Beef with potatoes</h3>
-                                                    </div>
-                                                    <div class="one-forth">
-                                                        <span class="price">$29</span>
-                                                    </div>
-                                                </div>
-                                                <p><span>Meat</span>, <span>Potatoes</span>, <span>Rice</span>,
-                                                    <span>Tomatoe</span></p>
-                                                <p><a href="#" class="btn btn-primary">Order now</a></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12 col-lg-6 d-flex align-self-stretch">
-                                    <div class="menus d-sm-flex ftco-animate align-items-stretch">
-                                        <div class="menu-img img order-md-last"
-                                            style="background-image: url(public/frontend/feliciano/images/breakfast-4.jpg);">
-                                        </div>
-                                        <div class="text d-flex align-items-center">
-                                            <div>
-                                                <div class="d-flex">
-                                                    <div class="one-half">
-                                                        <h3>Grilled Beef with potatoes</h3>
-                                                    </div>
-                                                    <div class="one-forth">
-                                                        <span class="price">$29</span>
-                                                    </div>
-                                                </div>
-                                                <p><span>Meat</span>, <span>Potatoes</span>, <span>Rice</span>,
-                                                    <span>Tomatoe</span></p>
-                                                <p><a href="#" class="btn btn-primary">Order now</a></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12 col-lg-6 d-flex align-self-stretch">
-                                    <div class="menus d-sm-flex ftco-animate align-items-stretch">
-                                        <div class="menu-img img"
-                                            style="background-image: url(public/frontend/feliciano/images/breakfast-5.jpg);">
-                                        </div>
-                                        <div class="text d-flex align-items-center">
-                                            <div>
-                                                <div class="d-flex">
-                                                    <div class="one-half">
-                                                        <h3>Grilled Beef with potatoes</h3>
-                                                    </div>
-                                                    <div class="one-forth">
-                                                        <span class="price">$29</span>
-                                                    </div>
-                                                </div>
-                                                <p><span>Meat</span>, <span>Potatoes</span>, <span>Rice</span>,
-                                                    <span>Tomatoe</span></p>
-                                                <p><a href="#" class="btn btn-primary">Order now</a></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12 col-lg-6 d-flex align-self-stretch">
-                                    <div class="menus d-sm-flex ftco-animate align-items-stretch">
-                                        <div class="menu-img img"
-                                            style="background-image: url(public/frontend/feliciano/images/breakfast-6.jpg);">
-                                        </div>
-                                        <div class="text d-flex align-items-center">
-                                            <div>
-                                                <div class="d-flex">
-                                                    <div class="one-half">
-                                                        <h3>Grilled Beef with potatoes</h3>
-                                                    </div>
-                                                    <div class="one-forth">
-                                                        <span class="price">$29</span>
-                                                    </div>
-                                                </div>
-                                                <p><span>Meat</span>, <span>Potatoes</span>, <span>Rice</span>,
-                                                    <span>Tomatoe</span></p>
-                                                <p><a href="#" class="btn btn-primary">Order now</a></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12 col-lg-6 d-flex align-self-stretch">
-                                    <div class="menus d-sm-flex ftco-animate align-items-stretch">
-                                        <div class="menu-img img order-md-last"
-                                            style="background-image: url(public/frontend/feliciano/images/breakfast-7.jpg);">
-                                        </div>
-                                        <div class="text d-flex align-items-center">
-                                            <div>
-                                                <div class="d-flex">
-                                                    <div class="one-half">
-                                                        <h3>Grilled Beef with potatoes</h3>
-                                                    </div>
-                                                    <div class="one-forth">
-                                                        <span class="price">$29</span>
-                                                    </div>
-                                                </div>
-                                                <p><span>Meat</span>, <span>Potatoes</span>, <span>Rice</span>,
-                                                    <span>Tomatoe</span></p>
-                                                <p><a href="#" class="btn btn-primary">Order now</a></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12 col-lg-6 d-flex align-self-stretch">
-                                    <div class="menus d-sm-flex ftco-animate align-items-stretch">
-                                        <div class="menu-img img order-md-last"
-                                            style="background-image: url(public/frontend/feliciano/images/breakfast-8.jpg);">
-                                        </div>
-                                        <div class="text d-flex align-items-center">
-                                            <div>
-                                                <div class="d-flex">
-                                                    <div class="one-half">
-                                                        <h3>Grilled Beef with potatoes</h3>
-                                                    </div>
-                                                    <div class="one-forth">
-                                                        <span class="price">$29</span>
-                                                    </div>
-                                                </div>
-                                                <p><span>Meat</span>, <span>Potatoes</span>, <span>Rice</span>,
-                                                    <span>Tomatoe</span></p>
-                                                <p><a href="#" class="btn btn-primary">Order now</a></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> --}}
                             </div>
                         </div>
 

@@ -130,7 +130,7 @@ class PublicController extends Controller
             $discount = 0;
             if ($item->item_product_discount_type == 1) {
                 $discount = $item->item_product_sell * $item->item_product_discount_value;
-            } else if ($item->item_product_discount_type == 2) {
+            } elseif ($item->item_product_discount_type == 2) {
                 $discount = $item->item_product_discount_value;
             }
 
@@ -157,15 +157,13 @@ class PublicController extends Controller
 
             $price = $item->item_product_sell - $discount;
             Cart::add($stock->first()->id, $item->item_product_name, $price, 1, $additional);
-        } else if ($type == 'love' && is_string($slug)) {
-
+        } elseif ($type == 'love' && is_string($slug)) {
             $love = DB::table('item_wishlist')->where([
                 'item_wishlist_item_product_id' => $slug,
                 'item_wishlist_user_id' => Auth::user()->id,
             ]);
 
             if ($love->count() > 0) {
-
                 $love->delete();
             } else {
                 $love = DB::table('item_wishlist')->insert([
@@ -220,7 +218,7 @@ class PublicController extends Controller
                     foreach ($value as $filter) {
                         $product->where($key, 'like', '%' . $filter . '%');
                     }
-                } else if ($key == 'item_product_name') {
+                } elseif ($key == 'item_product_name') {
                     $product->where($key, 'like', '%' . $value . '%');
                 } else {
                     $product->whereIn($key, array_values($value));
@@ -256,7 +254,6 @@ class PublicController extends Controller
         $model = new OrderRepository();
         $data = $model->showRepository($code);
         if ($data) {
-
             try {
                 //code...
                 $response = Curl::to(route('waybill'))->withData([
@@ -265,7 +262,6 @@ class PublicController extends Controller
                 ])->post();
                 $waybill  = json_decode($response);
                 if (isset($waybill) && !empty($waybill->rajaongkir) && $waybill->rajaongkir->status->code == 200) {
-
                     return View(Helper::setViewFrontend(__FUNCTION__))->with([
                         'data' => $data,
                         'waybill' => $waybill->rajaongkir->result,
@@ -299,7 +295,6 @@ class PublicController extends Controller
         }
 
         if (Auth::check()) {
-
             $province = Auth::user()->province;
             $city = Auth::user()->city;
             $location = Auth::user()->location;
@@ -310,7 +305,6 @@ class PublicController extends Controller
         };
 
         if (request()->isMethod('POST')) {
-
             $request = request()->all();
             $province = request()->get('province');
             $city = request()->get('city');
@@ -393,7 +387,6 @@ class PublicController extends Controller
         }
 
         if (Auth::check()) {
-
             $province = Auth::user()->province;
             $city = Auth::user()->city;
             $location = Auth::user()->location;
@@ -404,7 +397,6 @@ class PublicController extends Controller
         };
 
         if (request()->isMethod('POST')) {
-
             $request = request()->all();
             $province = request()->get('province');
             $city = request()->get('city');
@@ -465,7 +457,6 @@ class PublicController extends Controller
     public function page($slug = false)
     {
         if ($slug && Cache::has('marketing_page_api')) {
-
             $page = Cache::get('marketing_page_api');
             $data = $page->where('marketing_page_slug', $slug)->first();
             if (!$data) {
@@ -505,7 +496,6 @@ class PublicController extends Controller
     public function category($slug = false)
     {
         if ($slug) {
-
             $category = new CategoryRepository();
             $data_category = $category->slugRepository($slug);
             $color = Helper::createOption(new ColorRepository(), false, true)->pluck('item_color_code');
@@ -536,21 +526,178 @@ class PublicController extends Controller
         // ));
 
         // Cart::clear();
+        // if (request()->isMethod('POST')) {
+
+        //     $request = request()->all();
+        //     if (isset($request['code']) && !empty($request['code'])) {
+
+        //         $code = $request['code'];
+        //         $validate = Validator::make($request, [
+        //             'code' => 'required|exists:marketing_promo,marketing_promo_code',
+        //         ], [
+        //             'code.exists' => 'Voucher Not Valid !',
+        //         ]);
+
+        //         $promo = new PromoRepository();
+        //         $data = $promo->codeRepository(strtoupper($code));
+
+        //         if ($data) {
+        //             $value = Cart::getTotal();
+        //             $matrix = $data->marketing_promo_matrix;
+        //             if ($matrix) {
+
+        //                 // validate with minimal
+        //                 $minimal = $data->marketing_promo_minimal;
+        //                 if ($minimal) {
+        //                     if ($minimal > $value) {
+        //                         $validate->getMessageBag()->add('code', 'Minimal value ' . number_format($minimal) . ' !');
+        //                         return redirect()->back()->withErrors($validate);
+        //                     }
+        //                 }
+
+        //                 $string = str_replace('@value', $value, $matrix);
+        //                 $total = $value;
+
+        //                 try {
+        //                     $total = Helper::calculate($string);
+        //                 } catch (\Throwable $th) {
+        //                     $total = $value;
+        //                 }
+
+        //                 $promo = Cart::getConditions()->first();
+        //                 if ($promo) {
+        //                     Cart::removeCartCondition($promo->getName());
+        //                 }
+        //                 $condition = new \Darryldecode\Cart\CartCondition(array(
+        //                     'name' => $data->marketing_promo_code,
+        //                     'type' => $data->marketing_promo_type == 1 ? 'Promo' : 'Voucher',
+        //                     'target' => 'total', // this condition will be applied to cart's subtotal when getSubTotal() is called.
+        //                     'value' => -$total,
+        //                     'order' => 1,
+        //                     'attributes' => array( // attributes field is optional
+        //                         'name' => $data->marketing_promo_name,
+        //                     )
+        //                 ));
+
+        //                 Cart::condition($condition);
+        //             }
+        //         } else {
+        //             $validate->getMessageBag()->add('code', 'Voucher Not Valid !');
+        //             return redirect()->back()->withErrors($validate)->withInput();
+        //         }
+
+        //         if ($validate->fails()) {
+        //             return redirect()->back()->withErrors($validate)->withInput();
+        //         }
+        //     } else {
+
+        //         $index = 0;
+        //         foreach ($request['cart'] as $value) {
+
+        //             $validate = Validator::make(
+        //                 $request,
+        //                 [
+        //                     'cart.*.qty' => 'numeric|min:1',
+        //                     'cart.*.option' => 'required',
+        //                 ],
+        //                 [],
+        //                 [
+        //                     'cart.' . $index . '.qty' => 'Input must correct',
+        //                 ]
+        //             );
+
+        //             if ($validate->fails()) {
+        //                 return redirect()->back()->withErrors($validate)->withInput();
+        //             }
+
+        //             $stock = DB::table('view_stock_product')->where('id', $value['option'])->first();
+
+        //             $input_qty = floatval($value['qty']);
+        //             $data_qty = $stock->qty;
+        //             $data_product = $stock->id;
+
+        //             if ($input_qty > $data_qty) {
+        //                 $validate->errors()->add('cart.' . $index . '.qty', 'Stock Not Enought !');
+        //             }
+
+        //             Cart::update($data_product, array(
+        //                 'quantity' => [
+        //                     'relative' => false,
+        //                     'value' => $input_qty
+        //                 ], // so if the current product has a quantity of 4, another 2 will be added so this will result to 6
+        //             ));
+
+        //             $index++;
+        //         }
+
+        //         return redirect()->back()->withErrors($validate)->withInput();
+        //     }
+        // }
+
         if (request()->isMethod('POST')) {
-
+            $index = 0;
             $request = request()->all();
-            if (isset($request['code']) && !empty($request['code'])) {
+            foreach ($request['cart'] as $value) {
+                $validate = Validator::make(
+                    $request,
+                    [
+                            'cart.*.qty' => 'numeric|min:1',
+                            'cart.*.product' => 'required',
+                        ],
+                    [],
+                    [
+                            'cart.' . $index . '.qty' => 'Input must correct',
+                        ]
+                );
 
+                if ($validate->fails()) {
+                    return redirect()->back()->withErrors($validate)->withInput();
+                }
+
+                $data_product = $value['product'];
+                $data_qty = $value['qty'];
+                $data_description = $value['description'];
+
+                $product_single = ProductRepository::find($data_product)->first();
+
+                $discount = 0;
+                if ($product_single->item_product_discount_type == 1) {
+                    $discount = $product_single->item_product_sell * $item->item_product_discount_value;
+                } elseif ($product_single->item_product_discount_type == 2) {
+                    $discount = $product_single->item_product_discount_value;
+                }
+
+                $additional = [
+                    'description' => $product_single->item_product_description,
+                    'notes' => $data_description,
+                    'image' => $product_single->item_product_image,
+                    'price' => $product_single->item_product_sell,
+                    'discount' => $discount,
+                    'brand_name' => $product_single->brand->item_brand_name ?? '',
+                    'brand_description' => $product_single->brand->item_brand_description ?? '',
+                ];
+
+                Cart::update($data_product, array(
+                        'quantity' => [
+                            'relative' => false,
+                            'value' => $data_qty
+                        ],
+                        'attributes' => $additional
+                    ));
+
+                $index++;
+            }
+
+            if (isset($request['code']) && !empty($request['code'])) {
                 $code = $request['code'];
                 $validate = Validator::make($request, [
                     'code' => 'required|exists:marketing_promo,marketing_promo_code',
                 ], [
                     'code.exists' => 'Voucher Not Valid !',
                 ]);
-
+                
                 $promo = new PromoRepository();
                 $data = $promo->codeRepository(strtoupper($code));
-
                 if ($data) {
                     $value = Cart::getTotal();
                     $matrix = $data->marketing_promo_matrix;
@@ -599,49 +746,9 @@ class PublicController extends Controller
                 if ($validate->fails()) {
                     return redirect()->back()->withErrors($validate)->withInput();
                 }
-            } else {
-
-                $index = 0;
-                foreach ($request['cart'] as $value) {
-
-                    $validate = Validator::make(
-                        $request,
-                        [
-                            'cart.*.qty' => 'numeric|min:1',
-                            'cart.*.option' => 'required',
-                        ],
-                        [],
-                        [
-                            'cart.' . $index . '.qty' => 'Input must correct',
-                        ]
-                    );
-
-                    if ($validate->fails()) {
-                        return redirect()->back()->withErrors($validate)->withInput();
-                    }
-
-                    $stock = DB::table('view_stock_product')->where('id', $value['option'])->first();
-
-                    $input_qty = floatval($value['qty']);
-                    $data_qty = $stock->qty;
-                    $data_product = $stock->id;
-
-                    if ($input_qty > $data_qty) {
-                        $validate->errors()->add('cart.' . $index . '.qty', 'Stock Not Enought !');
-                    }
-
-                    Cart::update($data_product, array(
-                        'quantity' => [
-                            'relative' => false,
-                            'value' => $input_qty
-                        ], // so if the current product has a quantity of 4, another 2 will be added so this will result to 6
-                    ));
-
-                    $index++;
-                }
-
-                return redirect()->back()->withErrors($validate)->withInput();
             }
+
+            return redirect()->back()->withErrors($validate)->withInput();
         }
 
         $bank = new BankRepository();
@@ -649,6 +756,7 @@ class PublicController extends Controller
             'bank' => Helper::shareOption($bank, false, true)->pluck('finance_bank_name', 'finance_bank_name'),
         ]);
     }
+
 
     public function delete($id)
     {
@@ -674,13 +782,14 @@ class PublicController extends Controller
             $discount = 0;
             if ($item->item_product_discount_type == 1) {
                 $discount = $item->item_product_sell * $item->item_product_discount_value;
-            } else if ($item->item_product_discount_type == 2) {
+            } elseif ($item->item_product_discount_type == 2) {
                 $discount = $item->item_product_discount_value;
             }
 
             $additional = [
-                'image' => $item->item_product_image,
                 'description' => $item->item_product_description,
+                'notes' => '',
+                'image' => $item->item_product_image,
                 'price' => $item->item_product_sell,
                 'discount' => $discount,
                 'brand_name' => $item->brand->item_brand_name ?? '',
@@ -711,7 +820,6 @@ class PublicController extends Controller
     {
         $bank = new BankRepository();
         if (request()->isMethod('POST')) {
-
             $request = request()->all();
             $payment = new PaymentRepository();
             $rules = [
@@ -726,7 +834,6 @@ class PublicController extends Controller
             $validate = Validator::make($request, $rules);
 
             if ($validate->fails()) {
-
                 return redirect()->back()->withErrors($validate)->withInput();
             }
 
@@ -767,7 +874,6 @@ class PublicController extends Controller
         $data_courier = Helper::shareOption((new CourierRepository()), false, true, false);
         $courier = $data_courier->pluck('rajaongkir_courier_name', 'rajaongkir_courier_code')->prepend('- Select Courier -', '')->all();
         if (Auth::check()) {
-
             $address = Auth::user()->address;
             $phone = Auth::user()->phone;
             $email = Auth::user()->email;
@@ -798,123 +904,117 @@ class PublicController extends Controller
 
         $validate = [];
         if (request()->isMethod('POST')) {
-
             $discount = Cart::getConditions()->first();
             $request = request()->all();
-            $validator1 = Validator::make($request, [
-                'sales_order_rajaongkir_courier' => 'required',
-                'sales_order_rajaongkir_ongkir' => 'required',
-                'sales_order_rajaongkir_city_id' => 'required',
-            ], [], [
-                'sales_order_rajaongkir_courier' => 'Expedition Harus Dipilih',
-                'sales_order_rajaongkir_ongkir' => 'Ongkir Harus Dipilih',
-                'sales_order_rajaongkir_city_id' => 'City Harus Dipilih',
-            ]);
+            // $validator1 = Validator::make($request, [
+            //     'sales_order_rajaongkir_courier' => 'required',
+            //     'sales_order_rajaongkir_ongkir' => 'required',
+            //     'sales_order_rajaongkir_city_id' => 'required',
+            // ], [], [
+            //     'sales_order_rajaongkir_courier' => 'Expedition Harus Dipilih',
+            //     'sales_order_rajaongkir_ongkir' => 'Ongkir Harus Dipilih',
+            //     'sales_order_rajaongkir_city_id' => 'City Harus Dipilih',
+            // ]);
 
-            $address = $request['sales_order_rajaongkir_address'];
-            $email = $request['sales_order_email'];
-            $name = $request['sales_order_rajaongkir_name'];
-            $phone = $request['sales_order_rajaongkir_phone'];
-            $postcode = $request['sales_order_rajaongkir_postcode'];
+            // $address = $request['sales_order_rajaongkir_address'];
+            // $email = $request['sales_order_email'];
+            // $name = $request['sales_order_rajaongkir_name'];
+            // $phone = $request['sales_order_rajaongkir_phone'];
+            // $postcode = $request['sales_order_rajaongkir_postcode'];
 
-            $province = $request['sales_order_rajaongkir_province_id'] ?? null;
-            $city = $request['sales_order_rajaongkir_city_id'] ?? null;
-            $location = $request['sales_order_rajaongkir_area_id'] ?? null;
+            // $province = $request['sales_order_rajaongkir_province_id'] ?? null;
+            // $city = $request['sales_order_rajaongkir_city_id'] ?? null;
+            // $location = $request['sales_order_rajaongkir_area_id'] ?? null;
 
-            if ($validator1->fails()) {
-                return View(Helper::setViewFrontend(__FUNCTION__))->with([
-                    'address' => $address,
-                    'email' => $email,
-                    'phone' => $phone,
-                    'name' => $name,
-                    'account' => $account,
-                    'postcode' => $postcode,
-                    'province' => $province,
-                    'city' => $city,
-                    'location' => $location,
-                    'list_city' => $list_city,
-                    'list_location' => $list_location,
-                    'list_province' => $list_province,
-                    'courier' => $courier,
-                    'ongkir' => $ongkir,
-                ])->withErrors($validator1);
-            }
+            // if ($validator1->fails()) {
+            //     return View(Helper::setViewFrontend(__FUNCTION__))->with([
+            //         'address' => $address,
+            //         'email' => $email,
+            //         'phone' => $phone,
+            //         'name' => $name,
+            //         'account' => $account,
+            //         'postcode' => $postcode,
+            //         'province' => $province,
+            //         'city' => $city,
+            //         'location' => $location,
+            //         'list_city' => $list_city,
+            //         'list_location' => $list_location,
+            //         'list_province' => $list_province,
+            //         'courier' => $courier,
+            //         'ongkir' => $ongkir,
+            //     ])->withErrors($validator1);
+            // }
 
-            $saveOngkir = 0;
-            if (request()->has('sales_order_rajaongkir_ongkir')) {
+            // $saveOngkir = 0;
+            // if (request()->has('sales_order_rajaongkir_ongkir')) {
+            //     $post_to = $location;
+            //     $post_weight = request()->get('sales_order_rajaongkir_weight');
+            //     $post_courier = request()->get('sales_order_rajaongkir_courier');
+            //     $response = Curl::to(route('ongkir'))->withData([
+            //         'to' => $post_to,
+            //         'weight' => $post_weight,
+            //         'courier' => $post_courier,
+            //     ])->post();
+            //     $json  = json_decode($response);
+            //     if (isset($json) && !empty($json)) {
+            //         $int = 0;
+            //         $service = $request['sales_order_rajaongkir_ongkir'];
+            //         $saveOngkir = collect($json)->where('service', $service)->first()->cost ?? 0;
+            //         $ongkir[''] = 'Choose Ongkir';
+            //         foreach ($json as $value) {
+            //             $ongkir[$value->service] = $value->service . ' ( ' . $value->description . ' ) [ ' . $value->etd . ' ] - ' . $value->price;
+            //         }
+            //     }
+            // }
 
-                $post_to = $location;
-                $post_weight = request()->get('sales_order_rajaongkir_weight');
-                $post_courier = request()->get('sales_order_rajaongkir_courier');
-                $response = Curl::to(route('ongkir'))->withData([
-                    'to' => $post_to,
-                    'weight' => $post_weight,
-                    'courier' => $post_courier,
-                ])->post();
-                $json  = json_decode($response);
-                if (isset($json) && !empty($json)) {
-                    $int = 0;
-                    $service = $request['sales_order_rajaongkir_ongkir'];
-                    $saveOngkir = collect($json)->where('service', $service)->first()->cost ?? 0;
-                    $ongkir[''] = 'Choose Ongkir';
-                    foreach ($json as $value) {
-                        $ongkir[$value->service] = $value->service . ' ( ' . $value->description . ' ) [ ' . $value->etd . ' ] - ' . $value->price;
-                    }
-                }
-            }
-
-            $request['sales_order_rajaongkir_ongkir'] = $saveOngkir;
+            // $request['sales_order_rajaongkir_ongkir'] = $saveOngkir;
+            
             if ($discount) {
-
                 $request['sales_order_marketing_promo_code'] = $discount->getName();
                 $request['sales_order_marketing_promo_name'] = $discount->getAttributes()['name'];
                 $request['sales_order_marketing_promo_value'] = abs($discount->getValue());
             }
 
             $rules = [
-                'sales_order_rajaongkir_province_id' => 'required',
-                'sales_order_rajaongkir_city_id' => 'required',
-                'sales_order_rajaongkir_area_id' => 'required',
-                'sales_order_rajaongkir_courier' => 'required',
-                'sales_order_rajaongkir_ongkir' => 'required|numeric',
+                // 'sales_order_rajaongkir_province_id' => 'required',
+                // 'sales_order_rajaongkir_city_id' => 'required',
+                // 'sales_order_rajaongkir_area_id' => 'required',
+                // 'sales_order_rajaongkir_courier' => 'required',
+                // 'sales_order_rajaongkir_ongkir' => 'required|numeric',
                 'sales_order_rajaongkir_address' => 'required',
                 'sales_order_email' => 'required|email',
                 'sales_order_rajaongkir_name' => 'required',
                 'sales_order_rajaongkir_phone' => 'required',
-                'sales_order_rajaongkir_weight' => 'required',
-                'sales_order_rajaongkir_courier' => 'required',
-                'sales_order_rajaongkir_ongkir' => 'required',
+                // 'sales_order_rajaongkir_weight' => 'required',
+                // 'sales_order_rajaongkir_courier' => 'required',
+                // 'sales_order_rajaongkir_ongkir' => 'required',
             ];
-            $request['sales_order_total'] = Cart::getTotal() + $saveOngkir;
+            $request['sales_order_total'] = Cart::getTotal();
             $validate = Validator::make($request, $rules, $order->custom_attribute);
             $check = $order->saveRepository($request);
             $id = $check['data']->sales_order_id;
+
             foreach (Cart::getContent() as $item) {
+                $stock = ProductRepository::where('item_product_id', $item->id)->first();
+                $price_real = $item->price * $item->quantity;
 
-                $stock = DB::table('view_stock_product')->where('id', $item->attributes['option'])->first();
-                $price_real = $item->price + $item->quantity;
-
-                $tax_name = $tax_value = null;
-                if (config('website.tax')) {
-                    $tax_name = $item->getConditions()->getName();
-                    $tax_value = $item->getConditions()->getValue() * $item->quantity;
-                    $price_real = ($item->price * $item->quantity) + $tax_value;
-                }
+                // $tax_name = $tax_value = null;
+                // if (config('website.tax')) {
+                //     $tax_name = $item->getConditions()->getName();
+                //     $tax_value = $item->getConditions()->getValue() * $item->quantity;
+                //     $price_real = ($item->price * $item->quantity) + $tax_value;
+                // }
 
                 DB::table('sales_order_detail')->insert([
                     'sales_order_detail_sales_order_id' => $id,
-                    'sales_order_detail_item_product_id' => $item->attributes['product'],
+                    'sales_order_detail_item_product_id' => $item->id,
                     'sales_order_detail_qty_order' => $item->quantity,
                     'sales_order_detail_price_order' => $item->price,
                     'sales_order_detail_total_order' => $price_real,
-                    'sales_order_detail_option' => $stock->id,
-                    'sales_order_detail_item_size' => $stock->size,
-                    'sales_order_detail_tax_name' => $tax_name,
-                    'sales_order_detail_tax_value' => $tax_value,
-                    'sales_order_detail_item_color' => $stock->color,
-                    'sales_order_detail_gram' => $item->attributes['gram'],
-                    'sales_order_detail_discount' => $item->attributes['discount'],
-                    'sales_order_detail_price_real' => $item->price + $item->attributes['discount'],
+                    // 'sales_order_detail_tax_value' => $tax_value,
+                    'sales_order_detail_notes' => $item->attributes['notes'],
+                    'sales_order_detail_discount' => $stock->item_product_sell - $item->price,
+                    'sales_order_detail_price_real' => $stock->item_product_sell,
                 ]);
 
                 if (Cart::getContent()->contains('id', $item->id)) {
@@ -927,26 +1027,29 @@ class PublicController extends Controller
 
             $data = $order->showRepository($id, ['customer', 'forwarder', 'detail', 'detail.product']);
 
-            return redirect()->back()->with(['success' => true]);
+            return redirect()->route('cart')->with(['success' => true]);
         }
 
 
-        return View(Helper::setViewFrontend(__FUNCTION__))->with([
-            'address' => $address,
-            'email' => $email,
-            'phone' => $phone,
-            'name' => $name,
-            'account' => $account,
-            'postcode' => $postcode,
-            'province' => $province,
-            'city' => $city,
-            'location' => $location,
-            'list_province' => $list_province,
-            'list_city' => $list_city,
-            'list_location' => $list_location,
-            'courier' => $courier,
-            'ongkir' => $ongkir,
-        ])->withErrors($validate);
+        return redirect()->route('cart')->with([
+            ])->withErrors($validate);
+
+        // return View(Helper::setViewFrontend(__FUNCTION__))->with([
+        //     'address' => $address,
+        //     'email' => $email,
+        //     'phone' => $phone,
+        //     'name' => $name,
+        //     'account' => $account,
+        //     'postcode' => $postcode,
+        //     'province' => $province,
+        //     'city' => $city,
+        //     'location' => $location,
+        //     'list_province' => $list_province,
+        //     'list_city' => $list_city,
+        //     'list_location' => $list_location,
+        //     'courier' => $courier,
+        //     'ongkir' => $ongkir,
+        // ])->withErrors($validate);
     }
 
     public function email($id)
@@ -976,7 +1079,6 @@ class PublicController extends Controller
     public function contact()
     {
         if (request()->isMethod('POST')) {
-
             $contact = new ContactRepository();
             $request = request()->all();
             request()->validate($contact->rules);
@@ -999,7 +1101,6 @@ class PublicController extends Controller
     public function install()
     {
         if (request()->isMethod('POST')) {
-
             $file = DotenvEditor::load('local.env');
             $file->setKey('DB_CONNECTION', request()->get('provider'));
             $file->setKey('DB_HOST', request()->get('host'));
@@ -1027,7 +1128,6 @@ class PublicController extends Controller
     public function konfirmasi()
     {
         if (request()->isMethod('POST')) {
-
             dd(request()->all());
         }
         return View('frontend.' . config('website.frontend') . '.pages.konfirmasi');
@@ -1041,7 +1141,7 @@ class PublicController extends Controller
         $discount = 0;
         if ($product->item_product_discount_type == 1) {
             $discount = $product->item_product_sell * $product->item_product_discount_value;
-        } else if ($product->item_product_discount_type == 2) {
+        } elseif ($product->item_product_discount_type == 2) {
             $discount = $product->item_product_discount_value;
         }
 
@@ -1049,7 +1149,6 @@ class PublicController extends Controller
 
         $stock = DB::table('view_stock_product')->where('product', $product->item_product_id)->get();
         $option_stock = $stock->mapWithKeys(function ($item) use ($outstanding) {
-
             $collect_qty = $item->qty;
             if (array_key_exists($item->id, $outstanding)) {
                 $collect_qty = $item->qty - $outstanding[$item->id];

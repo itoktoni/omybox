@@ -172,9 +172,6 @@
                                                                     style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
                                                                     bgcolor="#FFFFFF">
                                                                     {{ $item->product->item_product_name }}
-                                                                    @if (config('website.tax'))
-                                                                    + {{ $item->sales_order_detail_tax_name }}
-                                                                    @endif
                                                                 </td>
                                                                 <td align="center" valign="middle" width="10%"
                                                                     style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
@@ -199,27 +196,7 @@
                                                             </tr>
                                                             @endforeach
 
-                                                            <tr>
-                                                                <td align="left" colspan="2" valign="top"
-                                                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                                                                    bgcolor="#f0f0f0">
-                                                                    <span
-                                                                        style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">Pengiriman
-                                                                        :
-                                                                        {{ $master->sales_order_rajaongkir_service ?? '' }}</span>
-                                                                </td>
-                                                                <td align="right" valign="top" colspan="2"
-                                                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                                                                    bgcolor="#f0f0f0">
-                                                                    <span
-                                                                        style="text-align: right;font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">{{ number_format($master->sales_order_rajaongkir_ongkir,0,",",".") }}</span>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th colspan="4"
-                                                                    style="border-bottom-style:none;color:#ffffff;padding-left:10px;padding-right:10px"
-                                                                    bgcolor="#{{ config('website.color') }}"></th>
-                                                            </tr>
+                                                           
                                                             @if ($master->sales_order_marketing_promo_value)
                                                             <tr>
                                                                 <td align="left" colspan="2" valign="top"
@@ -294,15 +271,10 @@
                                                     </table>
 
                                                     <br>
+                                                    
                                                     <p
                                                         style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:15px;margin:0;padding:0">
-                                                        Segera lakukan konfirmasi order barang di link <a
-                                                            href="{{ route('confirmation', ['code' => $master->sales_order_id]) }}">KONFIRMASI</a>
-                                                    </p>
-                                                    <p
-                                                        style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:15px;margin:0;padding:0">
-                                                        Jika ternyata
-                                                        order kamu bermasalah, <br>silakan hubungi kami melalui halaman
+                                                        silakan hubungi kami melalui halaman
                                                         <a href=""
                                                             style="font-family:Arial,sans-serif;color:#{{ config('website.color') }}!important;line-height:1.5;text-decoration:none;font-size:13px;margin:0;padding:0"
                                                             target="_blank">

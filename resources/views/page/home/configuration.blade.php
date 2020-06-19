@@ -393,7 +393,7 @@
                                                 <label class="col-md-2 control-label">Header</label>
                                                 <div class="col-md-10">
                                                     <textarea class="form-control basic" rows="3" name="header"
-                                                        cols="50">{{ html_entity_decode(config('website.header')) }}</textarea>
+                                                        cols="50">{{ config('website.header') }}</textarea>
                                                 </div>
                                             </div>
                                             <div class="form-group">
