@@ -720,12 +720,9 @@ class PublicController extends Controller
                         } catch (\Throwable $th) {
                             $total = $value;
                         }
-
                         $promo = Cart::getConditions()->first();
-                        if ($promo) {
-                            Cart::removeCartCondition($promo->getName());
-                        }
-                        $condition = new \Darryldecode\Cart\CartCondition(array(
+                        if (empty($promo)) {
+                            $condition = new \Darryldecode\Cart\CartCondition(array(
                             'name' => $data->marketing_promo_code,
                             'type' => $data->marketing_promo_type == 1 ? 'Promo' : 'Voucher',
                             'target' => 'total', // this condition will be applied to cart's subtotal when getSubTotal() is called.
@@ -735,7 +732,8 @@ class PublicController extends Controller
                                 'name' => $data->marketing_promo_name,
                             )
                         ));
-
+                        }
+                        
                         Cart::condition($condition);
                     }
                 } else {
