@@ -721,19 +721,20 @@ class PublicController extends Controller
                             $total = $value;
                         }
                         $promo = Cart::getConditions()->first();
-                        if (empty($promo)) {
-                            $condition = new \Darryldecode\Cart\CartCondition(array(
-                            'name' => $data->marketing_promo_code,
-                            'type' => $data->marketing_promo_type == 1 ? 'Promo' : 'Voucher',
-                            'target' => 'total', // this condition will be applied to cart's subtotal when getSubTotal() is called.
-                            'value' => -$total,
-                            'order' => 1,
-                            'attributes' => array( // attributes field is optional
-                                'name' => $data->marketing_promo_name,
-                            )
-                        ));
-                            Cart::condition($condition);
-                        }
+                        $condition = new \Darryldecode\Cart\CartCondition(array(
+                                'name' => $data->marketing_promo_code,
+                                'type' => $data->marketing_promo_type == 1 ? 'Promo' : 'Voucher',
+                                'target' => 'subtotal', // this condition will be applied to cart's subtotal when getSubTotal() is called.
+                                'value' => -$total,
+                                'order' => 1,
+                                'attributes' => array( // attributes field is optional
+                                    'name' => $data->marketing_promo_name,
+                                    'real' => $value,
+                                )
+                            ));
+
+                        Cart::condition($condition);
+
                     }
                 } else {
                     $validate->getMessageBag()->add('code', 'Voucher Not Valid !');
