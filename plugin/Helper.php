@@ -553,10 +553,10 @@ class Helper
                 foreach ($dataFilter as $filtering) {
                     switch ($filtering->custom) {
                         case 1:
-                            $value = json_decode($filtering->value);
+                            $value = json_decode($filtering->val);
                             break;
                         case 0:
-                            $value = Auth()->user()->{$filtering->value};
+                            $value = Auth()->user()->{$filtering->val};
                             break;
                     }
                     if ($filtering->operator) {
