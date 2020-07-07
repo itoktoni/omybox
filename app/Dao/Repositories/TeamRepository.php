@@ -22,7 +22,6 @@ class TeamRepository extends User implements MasterInterface
     {
         try {
             unset($request['_token']);
-
             if (!empty($request['password'])) {
                 $request['password'] =  bcrypt($request['password']);
             } else {
@@ -45,6 +44,7 @@ class TeamRepository extends User implements MasterInterface
                 unset($request['password']);
             }
             
+            unset($request['code']);
             unset($request['_token']);
             $activity = DB::table($this->getTable())
               ->where($this->getKeyName(), $id)
