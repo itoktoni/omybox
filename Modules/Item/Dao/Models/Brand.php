@@ -15,6 +15,7 @@ class Brand extends Model
     'item_brand_name',
     'item_brand_slug',
     'item_brand_image',
+    'item_brand_email',
     'item_brand_description',
     'item_brand_created_at',
     'item_brand_created_by',
@@ -34,6 +35,7 @@ class Brand extends Model
     'item_brand_name'           => [true => 'Name'],
     'item_brand_description'    => [true => 'Description'],
     'item_brand_slug'           => [false => 'Slug'],
+    'item_brand_email'           => [true => 'Email'],
     'item_brand_created_at'     => [false => 'Created At'],
     'item_brand_created_by'     => [false => 'Updated At'],
   ];

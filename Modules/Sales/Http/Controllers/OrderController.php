@@ -5,24 +5,25 @@ namespace Modules\Sales\Http\Controllers;
 use PDF;
 use Plugin\Helper;
 use Plugin\Response;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Services\MasterService;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Services\TransactionService;
+use Modules\Sales\Dao\Models\OrderDelivery;
 use Modules\Sales\Http\Services\OrderService;
+use Modules\Item\Dao\Repositories\StockRepository;
 use Modules\Sales\Dao\Repositories\OrderRepository;
 use Modules\Crm\Dao\Repositories\CustomerRepository;
 use Modules\Finance\Dao\Repositories\BankRepository;
 use Modules\Item\Dao\Repositories\ProductRepository;
 use Modules\Finance\Dao\Repositories\AccountRepository;
 use Modules\Sales\Dao\Repositories\OrderCreateRepository;
+use Modules\Sales\Dao\Repositories\OrderPrepareRepository;
+use Modules\Sales\Dao\Repositories\OrderDeliveryRepository;
 use Modules\Production\Dao\Repositories\WorkOrderCreateRepository;
 use Modules\Forwarder\Dao\Repositories\VendorRepository as ForwarderRepository;
-use Modules\Item\Dao\Repositories\StockRepository;
 use Modules\Production\Dao\Repositories\VendorRepository as ProductionRepository;
-use Modules\Sales\Dao\Models\OrderDelivery;
-use Modules\Sales\Dao\Repositories\OrderDeliveryRepository;
-use Modules\Sales\Dao\Repositories\OrderPrepareRepository;
 
 class OrderController extends Controller
 {
@@ -99,15 +100,28 @@ class OrderController extends Controller
         if (request()->isMethod('POST')) {
 
             $post = $service->update(self::$detail);
+            foreach (request()->get('detail') as $value) {
+                $parse = request()->get('brand');
+                $brand_id = $value['temp_brand_id'];
+                $update = [
+                    'sales_order_detail_ongkir' => isset($parse[$brand_id]) ? Helper::filterInput($parse[$brand_id]['temp_brand_ongkir']) : 0, 
+                    'sales_order_detail_waybill' => isset($parse[$brand_id]) ? $parse[$brand_id]['temp_brand_waybill'] : '', 
+                ];
+                DB::table(self::$model->detail_table)->where([
+                    'sales_order_detail_sales_order_id' => $value['temp_order_id'],
+                    'sales_order_detail_item_product_id' => $value['temp_product_id'],
+                ])->update($update);
+            }
             if ($post['status']) {
                 return Response::redirectToRoute($this->getModule() . '_data');
             }
             return Response::redirectBackWithInput();
         }
-        if (request()->has('code')) {
-
-            $data = $service->show(self::$model, ['detail', 'detail.product', 'province', 'city', 'area']);
+        if ($code = request()->has('code')) {
+            $data = $service->show(self::$model, ['detail', 'detail.product','detail.product.brand']);
+            $brands = self::$model->brand()->where(self::$model->getKeyName(), request()->get('code'))->groupBy('item_brand_id')->get();
             return view(Helper::setViewSave($this->template, $this->folder))->with($this->share([
+                'brands'        => $brands,
                 'model'        => $data,
                 'detail'       => $data->detail,
                 'key'          => self::$model->getKeyName()
@@ -308,7 +322,7 @@ class OrderController extends Controller
             $datatable->editColumn('action', function ($select) use ($module) {
 
                 $header = '<div class="action text-center">';
-                if (Auth::user()->group_user == 'warehouse') {
+                if (Auth::user()->group_user == 'brand') {
                     $print = '<a target="_blank" class="btn btn-danger btn-xs" href="' . route($module . '_print_prepare_do', ['code' => $select->sales_order_id]) . '">print</a> ';
                     $prepare = '<a class="btn btn-success btn-xs" href="' . route($module . '_prepare', ['code' => $select->sales_order_id]) . '">prepare</a>';
                     $do = '<a class="btn btn-primary btn-xs" href="' . route($module . '_do', ['code' => $select->sales_order_id]) . '">delivery</a>';

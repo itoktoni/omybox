@@ -22,9 +22,7 @@
                 <a id="linkMenu" href="{!! route($module.'_data') !!}" class="btn btn-warning">Back</a>
                 <button type="reset" class="btn btn-default">Reset</button>
                 @isset($action['update'])
-                <a id="linkMenu" href="{!! route($module.'_print_order', ['code'=> $model->{$key}]) !!}"
-                        class="btn btn-danger">PDF</a>
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" class="btn btn-primary">Update</button>
                 @endisset
                 @break
 

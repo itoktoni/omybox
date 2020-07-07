@@ -30,7 +30,7 @@ class PaymentRepository extends Payment implements MasterInterface
     {
         try {
             $order = new OrderRepository();
-            $activity = $order->updateRepository($id, ['sales_order_status' => 2]);
+            $activity = $order->updateRepository($id, ['sales_order_status' => 3]);
             return Notes::update($activity);
         } catch (QueryExceptionAlias $ex) {
             return Notes::error($ex->getMessage());

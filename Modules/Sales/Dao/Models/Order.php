@@ -4,10 +4,12 @@ namespace Modules\Sales\Dao\Models;
 
 use App\User;
 use Plugin\Helper;
+use Modules\Item\Dao\Models\Brand;
 use Modules\Sales\Dao\Models\Area;
 use Modules\Sales\Dao\Models\City;
 use Illuminate\Support\Facades\Auth;
 use Modules\Crm\Dao\Models\Customer;
+use Modules\Item\Dao\Models\Product;
 use Modules\Sales\Dao\Models\Province;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Finance\Dao\Models\Payment;
@@ -17,11 +19,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
-  use SoftDeletes;
-  protected $table = 'sales_order';
-  protected $primaryKey = 'sales_order_id';
-  public $detail_table = 'sales_order_detail';
-  protected $fillable = [
+    use SoftDeletes;
+    protected $table = 'sales_order';
+    protected $primaryKey = 'sales_order_id';
+    public $detail_table = 'sales_order_detail';
+    protected $fillable = [
     'sales_order_id',
     'sales_order_reff',
     'sales_order_email',
@@ -61,25 +63,25 @@ class Order extends Model
     'sales_order_rajaongkir_waybill',
   ];
 
-  public $timestamps = true;
-  public $incrementing = false;
-  public $rules = [
+    public $timestamps = true;
+    public $incrementing = false;
+    public $rules = [
     'sales_order_email' => 'required',
   ];
 
-  public $validate = true;
+    public $validate = true;
 
-  public $prefix = 'SO';
-  public $order = 'sales_order_date';
+    public $prefix = 'SO';
+    public $order = 'sales_order_date';
 
-  public $with = ['detail', 'detail.product', 'detail.color'];
+    public $with = ['detail', 'detail.product', 'detail.product.brand'];
 
-  const CREATED_AT = 'sales_order_created_at';
-  const UPDATED_AT = 'sales_order_updated_at';
-  const DELETED_AT = 'sales_order_deleted_at';
+    const CREATED_AT = 'sales_order_created_at';
+    const UPDATED_AT = 'sales_order_updated_at';
+    const DELETED_AT = 'sales_order_deleted_at';
 
-  public $searching = 'sales_order_id';
-  public $datatable = [
+    public $searching = 'sales_order_id';
+    public $datatable = [
     'sales_order_id'                  => [true => 'ID'],
     'sales_order_date'                => [true => 'Order Date'],
     'sales_order_rajaongkir_name'     => [true => 'Name'],
@@ -94,13 +96,14 @@ class Order extends Model
     'sales_order_rajaongkir_service'  => [false => 'Service'],
     'sales_order_rajaongkir_ongkir'  => [false => 'Ongkir'],
     'sales_order_rajaongkir_waybill'  => [false => 'Waybill'],
-    'sales_order_total'               => [true => 'Total'],
+    'item_brand_name'              => [true => 'Brand'],
+    'sales_order_total'               => [false => 'Total'],
     'sales_order_status'              => [true => 'Status'],
     'sales_order_created_at'          => [false => 'Created At'],
     'sales_order_created_by'          => [false => 'Updated At'],
   ];
 
-  protected $dates = [
+    protected $dates = [
     'sales_order_created_at',
     'sales_order_updated_at',
     'sales_order_date',
@@ -109,15 +112,16 @@ class Order extends Model
     'sales_order_invoice_date',
   ];
 
-  public $status = [
+    public $status = [
     '1' => ['CREATE', 'warning'],
-    '2' => ['APPROVE', 'primary'],
-    '3' => ['PREPARE', 'success'],
-    '4' => ['DELIVERED', 'dark'],
+    '2' => ['ESTIMATE', 'info'],
+    '3' => ['APPROVE', 'primary'],
+    '4' => ['PREPARE', 'success'],
+    '5' => ['DELIVERED', 'dark'],
     '0' => ['CANCEL', 'danger'],
   ];
 
-  public $courier = [
+    public $courier = [
     '' => 'Choose Expedition',
     'pos' => 'POS Indonesia (POS)',
     'jne' => 'Jalur Nugraha Ekakurir (JNE)',
@@ -135,7 +139,7 @@ class Order extends Model
     'rex' => 'Royal Express Indonesia (REX)',
   ];
 
-  public $custom_attribute = [
+    public $custom_attribute = [
 
     'sales_order_rajaongkir_province_id' => 'Province',
     'sales_order_rajaongkir_city_id' => 'City',
@@ -148,71 +152,77 @@ class Order extends Model
 
   ];
 
-  public $custom_message = [
+    public $custom_message = [
     'sales_order_core_user_id.required' => 'Customer Data Require',
     'sales_order_forwarder_vendor_id.required'  => 'Forwarder Vendor Required',
     'temp_id.required'  => 'Data Product Required',
   ];
 
-  public function detail()
-  {
-    return $this->hasMany(OrderDetail::class, 'sales_order_detail_sales_order_id', 'sales_order_id');
-  }
+    public function detail()
+    {
+        return $this->hasMany(OrderDetail::class, 'sales_order_detail_sales_order_id', 'sales_order_id');
+    }
 
-  public function payment()
-  {
-    return $this->hasMany(Payment::class, 'finance_payment_sales_order_id', 'sales_order_id');
-  }
+    public function payment()
+    {
+        return $this->hasMany(Payment::class, 'finance_payment_sales_order_id', 'sales_order_id');
+    }
 
-  public function customer()
-  {
-    return $this->hasOne(User::class, 'id', 'sales_order_core_user_id');
-  }
+    public function customer()
+    {
+        return $this->hasOne(User::class, 'id', 'sales_order_core_user_id');
+    }
 
-  public function Province()
-  {
-    return $this->hasOne(Province::class, 'rajaongkir_province_id', 'sales_order_rajaongkir_province_id');
-  }
+    public function Province()
+    {
+        return $this->hasOne(Province::class, 'rajaongkir_province_id', 'sales_order_rajaongkir_province_id');
+    }
 
-  public function City()
-  {
-    return $this->hasOne(City::class, 'rajaongkir_city_id', 'sales_order_rajaongkir_city_id');
-  }
+    public function Brand()
+    {
+        return $this->select(['item_brand_id','item_brand_name','item_brand_description','sales_order_detail_waybill', 'sales_order_detail_ongkir'])
+        ->leftJoin((new OrderDetail())->getTable(), (new OrderDetail())->getKeyName(), $this->getKeyName())
+        ->leftJoin((new Product())->getTable(), (new Product())->getKeyName(), 'sales_order_detail_item_product_id')
+        ->leftJoin((new Brand())->getTable(), (new Brand())->getKeyName(), 'item_product_item_brand_id');
+    }
 
-  public function Area()
-  {
-    return $this->hasOne(Area::class, 'rajaongkir_area_id', 'sales_order_rajaongkir_area_id');
-  }
+    public function City()
+    {
+        return $this->hasOne(City::class, 'rajaongkir_city_id', 'sales_order_rajaongkir_city_id');
+    }
 
-  public function forwarder()
-  {
-    return $this->hasOne(Vendor::class, 'forwarder_vendor_id', 'sales_order_forwarder_vendor_id');
-  }
+    public function Area()
+    {
+        return $this->hasOne(Area::class, 'rajaongkir_area_id', 'sales_order_rajaongkir_area_id');
+    }
 
-  public static function boot()
-  {
-    parent::boot();
-    parent::creating(function ($model) {
+    public function forwarder()
+    {
+        return $this->hasOne(Vendor::class, 'forwarder_vendor_id', 'sales_order_forwarder_vendor_id');
+    }
 
-      if (Auth::check()) {
-        $model->sales_order_created_by = auth()->user()->username;
-        $model->sales_order_core_user_id = auth()->user()->id;
-      } else {
+    public static function boot()
+    {
+        parent::boot();
+        parent::creating(function ($model) {
+            if (Auth::check()) {
+                $model->sales_order_created_by = auth()->user()->username;
+                $model->sales_order_core_user_id = auth()->user()->id;
+            } else {
+                $model->sales_order_created_by = 'no login';
+            }
 
-        $model->sales_order_created_by = 'no login';
-      }
+            if (!request()->has('sales_order_date')) {
+                $model->sales_order_date = date('Y-m-d');
+            }
 
-      if (!request()->has('sales_order_date')) {
-        $model->sales_order_date = date('Y-m-d');
-      }
+            $model->sales_order_status = 1;
+            $model->sales_order_id = Helper::autoNumber($model->getTable(), $model->getKeyName(), 'SO' . date('Ym'), config('website.autonumber'));
+        });
+    }
 
-      $model->sales_order_status = 1;
-      $model->sales_order_id = Helper::autoNumber($model->getTable(), $model->getKeyName(), 'SO' . date('Ym'), config('website.autonumber'));
-    });
-  }
-
-  public function scopeStatusCreate($query)
-  {
-    return $query->where('sales_order_status', 1);
-  }
+    public function scopeStatusCreate($query)
+    {
+        return $query->where('sales_order_status', 1);
+    }
 }

@@ -2,7 +2,7 @@
 @endcomponent
 
 <div class="form-group">
-    {!! Form::label('name', 'Group Name', ['class' => 'col-md-2 control-label']) !!}
+    {!! Form::label('name', 'Product Name', ['class' => 'col-md-2 control-label']) !!}
     <div class="col-md-4 {{ $errors->has($form.'name') ? 'has-error' : ''}}">
         {!! Form::text($form.'name', null, ['class' => 'form-control']) !!}
         {!! $errors->first($form.'name', '<p class="help-block">:message</p>') !!}
@@ -28,14 +28,14 @@
         {!! $errors->first($form.'status', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
-<div class="form-group">
+{{-- <div class="form-group">
 
     {!! Form::label('name', 'Tag', ['class' => 'col-md-2 control-label']) !!}
     <div class="col-md-10 {{ $errors->has($form.'item_tag_json') ? 'has-error' : ''}}">
         {{ Form::select($form.'item_tag_json[]', $tag, json_decode($form.'item_tag_json'), ['class'=> 'form-control choosen', 'multiple']) }}
         {!! $errors->first($form.'item_tag_json', '<p class="help-block">:message</p>') !!}
     </div>
-</div>
+</div> --}}
 <div class="form-group">
 
     {!! Form::label('name', 'Description', ['class' => 'col-md-2 control-label']) !!}
@@ -65,7 +65,7 @@
         {!! $errors->first($form.'sell', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
-
+{{-- 
 <div class="form-group">
     {!! Form::label('name', 'Minimal Stock', ['class' => 'col-md-2 control-label']) !!}
     <div class="col-md-4 {{ $errors->has($form.'min') ? 'has-error' : ''}}">
@@ -78,8 +78,7 @@
         {!! Form::number($form.'max', null, ['class' => 'form-control']) !!}
         {!! $errors->first($form.'max', '<p class="help-block">:message</p>') !!}
     </div>
-</div>
-
+</div>  
 <div class="form-group">
 
     {!! Form::label('name', 'Tax', ['class' => 'col-md-2 control-label']) !!}
@@ -94,7 +93,7 @@
         {!! $errors->first($form.'gram', '<p class="help-block">:message</p>') !!}
     </div>
 
-</div>
+</div> 
 <div class="form-group">
 
     {!! Form::label('name', 'Care', ['class' => 'col-md-2 control-label']) !!}
@@ -102,7 +101,7 @@
         {!! Form::textarea($form.'care', null, ['id' => 'summernote-editor', 'class' => 'form-control', 'rows' => '3']) !!}
     </div>
 </div>
-
+--}}
 <hr>
 
 <div class="form-group">
@@ -125,7 +124,7 @@
 {{ Form::select($form.'item_color_json[]', $color, json_decode($model->item_product_item_color_json) ?? null, ['class'=> 'form-control', 'multiple']) }}
 {!! $errors->first($form.'item_color_json', '<p class="help-block">:message</p>') !!}
 </div>
-</div> --}}
+</div> 
 
 <div class="form-group">
 
@@ -142,14 +141,14 @@
     </div>
 
 </div>
-{{-- 
+
 <div class="form-group">
     {!! Form::label('name', 'Size', ['class' => 'col-md-2 control-label']) !!}
     <div class="col-md-10 {{ $errors->has($form.'item_size_json') ? 'has-error' : ''}}">
 {{ Form::select($form.'item_size_json[]', $size, json_decode($model->item_product_item_size_json) ?? null, ['class'=> 'form-control', 'multiple']) }}
 {!! $errors->first($form.'item_size_json', '<p class="help-block">:message</p>') !!}
 </div>
-</div> --}}
+</div> 
 <div class="form-group">
 
     {!! Form::label('name', 'Return', ['class' => 'col-md-2 control-label']) !!}
@@ -158,6 +157,7 @@
     </div>
 </div>
 <hr>
+--}}
 <div class="form-group">
 
     {!! Form::label('name', 'Discount Type', ['class' => 'col-md-2 control-label']) !!}

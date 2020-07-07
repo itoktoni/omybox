@@ -3,6 +3,7 @@
 
 <head>
     @include(Helper::setExtendFrontend('meta'))
+    @stack('css')
 </head>
 
 <body>

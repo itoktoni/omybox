@@ -38,7 +38,7 @@ class Category extends Model
   public $datatable = [
     'item_category_id'          => [false => 'ID'],
     'item_category_name'        => [true => 'Name'],
-    'item_category_flag'        => [true => 'Flag'],
+    'item_category_flag'        => [false => 'Flag'],
     'item_category_slug'        => [false => 'Slug'],
     'item_category_image'        => [true => 'Images'],
     'item_category_homepage'        => [true => 'Homepage'],

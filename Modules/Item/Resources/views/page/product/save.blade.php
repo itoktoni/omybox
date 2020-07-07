@@ -30,7 +30,6 @@
         </div>
         {!! Form::close() !!}
         <br>
-        @include($folder.'::page.'.$template.'.upload')
        
     </div>
 </div>

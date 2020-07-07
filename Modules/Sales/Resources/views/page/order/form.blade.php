@@ -42,68 +42,9 @@
 <hr>
 <div id="input-form">
     <div class="form-group">
-        {!! Form::label('name', 'Province', ['class' => 'col-md-2 control-label']) !!}
-        <div class="col-md-4">
-            {!! Form::text('', $model->province->rajaongkir_province_name, ['class' => 'form-control', 'readonly']) !!}
-        </div>
-        {!! Form::label('name', 'City', ['class' => 'col-md-2 control-label']) !!}
-        <div class="col-md-4 {{ $errors->has('sales_order_rajaongkir_name') ? 'has-error' : ''}}">
-            {!! Form::text('', $model->city->rajaongkir_city_name, ['class' => 'form-control', 'readonly']) !!}
-        </div>
-    </div>
-    <div class="form-group">
-        {!! Form::label('name', 'Area', ['class' => 'col-md-2 control-label']) !!}
-        <div class="col-md-4">
-            {!! Form::text('', $model->area->rajaongkir_area_name, ['class' => 'form-control', 'readonly']) !!}
-        </div>
-
-        {!! Form::label('name', 'Postcode', ['class' => 'col-md-2 control-label']) !!}
-        <div class="col-md-4">
-            {!! Form::text('', $model->sales_order_rajaongkir_postcode, ['class' => 'form-control', 'readonly']) !!}
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2 control-label" for="textareaDefault">Address</label>
+        {!! Form::label('name', 'Address', ['class' => 'col-md-2 control-label']) !!}
         <div class="col-md-10">
-            {!! Form::textarea('', $model->sales_order_rajaongkir_address, ['class' => 'form-control', 'rows' => '3', 'readonly']) !!}
-        </div>
-    </div>
-</div>
-<hr>
-<div id="input-form">
-    <div class="form-group">
-        {!! Form::label('name', 'Courier', ['class' => 'col-md-2 control-label']) !!}
-        <div class="col-md-4">
-            {!! Form::text('', $model->sales_order_rajaongkir_expedition, ['class' => 'form-control', 'readonly']) !!}
-        </div>
-        {!! Form::label('name', 'Service', ['class' => 'col-md-2 control-label']) !!}
-        <div class="col-md-4">
-            {!! Form::text('', $model->sales_order_rajaongkir_service, ['class' => 'form-control', 'readonly']) !!}
-        </div>
-    </div>
-    <div class="form-group">
-        {!! Form::label('name', 'Weight / gram', ['class' => 'col-md-2 control-label']) !!}
-        <div class="col-md-4">
-            {!! Form::text('', $model->sales_order_rajaongkir_weight, ['class' => 'form-control', 'readonly']) !!}
-        </div>
-
-        {!! Form::label('name', 'Waybill', ['class' => 'col-md-2 control-label']) !!}
-        <div class="col-md-4">
-            {!! Form::text('sales_order_rajaongkir_waybill', $model->sales_order_rajaongkir_waybill, ['class' => 'form-control']) !!}
-        </div>
-    </div>
-</div>
-<hr>
-<div id="input-form">
-    <div class="form-group">
-        {!! Form::label('name', 'Voucher Name', ['class' => 'col-md-2 control-label']) !!}
-        <div class="col-md-4">
-            {!! Form::text('', $model->sales_order_marketing_promo_name, ['class' => 'form-control', 'readonly']) !!}
-        </div>
-        
-        {!! Form::label('name', 'Voucher Value', ['class' => 'col-md-2 control-label']) !!}
-        <div class="col-md-4">
-            {!! Form::text('', number_format($model->sales_order_marketing_promo_value), ['class' => 'form-control', 'readonly']) !!}
+            {!! Form::textarea('', $model->sales_order_rajaongkir_address, ['class' => 'form-control', 'readonly', 'rows' => 3]) !!}
         </div>
     </div>
 </div>

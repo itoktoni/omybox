@@ -39,6 +39,7 @@ class User extends Authenticatable
         'location',
         'postcode',
         'token',
+        'brand',
     ];
     public $timestamps    = true; //timestamp will true
     public $incrementing  = true; //make creating id use lastcode
@@ -70,7 +71,7 @@ class User extends Authenticatable
         'id'            => [false => 'ID User'],
         'username'      => [true => 'Username'],
         'name'      => [true => 'Name'],
-        'email'         => [true => 'Email'],
+        'email'         => [false => 'Email'],
         'group_user'    => [true => 'Group User'],
         'active'        => [true => 'Active'],
     ];

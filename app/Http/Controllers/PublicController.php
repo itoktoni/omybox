@@ -84,12 +84,18 @@ class PublicController extends Controller
 
         
         $product = new ProductRepository();
+        $bank = new BankRepository();
         $data_product = $product->getBestSeller()->get();
+        $data_bank = Helper::shareOption($bank, false, true);
+        $option_bank = $data_bank->mapWithKeys(function ($item) {
+            return [$item->finance_bank_branch => $item->finance_bank_branch.' - '.$item->finance_bank_account_name];
+        });
 
         return view(Helper::setViewFrontend(__FUNCTION__))->with([
             'sliders' => $default_slider,
             'whitelist' => $wishlist,
             'data_product' => $data_product,
+            'bank' => $option_bank->all(),
         ]);
     }
 
@@ -278,46 +284,20 @@ class PublicController extends Controller
 
     public function userprofile()
     {
-        // session()->remove('info');
-        $user = new TeamRepository;
-        $order = new OrderRepository();
-
-        $province = $city = $location = $data = false;
-        $list_location = $list_city  = $data_order = $my_wishlist = [];
-
-        if ($delete = request()->get('delete')) {
-            $c = Wishlist::where('item_wishlist_item_product_id', $delete)->where('item_wishlist_user_id', Auth::user()->id)->delete();
-            if ($c) {
-                return redirect()->route('myaccount')->with('info', 'Success Delete Product');
-            } else {
-                return redirect()->route('myaccount')->with('info', 'Fail Delete Product');
-            }
-        }
+        $user = new TeamRepository();
+        $data = false;
 
         if (Auth::check()) {
-            $province = Auth::user()->province;
-            $city = Auth::user()->city;
-            $location = Auth::user()->location;
             $data = $user->showRepository(Auth::user()->id);
-
-            $data_order = $order->userRepository(Auth::user()->id)->get();
-            $my_wishlist = DB::table('view_wishlist')->where('item_wishlist_user_id', Auth::user()->id)->paginate(6);
         };
 
         if (request()->isMethod('POST')) {
             $request = request()->all();
-            $province = request()->get('province');
-            $city = request()->get('city');
-            $location = request()->get('location');
-
             $validation = [
                 'name' => 'required',
                 'email' => 'required',
                 'address' => 'required',
-                'province' => 'required',
-                'city' => 'required',
-                'location' => 'required',
-                // 'password' => 'required|min:6',
+                'phone' => 'required',
             ];
 
             $validate = Validator::make($request, $validation);
@@ -325,46 +305,15 @@ class PublicController extends Controller
                 return redirect()->back()->withInput()->withErrors($validate);
             }
 
-            // if (!empty(request()->get('password'))) {
-            //     $request['password'] = bcrypt(request()->get('password'));
-            // } else {
-            //     unset($request['password']);
-            // }
-            // dd($request);
             $success = $user->updateRepository(Auth::user()->id, $request);
             if ($success) {
-                session()->flash('info', 'Data Has been saved');
+                session()->flash('success', 'Data Has been saved');
                 return redirect()->back();
             }
         }
 
-        if (Cache::has('province')) {
-            $list_province =  Cache::get('province');
-        } else {
-            $list_province = Cache::rememberForever('province', function () {
-                return DB::table('rajaongkir_provinces')->get()->sortBy('rajaongkir_province_name')->pluck('rajaongkir_province_name', 'rajaongkir_province_id')->prepend(' Choose Province', '0')->toArray();
-            });
-        }
-
-        if ($province) {
-            $list_city = DB::table('rajaongkir_cities')->where('rajaongkir_city_province_id', $province)->get()->sortBy('rajaongkir_city_name')->pluck('rajaongkir_city_name', 'rajaongkir_city_id')->toArray();
-        }
-
-        if ($city) {
-            $list_location = DB::table('rajaongkir_areas')->where('rajaongkir_area_city_id', $city)->get()->sortBy('rajaongkir_area_name')->pluck('rajaongkir_area_name', 'rajaongkir_area_id')->toArray();
-        }
-
         return View(Helper::setViewFrontend(__FUNCTION__))->with([
             'model' => $data,
-            'province' => $province,
-            'order' => $data_order,
-            'city' => $city,
-            'location' => $location,
-            'status' => Helper::shareStatus($order->status),
-            'list_province' => $list_province,
-            'list_city' => $list_city,
-            'list_location' => $list_location,
-            'my_wishlist' => $my_wishlist,
         ]);
     }
 
@@ -377,23 +326,9 @@ class PublicController extends Controller
         $province = $city = $location = $data = false;
         $list_location = $list_city  = $data_order = $my_wishlist = [];
 
-        if ($delete = request()->get('delete')) {
-            $c = Wishlist::where('item_wishlist_item_product_id', $delete)->where('item_wishlist_user_id', Auth::user()->id)->delete();
-            if ($c) {
-                return redirect()->route('myaccount')->with('info', 'Success Delete Product');
-            } else {
-                return redirect()->route('myaccount')->with('info', 'Fail Delete Product');
-            }
-        }
-
         if (Auth::check()) {
-            $province = Auth::user()->province;
-            $city = Auth::user()->city;
-            $location = Auth::user()->location;
             $data = $user->showRepository(Auth::user()->id);
-
-            $data_order = $order->userRepository(Auth::user()->id)->get();
-            $my_wishlist = DB::table('view_wishlist')->where('item_wishlist_user_id', Auth::user()->id)->paginate(6);
+            $data_order = $order->userRepository(Auth::user()->phone)->get();
         };
 
         if (request()->isMethod('POST')) {
@@ -424,33 +359,10 @@ class PublicController extends Controller
             $user->updateRepository(Auth::user()->id, $request);
         }
 
-        if (Cache::has('province')) {
-            $list_province =  Cache::get('province');
-        } else {
-            $list_province = Cache::rememberForever('province', function () {
-                return DB::table('rajaongkir_provinces')->get()->sortBy('rajaongkir_province_name')->pluck('rajaongkir_province_name', 'rajaongkir_province_id')->prepend(' Choose Province', '0')->toArray();
-            });
-        }
-
-        if ($province) {
-            $list_city = DB::table('rajaongkir_cities')->where('rajaongkir_city_province_id', $province)->get()->sortBy('rajaongkir_city_name')->pluck('rajaongkir_city_name', 'rajaongkir_city_id')->toArray();
-        }
-
-        if ($city) {
-            $list_location = DB::table('rajaongkir_areas')->where('rajaongkir_area_city_id', $city)->get()->sortBy('rajaongkir_area_name')->pluck('rajaongkir_area_name', 'rajaongkir_area_id')->toArray();
-        }
-
         return View(Helper::setViewFrontend(__FUNCTION__))->with([
             'model' => $data,
-            'province' => $province,
             'order' => $data_order,
-            'city' => $city,
-            'location' => $location,
             'status' => Helper::shareStatus($order->status),
-            'list_province' => $list_province,
-            'list_city' => $list_city,
-            'list_location' => $list_location,
-            'my_wishlist' => $my_wishlist,
         ]);
     }
 
@@ -734,7 +646,6 @@ class PublicController extends Controller
                             ));
 
                         Cart::condition($condition);
-
                     }
                 } else {
                     $validate->getMessageBag()->add('code', 'Voucher Not Valid !');
@@ -829,7 +740,15 @@ class PublicController extends Controller
                 'files' => 'required|image|mimes:jpeg,png,jpg|max:2048',
                 'finance_payment_to' => 'required',
             ];
-            $validate = Validator::make($request, $rules);
+            $message = [
+                'finance_payment_amount.required' => 'Masukan Nilai Pembayaran',
+                'finance_payment_sales_order_id.required' => 'Nomer Order tidak terdaftar',
+                'finance_payment_sales_order_id.exists' => 'Nomer Order tidak ada di database',
+                'finance_payment_person.required' => 'Nama pengirim tidak boleh kosong',
+                'finance_payment_email.required' => 'Email pengirim tidak boleh kosong',
+                'files.required' => 'Upload Bukti Pembayaran',
+            ];
+            $validate = Validator::make($request, $rules, $message);
 
             if ($validate->fails()) {
                 return redirect()->back()->withErrors($validate)->withInput();
@@ -837,7 +756,7 @@ class PublicController extends Controller
 
             $check = $payment->saveRepository($request);
             if ($check['status']) {
-                return redirect()->route('confirmation')->with('success', 'Data has been Success');
+                return redirect()->to('/')->with('success', 'Data has been Success');
             }
         }
 

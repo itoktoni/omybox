@@ -4694,7 +4694,7 @@
             width: 100px;
             height: 100px;
             top: 0px;
-            left: 100px;
+            left: 30px;
         }
         
         .navbar-nav {
@@ -4770,7 +4770,7 @@
             .logo {
                 width: 65px;
                 height: 65px;
-                left: 60px;
+                left: 15px;
             }
         }
         
@@ -11027,6 +11027,7 @@
         @media (max-width: 991.98px) {
             .ftco-navbar-light .navbar-nav {
                 padding-bottom: 10px;
+                padding-top: 30px;
             }
         }
         
@@ -12014,6 +12015,7 @@
             text-align: right;
             bottom: 10px;
             color: #c8a97e;
+            margin-top: 7px;
             font-weight: 600;
             line-height: 1.3;
             -moz-transition: all 0.3s ease;
@@ -13338,37 +13340,50 @@
             margin-bottom: 0px !important;
         }
         
-        @media (max-width:600px) {
-            .ftco-footer-social {
-                padding-top: 20px;
-            }
-        }
-        
         .header-cart {
             background-color: rgba(255, 255, 255, .67) !important;
-            padding: 8px 20px;
-            border-radius: 50px;
-            position: relative !important;
+            padding: 8px 17px;
+            position: fixed;
+            right: 5px;
+            top: 0px;
+            height: 75px;
+        }
+        
+        .header-auth {
+            background-color: rgba(255, 255, 255, .67) !important;
+            padding: 10px 19px;
+            position: fixed;
+            right: 45px;
+            top: 0px;
+            height: 75px;
+        }
+        
+        .button-auth {
+            position: absolute !important;
+            top: 25px;
+            left: 9px;
+            font-size: 20px;
+            color: black;
         }
         
         .cart-block {
-            margin-left: -5px;
+            margin-left: 0px;
             background-color: whitesmoke !important;
         }
         
         .button-cart {
             position: absolute !important;
-            top: 15px;
-            left: 9px;
-            font-size: 17px;
+            top: 25px;
+            left: 5px;
+            font-size: 20px;
             color: black;
         }
         
         .number-cart {
             position: absolute;
-            top: 4px;
-            left: 20px;
-            font-size: 10px;
+            top: 13px;
+            left: 22px;
+            font-size: 12px;
             color: black;
         }
         
@@ -13398,4 +13413,76 @@
         
         .form-cart {
             margin-bottom: 80px;
+        }
+        
+        @media (max-width:600px) {
+            .ftco-footer-social {
+                padding-top: 20px;
+            }
+            .header-cart {
+                background-color: rgba(255, 255, 255, .67) !important;
+                padding: 8px 20px;
+                position: fixed;
+                right: 105px;
+                top: 0px;
+                height: 47px;
+            }
+            .header-auth {
+                background-color: rgba(255, 255, 255, .67) !important;
+                padding: 8px 20px;
+                position: fixed;
+                right: 150px;
+                top: 0px;
+                height: 47px;
+            }
+            .cart-block {
+                margin-left: -5px;
+                background-color: whitesmoke !important;
+            }
+            .button-auth {
+                position: absolute !important;
+                top: 15px;
+                left: 10px;
+                font-size: 20px;
+                color: black;
+            }
+            .button-cart {
+                position: absolute !important;
+                top: 17px;
+                left: 7px;
+                font-size: 20px;
+                color: black;
+            }
+            .number-cart {
+                position: absolute;
+                top: 4px;
+                left: 20px;
+                font-size: 12px;
+                color: black;
+            }
+        }
+        
+         ::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+            background-color: #F5F5F5;
+        }
+        
+         ::-webkit-scrollbar {
+            width: 5px;
+            background-color: #F5F5F5;
+        }
+        
+         ::-webkit-scrollbar-thumb {
+            background-color: #000000;
+            border: 2px solid #545454;
+        }
+        
+        .master-header {
+            position: relative;
+        }
+        
+        .child-header {
+            position: absolute;
+            top: 62%;
+            left: 46%;
         }

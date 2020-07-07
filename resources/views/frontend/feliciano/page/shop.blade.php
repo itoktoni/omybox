@@ -58,44 +58,65 @@
                                         <a href="{{ Helper::files('product/'.$item_product->item_product_image) }}"
                                             data-lightbox="{{ $item_product->item_product_image }}"
                                             data-title="{!! $item_product->item_product_description !!}"
-                                            class="menu-img img {{ $loop->iteration > 1 ? 'order-md-last' : '' }}"
+                                            class="menu-img img {{ intval($loop->iteration) % 3 == 0 || intval($loop->iteration) % 4 == 0 ? 'order-md-last' : '' }}"
                                             style="background-image: url(public/files/product/{{ $item_product->item_product_image }});">
                                         </a>
 
                                         <div class="text d-flex align-items-center">
                                             <div class="width100">
-                                                <div class="d-flex">
-                                                    <div class="one-half">
-                                                        <h3>{{ $item_product->item_product_name }}</h3>
-                                                    </div>
-                                                    <div class="one-forth">
-                                                        <span class="price">
-                                                            @if ($item_product->item_product_discount_type)
-                                                            <h6 class="coret">
+                                                <a href="{{ Helper::files('product/'.$item_product->item_product_image) }}"
+                                                    data-lightbox="{{ $item_product->item_product_image }}"
+                                                    data-title="{!! $item_product->item_product_description !!}">
+
+                                                    <div class="d-flex">
+                                                        <div class="one-half">
+                                                            <h3>{{ $item_product->item_product_name }}</h3>
+                                                        </div>
+                                                        <div class="one-forth">
+                                                            <span class="price">
+                                                                @if ($item_product->item_product_discount_type)
+                                                                <h6 class="coret">
+                                                                    {{ number_format($item_product->item_product_sell) }}
+                                                                </h6>
+                                                                {{ number_format($item_product->item_product_discount_type == 1 ? $item_product->item_product_sell - ($item_product->item_product_discount_value * $item_product->item_product_sell) : $item_product->item_product_sell - $item_product->item_product_discount_value ) }}
+                                                                @else
                                                                 {{ number_format($item_product->item_product_sell) }}
+                                                                @endif
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-xs-12 d-lg-none">
+                                                            <div class="container">
+                                                                <img class="img-fluid" src="{{ Helper::files('product/'.$item_product->item_product_image) }}" alt="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12">
+                                                            <div class="container mt-2">
+                                                                {!! $item_product->item_product_description !!}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="container">
+                                                            <h6 class="text-right">
+                                                                <a href="{{ route('add', ['id' => $item_product->item_product_id ]) }}"
+                                                                    class="btn btn-primary add-cart text-right">Order
+                                                                    now</a>
                                                             </h6>
-                                                            {{ number_format($item_product->item_product_discount_type == 1 ? $item_product->item_product_sell - ($item_product->item_product_discount_value * $item_product->item_product_sell) : $item_product->item_product_sell - $item_product->item_product_discount_value ) }}
-                                                            @else
-                                                            {{ number_format($item_product->item_product_sell) }}
-                                                            @endif
-                                                        </span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                {!! $item_product->item_product_description !!}
+                                                    <hr>
 
-                                                <a href="{{ route('add', ['id' => $item_product->item_product_id ]) }}"
-                                                    class="btn btn-primary add-cart">Order now</a>
-                                                <hr>
-
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <h6 class="text-right">
-                                                            {{ $item_product->brand->item_brand_name ?? '' }} -
-                                                            {{ $item_product->brand->item_brand_description ?? '' }}
-                                                        </h6>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h6 class="text-left">
+                                                                {{ $item_product->brand->item_brand_name ?? '' }} -
+                                                                {{ $item_product->brand->item_brand_description ?? '' }}
+                                                            </h6>
+                                                        </div>
                                                     </div>
-                                                </div>
-
+                                                </a>
                                             </div>
                                         </div>
                                     </div>

@@ -37,3 +37,19 @@
         {{ Form::select('active', $status, null, ['class'=> 'form-control', 'data-plugin-selectTwo']) }}
     </div>
 </div>
+
+<div class="form-group">
+
+    {!! Form::label('name', 'Brand', ['class' => 'col-md-2 control-label']) !!}
+    <div class="col-md-4 {{ $errors->has('brand') ? 'has-error' : ''}}">
+        {{ Form::select('brand', $brand, $model->brand ?? null, ['class'=> 'form-control']) }}
+        {!! $errors->first('brand', '<p class="help-block">:message</p>') !!}
+    </div>
+
+    {!! Form::label('address', 'Address', ['class' => 'col-md-2 control-label']) !!}
+    <div class="col-md-4 {{ $errors->has('address') ? 'has-error' : ''}}">
+        {!! Form::textarea('address', null, ['class' => 'form-control', 'rows' => 3]) !!}
+        {!! $errors->first('address', '<p class="help-block">:message</p>') !!}
+    </div>
+
+</div>

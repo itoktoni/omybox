@@ -2,11 +2,13 @@
 
 namespace Modules\Item\Http\Controllers;
 
+use App\User;
 use Plugin\Helper;
 use Plugin\Response;
 use App\Http\Controllers\Controller;
-use Modules\Item\Dao\Repositories\BrandRepository;
 use App\Http\Services\MasterService;
+use Illuminate\Support\Facades\Auth;
+use Modules\Item\Dao\Repositories\BrandRepository;
 
 class BrandController extends Controller
 {
@@ -28,8 +30,16 @@ class BrandController extends Controller
 
     private function share($data = [])
     {
+        $user = User::all();
+        $user->where('email', 'itok.toni@gmail.com');
+        if (Auth::user()->group_user == 'partner') {
+           
+           $user = $user->where('email', Auth::user()->email);
+        }
+        $filter = $user->pluck('name', 'email')->prepend('- Select User Login -', '');
         $view = [
             'template' => $this->template,
+            'user' => $filter,
         ];
 
         return array_merge($view, $data);
@@ -38,7 +48,6 @@ class BrandController extends Controller
     public function create(MasterService $service)
     {
         if (request()->isMethod('POST')) {
-
             $service->save(self::$model);
         }
         return view(Helper::setViewCreate())->with($this->share());
@@ -47,13 +56,11 @@ class BrandController extends Controller
     public function update(MasterService $service)
     {
         if (request()->isMethod('POST')) {
-
             $service->update(self::$model);
             return redirect()->route($this->getModule() . '_data');
         }
 
         if (request()->has('code')) {
-
             $data = $service->show(self::$model);
 
             return view(Helper::setViewUpdate())->with($this->share([
@@ -66,7 +73,8 @@ class BrandController extends Controller
     public function delete(MasterService $service)
     {
         $service->delete(self::$model);
-        return Response::redirectBack();;
+        return Response::redirectBack();
+        ;
     }
 
     public function data(MasterService $service)

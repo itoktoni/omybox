@@ -57,13 +57,14 @@
                                                 {{ $item_cart->attributes['brand_description'] }}
                                             </span>
                                             <span class="col-md-7">
-                                                <textarea placeholder="Notes" name="cart[{{$loop->index}}][description]" class="form-control" >{{ old("cart[$loop->index][description]") ?? $item_cart->attributes['notes'] }}</textarea>
+                                                <textarea placeholder="Notes" name="cart[{{$loop->index}}][description]"
+                                                    class="form-control">{{ old("cart[$loop->index][description]") ?? $item_cart->attributes['notes'] }}</textarea>
                                             </span>
                                         </div>
-                                        
+
                                         <div class="row">
                                             <span class="col-md-9 mb-1">
-                                                
+
                                             </span>
                                             <span class="col-md-3">
                                                 <a onclick="return confirm('Are you sure to delete product ?');"
@@ -128,21 +129,27 @@
                                 </div>
                                 @endif
                             </div>
+                            @if (Cart::getConditions()->count() > 0)
+                            <hr style="margin-top:-15px;">
+                            @endif
+
                             <div class="row">
 
-                                <div class="col-md-6">
-                                    <div class="container">
-                                        <h6 class="text-left">
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <h6 class="col-md-12 text-left">
                                             <button type="submit" name="submit" value="update"
                                                 class="btn btn-info col-md-10">Update</button>
                                         </h6>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="container">
-                                        <h6 class="harga text-right">
-                                            Total Harga : {{ number_format(Cart::getTotal()) }}
-                                        </h6>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="container">
+                                            <div class="col-md-12 text-sm-center text-lg-right btn btn-secondary">
+                                                Total Harga : {{ number_format(Cart::getTotal()) }}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -289,7 +296,7 @@
                                     <div class="col-md-12 mb-2">
                                         <div class="row">
                                             <div class="col-md-12 text-right">
-                                                <a class="btn btn-success" href="{{ route('login') }}">Login</a>
+                                                {{-- <a class="btn btn-success" href="{{ route('login') }}">Login</a> --}}
                                                 <button type="submit" name="submit"
                                                     class="btn btn-info">Proceed</button>
                                             </div>
@@ -322,7 +329,7 @@
             </div>
         </div>
         @endif
-        
+
         {!! config('website.header') !!}
         <p class="lead">
             <a class="btn btn-primary btn-lg" href="{{ route('shop') }}" role="button">Buy Product</a>

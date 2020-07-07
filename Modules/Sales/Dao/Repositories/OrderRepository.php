@@ -28,13 +28,18 @@ class OrderRepository extends Order implements MasterInterface
         }
 
         $list = Helper::dataColumn($this->datatable, $this->getKeyName());
-        return $this->select($list);
+        return $this->select($list)->join('sales_order_detail', 'sales_order_detail_sales_order_id', 'sales_order_id')
+            ->join('item_product', 'item_product_id', 'sales_order_detail_item_product_id')
+            ->leftJoin('item_brand', 'item_brand_id', 'item_product_item_brand_id')
+            ->groupBy('sales_order_detail_sales_order_id', 'item_product_item_brand_id');
+
     }
 
     public function userRepository($id)
     {
         $list = Helper::dataColumn($this->datatable, $this->getKeyName());
-        return $this->select($list)->where('sales_order_core_user_id', $id);
+        unset($list[13]);
+        return $this->select($list)->where('sales_order_rajaongkir_phone', $id);
     }
 
     public function saveRepository($request)
@@ -50,6 +55,9 @@ class OrderRepository extends Order implements MasterInterface
     public function updateRepository($id, $request)
     {
         try {
+            if(isset($request['sales_order_rajaongkir_ongkir'])){
+                $request['sales_order_rajaongkir_ongkir'] = Helper::filterInput($request['sales_order_rajaongkir_ongkir']);
+            }
             $activity = $this->findOrFail($id)->update($request);
             return Notes::update($activity);
         } catch (QueryException $ex) {

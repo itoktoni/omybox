@@ -271,7 +271,7 @@
 
 
      $('#book_date').datepicker({
-         'format': 'yyyy-m-d',
+         'format': 'yyyy-mm-dd',
          'autoclose': true
      });
      $('#book_time').timepicker();

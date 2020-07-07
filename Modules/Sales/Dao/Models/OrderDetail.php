@@ -26,6 +26,8 @@ class OrderDetail extends Model
     'sales_order_detail_discount',
     'sales_order_detail_price_real',
     'sales_order_detail_tax_name',
+    'sales_order_detail_waybill',
+    'sales_order_detail_ongkir',
     'sales_order_detail_tax_value',
     'sales_order_detail_notes'
   ];

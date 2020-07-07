@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Dao\Repositories\GroupUserRepository;
 use Helper;
 use Plugin\Response;
-use App\Dao\Repositories\TeamRepository;
 use App\Http\Services\MasterService;
+use App\Dao\Repositories\TeamRepository;
+use App\Dao\Repositories\GroupUserRepository;
+use Modules\Item\Dao\Repositories\BrandRepository;
 
 class TeamController extends Controller
 {
@@ -30,10 +31,12 @@ class TeamController extends Controller
     {
         $status = Helper::shareStatus(self::$model->status)->prepend('- Select Status -', '');
         $group = Helper::shareOption((new GroupUserRepository()));
+        $brand = Helper::shareOption((new BrandRepository()));
         $view = [
             'key'      => self::$model->getKeyName(),
             'template' => $this->template,
             'status' => $status,
+            'brand' => $brand,
             'group' => $group,
         ];
 
