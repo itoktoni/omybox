@@ -96,9 +96,11 @@
                                                 {{ number_format($detail->sales_order_detail_price_order * $detail->sales_order_detail_qty_order) }}
                                                 <span class="col-md-2">
                                                     <div class="row">
+                                                        @isset($detail->product->item_product_image)
                                                         <img class="img-fluid img-thumbnail"
                                                             src="{{ Helper::files('product/'.$detail->product->item_product_image) }}"
                                                             alt="">
+                                                        @endisset
                                                     </div>
 
                                                 </span>
