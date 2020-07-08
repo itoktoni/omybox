@@ -6,8 +6,9 @@
                 <span class="text-center" style="font-size: 13px;color:#ABB4BE;">Dashboard</span>
             </div>
         </div>
-        <div class="sidebar-toggle hidden-xs" data-toggle-class="sidebar-left-collapsed" data-target="html" data-fire-event="sidebar-left-toggle">
-            <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+        {{-- <div class="sidebar-toggle hidden-xs" data-toggle-class="sidebar-left-collapsed" data-target="html" data-fire-event="sidebar-left-toggle"> --}}
+        <div class="sidebar-toggle hidden-xs">
+        <a href="{{ route('home', ['toggle']) }}"><i style="font-size: 25px;" class="fa fa-chevron-circle-{{ Cache::get('toggle') ? 'right' : 'left' }}" aria-label="Toggle sidebar"></i></a> 
         </div>
     </div>
     <div class="nano">

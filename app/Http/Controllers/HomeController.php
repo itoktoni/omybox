@@ -81,8 +81,24 @@ class HomeController extends Controller
         if (Auth::user()->group_user == 'customer') {
             return redirect()->to('/');
         }
+
+        if (request()->has('toggle')) {
+            if (Cache::has('toggle')) {
+                $check = Cache::get('toggle');
+                if ($check) {
+                    Cache::put('toggle', false);
+                } else {
+                    Cache::put('toggle', true);
+                }
+            }
+            else{
+                Cache::put('toggle', true);
+            }
+
+            return redirect()->back();
+        }
         
-        if(request()->has('order') && request()->has('id')){
+        if (request()->has('order') && request()->has('id')) {
             $order = request()->get('order');
             $id = request()->get('id');
 

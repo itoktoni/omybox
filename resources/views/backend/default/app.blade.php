@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="scroll">
+<html class="scroll {{ Cache::get('toggle') ? 'sidebar-left-collapsed' : '' }}">
 <head>
 @include(Helper::setExtendBackend('meta'))
 
