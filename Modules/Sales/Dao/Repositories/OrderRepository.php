@@ -2,11 +2,12 @@
 
 namespace Modules\Sales\Dao\Repositories;
 
-use Plugin\Helper;
 use App\User;
 use Plugin\Notes;
+use Plugin\Helper;
 use Illuminate\Support\Facades\DB;
 use Modules\Sales\Dao\Models\Order;
+use Illuminate\Support\Facades\Auth;
 use Modules\Crm\Dao\Models\Customer;
 use App\Dao\Interfaces\MasterInterface;
 use Illuminate\Database\QueryException;
@@ -26,13 +27,19 @@ class OrderRepository extends Order implements MasterInterface
         if (self::$vendor == null) {
             self::$vendor = new Vendor();
         }
-
+    
         $list = Helper::dataColumn($this->datatable, $this->getKeyName());
-        return $this->select($list)->join('sales_order_detail', 'sales_order_detail_sales_order_id', 'sales_order_id')
+        $query = $this->select($list)->join('sales_order_detail', 'sales_order_detail_sales_order_id', 'sales_order_id')
             ->join('item_product', 'item_product_id', 'sales_order_detail_item_product_id')
-            ->leftJoin('item_brand', 'item_brand_id', 'item_product_item_brand_id')
-            ->groupBy('sales_order_detail_sales_order_id', 'item_product_item_brand_id');
+            ->leftJoin('item_brand', 'item_brand_id', 'item_product_item_brand_id');
 
+        if (empty(Auth::user()->brand)) {
+            $query->groupBy('sales_order_detail_sales_order_id');
+        } else {
+            $query->groupBy('sales_order_detail_sales_order_id', 'item_product_item_brand_id');
+        }
+
+        return $query;
     }
 
     public function userRepository($id)
@@ -55,7 +62,7 @@ class OrderRepository extends Order implements MasterInterface
     public function updateRepository($id, $request)
     {
         try {
-            if(isset($request['sales_order_rajaongkir_ongkir'])){
+            if (isset($request['sales_order_rajaongkir_ongkir'])) {
                 $request['sales_order_rajaongkir_ongkir'] = Helper::filterInput($request['sales_order_rajaongkir_ongkir']);
             }
             $activity = $this->findOrFail($id)->update($request);

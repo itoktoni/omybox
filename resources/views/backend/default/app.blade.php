@@ -18,7 +18,7 @@
         <header class="page-header">
             <span class="col-lg-11 col-sm-6 col-xl-3 pull-left" style="color:#A6A3A3;margin-top:15px;z-index: 1;">
                 <marquee>
-                    <span>test</span>
+                    <span>Cek Selalu Pesanan Anda !</span>
                 </marquee>
             </span>
             <div class="right-wrapper pull-right">       

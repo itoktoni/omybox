@@ -415,17 +415,14 @@ a, h3 a, h4 a, h5 a, h6 a {
                     <th colspan='8' style='background: #{{ config('website.color') }} !important'></th>
                 </tr>
                 <tr>
-                    <td align='left' colspan='4' style='background-color: #e0e0e0 !important' valign='top'>
+                    <td align='left' colspan='5' style='background-color: #e0e0e0 !important' valign='top'>
                         <strong>Nama Barang</strong>
                     </td>
                     <td align='center' colspan='1' style='background-color: #e0e0e0 !important' valign='top'>
                         <strong>Jumlah</strong>
                     </td>
-                    <td align='center' colspan='1' style='background-color: #e0e0e0 !important' valign='top'>
+                    <td align='right' colspan='1' style='background-color: #e0e0e0 !important' valign='top'>
                         <strong>Harga</strong>
-                    </td>
-                    <td align='center' colspan='1' style='background-color: #e0e0e0 !important' valign='top'>
-                        <strong>Tax</strong>
                     </td>
                     <td align='right' colspan='1' style='background-color: #e0e0e0 !important' valign='top'>
                         <strong>Total</strong>
@@ -435,18 +432,53 @@ a, h3 a, h4 a, h5 a, h6 a {
                 $sub = 0;
                 $total = 0;
                 ?>
-                @foreach ($detail as $item)
+                @foreach ($detail->groupBy('sales_order_detail_item_brand') as $brand)
+                @php
+                $clone = clone($brand);
+                $single_brand = $clone->first();
+                @endphp
+                <tr>
+                    <td align="left" colspan="5" valign="middle" width="15%"
+                        style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;"
+                        bgcolor="#FFFFFF">
+                        <span>
+                            - Outlet {{ $single_brand->brand->item_brand_name ?? ''}}
+                        </span>
+                    </td>
+                    <td align="center" valign="middle" width="10%"
+                        style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;"
+                        bgcolor="#FFFFFF">
+                        <span>
+                            Ongkir
+                        </span>
+                    </td>
+                    <td align="right" valign="middle" width="15%"
+                        style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;"
+                        bgcolor="#FFFFFF">
+                        <span>
+                            {{ $single_brand->brand->item_brand_description }}
+                        </span>
+                    </td>
+                    <td align="right" valign="middle" width="15%"
+                        style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;"
+                        bgcolor="#FFFFFF">
+                        <span>
+                            {{ number_format($single_brand->sales_order_detail_ongkir) }}
+                        </span>
+                    </td>
+                </tr>
+                @foreach ($brand as $item)
                 <?php
                 $sub = $item->sales_order_detail_qty_order * $item->sales_order_detail_price_order;
                 $total = $total + $sub;
                 ?>
 
                 <tr>
-                    <td align="left" colspan='4' valign="middle" width="50%"
+                    <td align="left" colspan='5' valign="middle" width="50%"
                         style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
                         bgcolor="#FFFFFF">
-                        {{ $item->product->item_product_name }} {{ $item->sales_order_detail_item_size }}
-                        {{ $item->color->item_color_name }}
+                        {{ $item->product->item_product_name }}
+                        {{ empty($item->sales_order_detail_notes) ? '' : ' ('.$item->sales_order_detail_notes.' )' }}
                     </td>
                     <td align="center" valign="middle" width="10%"
                         style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
@@ -454,20 +486,12 @@ a, h3 a, h4 a, h5 a, h6 a {
 
                         {{ $item->sales_order_detail_qty_order }}
                     </td>
-                    <td align="center" valign="middle" width="15%"
+                    <td align="right" valign="middle" width="15%"
                         style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
                         bgcolor="#FFFFFF">
                         {{ number_format( $item->sales_order_detail_price_order ,0,",",".")}}
                     </td>
-                    <td align="center" valign="middle" width="15%"
-                        style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                        bgcolor="#FFFFFF">
-                        @if (config('website.tax'))
-                        {{ number_format($item->sales_order_detail_tax_value,0,",",".") }}
-                        @endif
-
-                    </td>
-                    <td align="right" valign="middle" width="25%"
+                    <td align="right" valign="middle" width="15%"
                         style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;"
                         bgcolor="#FFFFFF">
                         <span>
@@ -478,12 +502,14 @@ a, h3 a, h4 a, h5 a, h6 a {
 
                 @endforeach
 
+                @endforeach
                 <tr>
                     <td align="left" colspan="7" valign="top"
                         style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
                         bgcolor="#f0f0f0">
                         <span
-                            style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">Pengiriman
+                            style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">Total
+                            Ongkir
                             :
                             {{ $master->sales_order_rajaongkir_service ?? '' }}</span>
                     </td>

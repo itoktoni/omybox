@@ -26,10 +26,6 @@
                                 <th class="col-lg-2">Customer</th>
                                 <td>{{ $model->customer->crm_customer_name }}</td>
                             </tr>
-                            <tr>
-                                <th class="col-lg-2">Vendor</th>
-                                <td>{{ $model->forwarder->forwarder_vendor_name }}</td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>

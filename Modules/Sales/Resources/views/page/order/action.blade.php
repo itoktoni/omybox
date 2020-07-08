@@ -21,6 +21,10 @@
                 @case('update')
                 <a id="linkMenu" href="{!! route($module.'_data') !!}" class="btn btn-warning">Back</a>
                 <button type="reset" class="btn btn-default">Reset</button>
+                @if ($model->sales_order_status >= 2)
+                <a id="linkMenu" target="_blank" href="{!! route($module.'_print_order', ['code'=> $model->{$key}]) !!}"
+                        class="btn btn-danger">PDF</a>
+                @endif
                 @isset($action['update'])
                 <button type="submit" class="btn btn-primary">Update</button>
                 @endisset
@@ -34,44 +38,45 @@
                 <a id="linkMenu" href="{!! route($module.'_print_prepare_do', ['code'=> $model->{$key}]) !!}"
                         class="btn btn-danger">PDF</a>
                 @endif
-                @if ($model->sales_order_status <= 3)        
-                <button type="submit" class="btn btn-primary">Save</button>
-                @endif
-                @endisset
-                @break
+                @if ($model->sales_order_status <= 3) <button type="submit" class="btn btn-primary">Save</button>
+                        @endif
+                        @endisset
+                        @break
 
-                @case('do')
-                <a id="linkMenu" href="{!! route($module.'_data') !!}" class="btn btn-warning">Back</a>
-                <button type="reset" class="btn btn-default">Reset</button>
+                        @case('do')
+                        <a id="linkMenu" href="{!! route($module.'_data') !!}" class="btn btn-warning">Back</a>
+                        <button type="reset" class="btn btn-default">Reset</button>
 
-                @if ($model->sales_order_status == 4)
-                <a target="__blank" id="linkMenu" href="{!! route($module.'_print_do', ['code'=> $model->{$key}]) !!}"
-                        class="btn btn-danger">PDF</a>
-                @else        
-                <button type="submit" class="btn btn-primary">Save</button>
-                @endif
+                        @if ($model->sales_order_status == 4)
+                        <a target="__blank" id="linkMenu"
+                                href="{!! route($module.'_print_do', ['code'=> $model->{$key}]) !!}"
+                                class="btn btn-danger">PDF</a>
+                        @else
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        @endif
 
-                @break
+                        @break
 
-                @case('work_order')
-                <a id="linkMenu" href="{!! route($module.'_data') !!}" class="btn btn-warning">Back</a>
-                <button type="reset" class="btn btn-default">Reset</button>
-                @isset($action['work_order'])
-                <button type="submit" class="btn btn-primary">Save</button>
-                @endisset
-                @break
+                        @case('work_order')
+                        <a id="linkMenu" href="{!! route($module.'_data') !!}" class="btn btn-warning">Back</a>
+                        <button type="reset" class="btn btn-default">Reset</button>
+                        @isset($action['work_order'])
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        @endisset
+                        @break
 
-                @case('show')
-                <a id="linkMenu" href="{!! route($module.'_data') !!}" class="btn btn-warning">Back</a>
-                @isset($action['print_order'])
-                <a id="linkMenu" href="{!! route(trim(" {$module}_print_order"), ['code'=> $model->{$key}]) !!}"
-                        class="btn btn-danger">Pdf</a>
-                @endisset
-                @isset($action['update'])
-                <a id="linkMenu" href="{!! route(trim(" {$module}_update"), ['code'=> $model->{$key}]) !!}" class="btn
-                        btn-primary">Edit</a>
-                @endisset
-                @break
-                @endswitch
+                        @case('show')
+                        <a id="linkMenu" href="{!! route($module.'_data') !!}" class="btn btn-warning">Back</a>
+                        @isset($action['print_order'])
+                        <a id="linkMenu" href="{!! route(trim(" {$module}_print_order"), ['code'=> $model->{$key}]) !!}"
+                                class="btn btn-danger">Pdf</a>
+                        @endisset
+                        @isset($action['update'])
+                        <a id="linkMenu" href="{!! route(trim(" {$module}_update"), ['code'=> $model->{$key}]) !!}"
+                                class="btn
+                                btn-primary">Edit</a>
+                        @endisset
+                        @break
+                        @endswitch
         </div>
 </div>

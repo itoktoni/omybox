@@ -42,7 +42,8 @@ class Payment extends Model
     'finance_payment_voucher',
     'finance_payment_email',
     'finance_payment_email_date',
-    'finance_payment_email_approve_date'
+    'finance_payment_email_approve_date',
+    'finance_payment_phone'
   ];
 
   public $with = ['account', 'order'];
@@ -67,6 +68,7 @@ class Payment extends Model
     'finance_payment_email'         => [false => 'Email'],
     'finance_payment_from'         => [false => 'From'],
     'finance_payment_to'         => [false => 'To'],
+    'finance_payment_phone'         => [false => 'Phone'],
     'finance_payment_account_id'         => [true => 'Account'],
     'finance_payment_amount'  => [true => 'Amount'],
     'finance_payment_approve_amount'  => [true => 'Approve'],

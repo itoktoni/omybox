@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Services\MasterService;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Services\TransactionService;
+use Modules\Sales\Dao\Models\OrderDetail;
 use Modules\Sales\Dao\Models\OrderDelivery;
 use Modules\Sales\Http\Services\OrderService;
 use Modules\Item\Dao\Repositories\StockRepository;
@@ -98,20 +99,29 @@ class OrderController extends Controller
     public function update(MasterService $service)
     {
         if (request()->isMethod('POST')) {
-
             $post = $service->update(self::$detail);
             foreach (request()->get('detail') as $value) {
                 $parse = request()->get('brand');
                 $brand_id = $value['temp_brand_id'];
                 $update = [
-                    'sales_order_detail_ongkir' => isset($parse[$brand_id]) ? Helper::filterInput($parse[$brand_id]['temp_brand_ongkir']) : 0, 
-                    'sales_order_detail_waybill' => isset($parse[$brand_id]) ? $parse[$brand_id]['temp_brand_waybill'] : '', 
+                    'sales_order_detail_ongkir' => isset($parse[$brand_id]) ? Helper::filterInput($parse[$brand_id]['temp_brand_ongkir']) : 0,
+                    'sales_order_detail_waybill' => isset($parse[$brand_id]) ? $parse[$brand_id]['temp_brand_waybill'] : '',
                 ];
                 DB::table(self::$model->detail_table)->where([
                     'sales_order_detail_sales_order_id' => $value['temp_order_id'],
                     'sales_order_detail_item_product_id' => $value['temp_product_id'],
                 ])->update($update);
             }
+
+            $total_ongkir = 0;
+            foreach (request()->get('brand') as $ongkir) {
+                $brand_ongkir = Helper::filterInput($ongkir['temp_brand_ongkir']);
+                $total_ongkir = $total_ongkir + $brand_ongkir;
+            }
+            OrderRepository::find(request()->get('code'))->update([
+                'sales_order_rajaongkir_ongkir' => $total_ongkir
+            ]);
+
             if ($post['status']) {
                 return Response::redirectToRoute($this->getModule() . '_data');
             }
@@ -132,8 +142,7 @@ class OrderController extends Controller
     public function prepare(TransactionService $service)
     {
         if (request()->isMethod('POST')) {
-
-            $post = $service->update(self::$prepare);
+            $post = $service->update(self::$detail);
             if ($post['status']) {
                 return Response::redirectToRoute($this->getModule() . '_data');
             }
@@ -141,14 +150,13 @@ class OrderController extends Controller
         }
 
         if (request()->has('code')) {
-
             $data = $service->show(self::$model, ['detail', 'detail.product', 'province', 'city', 'area']);
             $stock = new StockRepository();
             $product = $data->detail->pluck('sales_order_detail_option')->toArray();
             $data_stock = $stock->dataStockRepository($product)->get();
 
             $collection = collect(self::$model->status);
-            $status = $collection->forget([1, 2, 4, 0])->toArray();
+            $status = $collection->forget([1, 2, 5, 0])->toArray();
 
             $delivery = OrderDelivery::whereIn('so_delivery_option', $product)->where('so_delivery_order', request()->get('code'))->get();
             return view(Helper::setViewForm($this->template, __FUNCTION__, $this->folder))->with($this->share([
@@ -173,7 +181,8 @@ class OrderController extends Controller
                 'customer' => $data->customer,
                 'detail' => $data->detail,
             ];
-
+            // return view(Helper::setViewPrint(__FUNCTION__, $this->folder))->with($this->share($pasing));
+            
             $pdf = PDF::loadView(Helper::setViewPrint(__FUNCTION__, $this->folder), $pasing);
             return $pdf->stream();
             // return $pdf->download($id . '.pdf');
@@ -202,7 +211,6 @@ class OrderController extends Controller
     public function do(TransactionService $service)
     {
         if (request()->isMethod('POST')) {
-
             request()->validate([
                 'sales_order_rajaongkir_waybill' => 'required'
             ], [
@@ -215,7 +223,6 @@ class OrderController extends Controller
             return Response::redirectBackWithInput();
         }
         if (request()->has('code')) {
-
             $data = $service->show(self::$model, ['detail', 'detail.product', 'province', 'city', 'area']);
             $collection = collect(self::$model->status);
             $status = $collection->forget([1, 2, 0])->toArray();
@@ -245,7 +252,6 @@ class OrderController extends Controller
     public function payment(TransactionService $service)
     {
         if (request()->isMethod('POST')) {
-
             $post = $service->update(self::$detail);
             if ($post['status']) {
                 return Response::redirectToRoute($this->getModule() . '_data');
@@ -253,7 +259,6 @@ class OrderController extends Controller
             return Response::redirectBackWithInput();
         }
         if (request()->has('code')) {
-
             $data = $service->show(self::$model, ['payment', 'payment.account']);
             return view(Helper::setViewForm($this->template, __FUNCTION__, $this->folder))->with($this->share([
                 'model'        => $data,
@@ -310,29 +315,19 @@ class OrderController extends Controller
             $datatable->editColumn('sales_order_date', function ($field) {
                 return $field->sales_order_date->toDateString();
             });
-            $datatable->editColumn('sales_order_rajaongkir_service', function ($field) {
-                return 'Courier ' . strtoupper($field->sales_order_rajaongkir_courier) . ' <br> ' . str_replace(') ', ' ', $field->sales_order_rajaongkir_service) . ' <br> Weight ' . number_format(floatval($field->sales_order_rajaongkir_weight)) . ' g';
-            });
-            $datatable->editColumn('sales_order_total', function ($field) {
-                if (!Auth::user()->group_user == 'warehouse') {
-                    return Helper::createTotal($field->sales_order_total);
-                }
-            });
             $module = $this->getModule();
             $datatable->editColumn('action', function ($select) use ($module) {
-
                 $header = '<div class="action text-center">';
-                if (Auth::user()->group_user == 'brand') {
+                if (Auth::user()->group_user == 'partner') {
                     $print = '<a target="_blank" class="btn btn-danger btn-xs" href="' . route($module . '_print_prepare_do', ['code' => $select->sales_order_id]) . '">print</a> ';
                     $prepare = '<a class="btn btn-success btn-xs" href="' . route($module . '_prepare', ['code' => $select->sales_order_id]) . '">prepare</a>';
-                    $do = '<a class="btn btn-primary btn-xs" href="' . route($module . '_do', ['code' => $select->sales_order_id]) . '">delivery</a>';
-
-                    $html = $header . $print . $prepare . $do . '</div>';
+                    
+                    $html = $header . $print . $prepare . '</div>';
                 } else {
-
-                    $payment = '<a target="_blank" class="btn btn-success btn-xs" href="' . route('finance_payment_update', ['so' => $select->sales_order_id]) . '">payment</a> ';
+                    $print = '<a target="_blank" class="btn btn-danger btn-xs" href="' . route($module . '_print_prepare_do', ['code' => $select->sales_order_id]) . '">print</a> ';
+                    // $payment = '<a target="_blank" class="btn btn-success btn-xs" href="' . route('finance_payment_update', ['so' => $select->sales_order_id]) . '">payment</a> ';
                     $update = '<a class="btn btn-primary btn-xs" href="' . route($module . '_update', ['code' => $select->sales_order_id]) . '">update</a>';
-                    $html = $header . $payment . $update . '</div>';
+                    $html = $header . $print . $update . '</div>';
                 }
                 return $html;
             });

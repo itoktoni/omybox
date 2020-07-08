@@ -554,10 +554,10 @@ class Helper
                     switch ($filtering->custom) {
                         case 1:
                             $value = json_decode($filtering->val);
-                            break;
+                        break;
                         case 0:
                             $value = Auth()->user()->{$filtering->val};
-                            break;
+                        break;
                     }
                     if ($filtering->operator) {
                         $query->{$filtering->function}($filtering->field, $filtering->operator, $value);

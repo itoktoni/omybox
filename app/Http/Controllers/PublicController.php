@@ -430,122 +430,6 @@ class PublicController extends Controller
 
     public function cart()
     {
-        //  Cart::update("P191203005L1", array(
-        //     'quantity' => [
-        //         'relative' => false,
-        //         'value' => 5
-        //     ], // so if the current product has a quantity of 4, another 2 will be added so this will result to 6
-        // ));
-
-        // Cart::clear();
-        // if (request()->isMethod('POST')) {
-
-        //     $request = request()->all();
-        //     if (isset($request['code']) && !empty($request['code'])) {
-
-        //         $code = $request['code'];
-        //         $validate = Validator::make($request, [
-        //             'code' => 'required|exists:marketing_promo,marketing_promo_code',
-        //         ], [
-        //             'code.exists' => 'Voucher Not Valid !',
-        //         ]);
-
-        //         $promo = new PromoRepository();
-        //         $data = $promo->codeRepository(strtoupper($code));
-
-        //         if ($data) {
-        //             $value = Cart::getTotal();
-        //             $matrix = $data->marketing_promo_matrix;
-        //             if ($matrix) {
-
-        //                 // validate with minimal
-        //                 $minimal = $data->marketing_promo_minimal;
-        //                 if ($minimal) {
-        //                     if ($minimal > $value) {
-        //                         $validate->getMessageBag()->add('code', 'Minimal value ' . number_format($minimal) . ' !');
-        //                         return redirect()->back()->withErrors($validate);
-        //                     }
-        //                 }
-
-        //                 $string = str_replace('@value', $value, $matrix);
-        //                 $total = $value;
-
-        //                 try {
-        //                     $total = Helper::calculate($string);
-        //                 } catch (\Throwable $th) {
-        //                     $total = $value;
-        //                 }
-
-        //                 $promo = Cart::getConditions()->first();
-        //                 if ($promo) {
-        //                     Cart::removeCartCondition($promo->getName());
-        //                 }
-        //                 $condition = new \Darryldecode\Cart\CartCondition(array(
-        //                     'name' => $data->marketing_promo_code,
-        //                     'type' => $data->marketing_promo_type == 1 ? 'Promo' : 'Voucher',
-        //                     'target' => 'total', // this condition will be applied to cart's subtotal when getSubTotal() is called.
-        //                     'value' => -$total,
-        //                     'order' => 1,
-        //                     'attributes' => array( // attributes field is optional
-        //                         'name' => $data->marketing_promo_name,
-        //                     )
-        //                 ));
-
-        //                 Cart::condition($condition);
-        //             }
-        //         } else {
-        //             $validate->getMessageBag()->add('code', 'Voucher Not Valid !');
-        //             return redirect()->back()->withErrors($validate)->withInput();
-        //         }
-
-        //         if ($validate->fails()) {
-        //             return redirect()->back()->withErrors($validate)->withInput();
-        //         }
-        //     } else {
-
-        //         $index = 0;
-        //         foreach ($request['cart'] as $value) {
-
-        //             $validate = Validator::make(
-        //                 $request,
-        //                 [
-        //                     'cart.*.qty' => 'numeric|min:1',
-        //                     'cart.*.option' => 'required',
-        //                 ],
-        //                 [],
-        //                 [
-        //                     'cart.' . $index . '.qty' => 'Input must correct',
-        //                 ]
-        //             );
-
-        //             if ($validate->fails()) {
-        //                 return redirect()->back()->withErrors($validate)->withInput();
-        //             }
-
-        //             $stock = DB::table('view_stock_product')->where('id', $value['option'])->first();
-
-        //             $input_qty = floatval($value['qty']);
-        //             $data_qty = $stock->qty;
-        //             $data_product = $stock->id;
-
-        //             if ($input_qty > $data_qty) {
-        //                 $validate->errors()->add('cart.' . $index . '.qty', 'Stock Not Enought !');
-        //             }
-
-        //             Cart::update($data_product, array(
-        //                 'quantity' => [
-        //                     'relative' => false,
-        //                     'value' => $input_qty
-        //                 ], // so if the current product has a quantity of 4, another 2 will be added so this will result to 6
-        //             ));
-
-        //             $index++;
-        //         }
-
-        //         return redirect()->back()->withErrors($validate)->withInput();
-        //     }
-        // }
-
         if (request()->isMethod('POST')) {
             $index = 0;
             $request = request()->all();
@@ -570,7 +454,7 @@ class PublicController extends Controller
                 $data_qty = $value['qty'];
                 $data_description = $value['description'];
 
-                $product_single = ProductRepository::find($data_product)->first();
+                $product_single = ProductRepository::find($data_product);
 
                 $discount = 0;
                 if ($product_single->item_product_discount_type == 1) {
@@ -578,13 +462,13 @@ class PublicController extends Controller
                 } elseif ($product_single->item_product_discount_type == 2) {
                     $discount = $product_single->item_product_discount_value;
                 }
-
                 $additional = [
                     'description' => $product_single->item_product_description,
                     'notes' => $data_description,
                     'image' => $product_single->item_product_image,
                     'price' => $product_single->item_product_sell,
                     'discount' => $discount,
+                    'brand_id' => $product_single->item_product_item_brand_id ?? '',
                     'brand_name' => $product_single->brand->item_brand_name ?? '',
                     'brand_description' => $product_single->brand->item_brand_description ?? '',
                 ];
@@ -666,19 +550,75 @@ class PublicController extends Controller
         ]);
     }
 
-
     public function delete($id)
     {
         if (Cart::getContent()->contains('id', $id)) {
             Cart::remove($id);
             if (Cart::isEmpty()) {
                 Cart::clearCartConditions();
+            } else {
+                $discount = Cart::getConditions()->first();
+                if ($discount) {
+                    $code = $discount->getName();
+                    $request['code'] = $code;
+                    $validate = Validator::make($request, [
+                        'code' => 'required|exists:marketing_promo,marketing_promo_code',
+                    ], [
+                        'code.exists' => 'Voucher Not Valid !',
+                    ]);
+                    Cart::removeCartCondition($code);
+
+                    $promo = new PromoRepository();
+                    $data = $promo->codeRepository(strtoupper($code));
+                    if ($data) {
+                        $value = Cart::getTotal();
+                        $matrix = $data->marketing_promo_matrix;
+                        if ($matrix) {
+
+                            // validate with minimal
+                            $minimal = $data->marketing_promo_minimal;
+                            if ($minimal) {
+                                if ($minimal > $value) {
+                                    $validate->getMessageBag()->add('code', 'Minimal value ' . number_format($minimal) . ' !');
+                                    Cart::removeCartCondition($code);
+                                    return redirect()->route('cart')->withErrors($validate);
+                                }
+                            }
+
+                            $string = str_replace('@value', $value, $matrix);
+                            $total = $value;
+
+                            try {
+                                $total = Helper::calculate($string);
+                            } catch (\Throwable $th) {
+                                $total = $value;
+                            }
+                            $promo = Cart::getConditions()->first();
+                            $condition = new \Darryldecode\Cart\CartCondition(array(
+                                    'name' => $data->marketing_promo_code,
+                                    'type' => $data->marketing_promo_type == 1 ? 'Promo' : 'Voucher',
+                                    'target' => 'subtotal', // this condition will be applied to cart's subtotal when getSubTotal() is called.
+                                    'value' => -$total,
+                                    'order' => 1,
+                                    'attributes' => array( // attributes field is optional
+                                        'name' => $data->marketing_promo_name,
+                                        'real' => $value,
+                                    )
+                                ));
+
+                            Cart::condition($condition);
+                        }
+                    } else {
+                        $validate->getMessageBag()->add('code', 'Voucher Not Valid !');
+                        return redirect()->route('cart')->withErrors($validate)->withInput();
+                    }
+                }
             }
 
             return redirect()->route('cart');
         }
 
-        return false;
+        return redirect()->route('cart');
     }
 
     public function add($id)
@@ -688,39 +628,80 @@ class PublicController extends Controller
             $product = new ProductRepository();
             $item = $product->showRepository($id);
 
-            $discount = 0;
+            $promo = 0;
             if ($item->item_product_discount_type == 1) {
-                $discount = $item->item_product_sell * $item->item_product_discount_value;
+                $promo = $item->item_product_sell * $item->item_product_discount_value;
             } elseif ($item->item_product_discount_type == 2) {
-                $discount = $item->item_product_discount_value;
+                $promo = $item->item_product_discount_value;
             }
-
             $additional = [
                 'description' => $item->item_product_description,
                 'notes' => '',
                 'image' => $item->item_product_image,
                 'price' => $item->item_product_sell,
-                'discount' => $discount,
+                'discount' => $promo,
+                'brand_id' => $item->item_product_item_brand_id ?? '',
                 'brand_name' => $item->brand->item_brand_name ?? '',
                 'brand_description' => $item->brand->item_brand_description ?? '',
             ];
-            // if (json_decode($item->item_product_color_json) && json_decode($item->item_product_size_json)) {
-            //     $additional = [
-            //         'image' => $item->item_product_image,
-            //         // 'color' => 'random',
-            //         // 'size' => 'random',
-            //         'discount' => $discount,
-            //     ];
-            // }
 
-            Cart::add($item->item_product_id, $item->item_product_name, $item->item_product_sell - $discount, 1, $additional);
+            Cart::add($item->item_product_id, $item->item_product_name, $item->item_product_sell - $promo, 1, $additional);
+            $discount = Cart::getConditions()->first();
+            if ($discount) {
+                $code = $discount->getName();
+                $request['code'] = $code;
+                $validate = Validator::make($request, [
+                        'code' => 'required|exists:marketing_promo,marketing_promo_code',
+                    ], [
+                        'code.exists' => 'Voucher Not Valid !',
+                    ]);
+                Cart::removeCartCondition($code);
 
-            // Cart::add($item->item_product_id, $item->item_product_name, $item->item_product_sell - $discount, 1, [
-            //     'image' => $item->item_product_image,
-            //     'description' => $item->item_product_description,
-            //     // 'color' => 'random',
-            //     // 'size' => 'random',
-            // ]);
+                $promo = new PromoRepository();
+                $data = $promo->codeRepository(strtoupper($code));
+                if ($data) {
+                    $value = Cart::getTotal();
+                    $matrix = $data->marketing_promo_matrix;
+                    if ($matrix) {
+
+                            // validate with minimal
+                        $minimal = $data->marketing_promo_minimal;
+                        if ($minimal) {
+                            if ($minimal > $value) {
+                                $validate->getMessageBag()->add('code', 'Minimal value ' . number_format($minimal) . ' !');
+                                Cart::removeCartCondition($code);
+                                return redirect()->route('cart')->withErrors($validate);
+                            }
+                        }
+
+                        $string = str_replace('@value', $value, $matrix);
+                        $total = $value;
+
+                        try {
+                            $total = Helper::calculate($string);
+                        } catch (\Throwable $th) {
+                            $total = $value;
+                        }
+                        $promo = Cart::getConditions()->first();
+                        $condition = new \Darryldecode\Cart\CartCondition(array(
+                                    'name' => $data->marketing_promo_code,
+                                    'type' => $data->marketing_promo_type == 1 ? 'Promo' : 'Voucher',
+                                    'target' => 'subtotal', // this condition will be applied to cart's subtotal when getSubTotal() is called.
+                                    'value' => -$total,
+                                    'order' => 1,
+                                    'attributes' => array( // attributes field is optional
+                                        'name' => $data->marketing_promo_name,
+                                        'real' => $value,
+                                    )
+                                ));
+
+                        Cart::condition($condition);
+                    }
+                } else {
+                    $validate->getMessageBag()->add('code', 'Voucher Not Valid !');
+                    return redirect()->route('cart')->withErrors($validate)->withInput();
+                }
+            }
         }
         return redirect()->back();
     }
@@ -735,6 +716,7 @@ class PublicController extends Controller
                 'finance_payment_amount' => 'required',
                 'finance_payment_sales_order_id' => 'required|exists:sales_order,sales_order_id',
                 'finance_payment_person' => 'required',
+                'finance_payment_phone' => 'required',
                 'finance_payment_email' => 'required|email',
                 'finance_payment_date' => 'required',
                 'files' => 'required|image|mimes:jpeg,png,jpg|max:2048',
@@ -745,6 +727,7 @@ class PublicController extends Controller
                 'finance_payment_sales_order_id.required' => 'Nomer Order tidak terdaftar',
                 'finance_payment_sales_order_id.exists' => 'Nomer Order tidak ada di database',
                 'finance_payment_person.required' => 'Nama pengirim tidak boleh kosong',
+                'finance_payment_person.phone' => 'Handphone tidak boleh kosong',
                 'finance_payment_email.required' => 'Email pengirim tidak boleh kosong',
                 'files.required' => 'Upload Bukti Pembayaran',
             ];
@@ -823,68 +806,6 @@ class PublicController extends Controller
         if (request()->isMethod('POST')) {
             $discount = Cart::getConditions()->first();
             $request = request()->all();
-            // $validator1 = Validator::make($request, [
-            //     'sales_order_rajaongkir_courier' => 'required',
-            //     'sales_order_rajaongkir_ongkir' => 'required',
-            //     'sales_order_rajaongkir_city_id' => 'required',
-            // ], [], [
-            //     'sales_order_rajaongkir_courier' => 'Expedition Harus Dipilih',
-            //     'sales_order_rajaongkir_ongkir' => 'Ongkir Harus Dipilih',
-            //     'sales_order_rajaongkir_city_id' => 'City Harus Dipilih',
-            // ]);
-
-            // $address = $request['sales_order_rajaongkir_address'];
-            // $email = $request['sales_order_email'];
-            // $name = $request['sales_order_rajaongkir_name'];
-            // $phone = $request['sales_order_rajaongkir_phone'];
-            // $postcode = $request['sales_order_rajaongkir_postcode'];
-
-            // $province = $request['sales_order_rajaongkir_province_id'] ?? null;
-            // $city = $request['sales_order_rajaongkir_city_id'] ?? null;
-            // $location = $request['sales_order_rajaongkir_area_id'] ?? null;
-
-            // if ($validator1->fails()) {
-            //     return View(Helper::setViewFrontend(__FUNCTION__))->with([
-            //         'address' => $address,
-            //         'email' => $email,
-            //         'phone' => $phone,
-            //         'name' => $name,
-            //         'account' => $account,
-            //         'postcode' => $postcode,
-            //         'province' => $province,
-            //         'city' => $city,
-            //         'location' => $location,
-            //         'list_city' => $list_city,
-            //         'list_location' => $list_location,
-            //         'list_province' => $list_province,
-            //         'courier' => $courier,
-            //         'ongkir' => $ongkir,
-            //     ])->withErrors($validator1);
-            // }
-
-            // $saveOngkir = 0;
-            // if (request()->has('sales_order_rajaongkir_ongkir')) {
-            //     $post_to = $location;
-            //     $post_weight = request()->get('sales_order_rajaongkir_weight');
-            //     $post_courier = request()->get('sales_order_rajaongkir_courier');
-            //     $response = Curl::to(route('ongkir'))->withData([
-            //         'to' => $post_to,
-            //         'weight' => $post_weight,
-            //         'courier' => $post_courier,
-            //     ])->post();
-            //     $json  = json_decode($response);
-            //     if (isset($json) && !empty($json)) {
-            //         $int = 0;
-            //         $service = $request['sales_order_rajaongkir_ongkir'];
-            //         $saveOngkir = collect($json)->where('service', $service)->first()->cost ?? 0;
-            //         $ongkir[''] = 'Choose Ongkir';
-            //         foreach ($json as $value) {
-            //             $ongkir[$value->service] = $value->service . ' ( ' . $value->description . ' ) [ ' . $value->etd . ' ] - ' . $value->price;
-            //         }
-            //     }
-            // }
-
-            // $request['sales_order_rajaongkir_ongkir'] = $saveOngkir;
             
             if ($discount) {
                 $request['sales_order_marketing_promo_code'] = $discount->getName();
@@ -893,34 +814,18 @@ class PublicController extends Controller
             }
 
             $rules = [
-                // 'sales_order_rajaongkir_province_id' => 'required',
-                // 'sales_order_rajaongkir_city_id' => 'required',
-                // 'sales_order_rajaongkir_area_id' => 'required',
-                // 'sales_order_rajaongkir_courier' => 'required',
-                // 'sales_order_rajaongkir_ongkir' => 'required|numeric',
                 'sales_order_rajaongkir_address' => 'required',
                 'sales_order_email' => 'required|email',
                 'sales_order_rajaongkir_name' => 'required',
                 'sales_order_rajaongkir_phone' => 'required',
-                // 'sales_order_rajaongkir_weight' => 'required',
-                // 'sales_order_rajaongkir_courier' => 'required',
-                // 'sales_order_rajaongkir_ongkir' => 'required',
             ];
             $request['sales_order_total'] = Cart::getTotal();
             $validate = Validator::make($request, $rules, $order->custom_attribute);
             $check = $order->saveRepository($request);
             $id = $check['data']->sales_order_id;
-
             foreach (Cart::getContent() as $item) {
                 $stock = ProductRepository::where('item_product_id', $item->id)->first();
                 $price_real = $item->price * $item->quantity;
-
-                // $tax_name = $tax_value = null;
-                // if (config('website.tax')) {
-                //     $tax_name = $item->getConditions()->getName();
-                //     $tax_value = $item->getConditions()->getValue() * $item->quantity;
-                //     $price_real = ($item->price * $item->quantity) + $tax_value;
-                // }
 
                 DB::table('sales_order_detail')->insert([
                     'sales_order_detail_sales_order_id' => $id,
@@ -928,7 +833,7 @@ class PublicController extends Controller
                     'sales_order_detail_qty_order' => $item->quantity,
                     'sales_order_detail_price_order' => $item->price,
                     'sales_order_detail_total_order' => $price_real,
-                    // 'sales_order_detail_tax_value' => $tax_value,
+                    'sales_order_detail_item_brand' => $item->attributes['brand_id'],
                     'sales_order_detail_notes' => $item->attributes['notes'],
                     'sales_order_detail_discount' => $stock->item_product_sell - $item->price,
                     'sales_order_detail_price_real' => $stock->item_product_sell,

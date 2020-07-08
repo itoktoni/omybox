@@ -9,7 +9,7 @@
     @endisset
     <div class="panel-body">
         <div class="panel panel-default">
-            <header class="panel-heading" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            <header class="panel-heading">
                 @isset($model->$key)
                 <h2 class="panel-title">Edit {{ ucwords(str_replace('_',' ',$template)) }} : {{ $model->$key }}</h2>
                 @else
@@ -17,7 +17,7 @@
                 @endisset
             </header>
             
-            <div class="panel-body line collapse" id="collapseExample">
+            <div class="panel-body line " id="collapseExample">
                 <div class="col-md-12 col-lg-12">
                     @includeIf(Helper::include($template))
                 </div>

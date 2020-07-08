@@ -322,7 +322,7 @@
         @if(session()->has('success'))
         <div class="col-md-12 text-center">
             <div style="margin-top:-20px;" class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Pemesanan Telah Success, Harap menunggu !</strong>
+                <strong>Pemesanan Telah Success, Harap menunggu Konfirmasi Ongkir !</strong>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

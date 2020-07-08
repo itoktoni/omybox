@@ -4,20 +4,23 @@ namespace App\Http\Controllers;
 
 use Config;
 // use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Artisan;
-use Closure;
 use Helper;
+use Closure;
 use Plugin\Response;
 use App\Charts\HomeChart;
 use Illuminate\Http\Request;
 use App\Dao\Models\GroupUser;
 use Illuminate\Support\Facades\DB;
+use Modules\Sales\Dao\Models\Order;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
+use Modules\Sales\Dao\Models\OrderDetail;
+use Modules\Sales\Dao\Repositories\OrderRepository;
 use Alkhachatryan\LaravelWebConsole\LaravelWebConsole;
 
 class HomeController extends Controller
@@ -78,20 +81,36 @@ class HomeController extends Controller
         if (Auth::user()->group_user == 'customer') {
             return redirect()->to('/');
         }
-        $chart = new HomeChart();
-        $chart->labels(['One', 'Two', 'Three', 'Four']);
-        $chart->dataset('My dataset', 'line', [1, 2, 3, 4])->backgroundColor('#0088cc')->fill(true);
-        $chart->dataset('My dataset 2', 'line', [4, 3, 2, 1])->backgroundColor('#ddf1fa')->fill(true);
+        
+        if(request()->has('order') && request()->has('id')){
+            $order = request()->get('order');
+            $id = request()->get('id');
 
-        $chart->options([
-            'tooltip' => [
-                'show' => true // or false, depending on what you want.
-            ]
-        ]);
+            $delete = OrderDetail::where('sales_order_detail_sales_order_id', $order)->where('sales_order_detail_item_product_id', $id);
+            $delete->update(['sales_order_detail_qty_prepare' => $delete->first()->sales_order_detail_qty_order]);
+            
+            return redirect()->back();
+        }
+        // return view(Helper::setViewDashboard())->with(['chart' => $chart]);
+        $list = [
+            'sales_order_id',
+            'item_brand_name',
+            'item_product_id',
+            'item_product_name',
+            'sales_order_detail_qty_order',
+            'sales_order_detail_notes',
+        ];
+        $query = Order::select($list)->join('sales_order_detail', 'sales_order_detail_sales_order_id', 'sales_order_id')
+            ->join('item_product', 'item_product_id', 'sales_order_detail_item_product_id')
+            ->leftJoin('item_brand', 'item_brand_id', 'item_product_item_brand_id');
 
-        session('button', 2);
+        $data = $query->where('sales_order_status', '=', 3)->whereNull('sales_order_detail_qty_prepare');
 
-        return view(Helper::setViewDashboard())->with(['chart' => $chart]);
+        if (Auth::user()->group_user == 'partner') {
+            $data->where('sales_order_detail_item_brand', Auth::user()->brand);
+        }
+
+        return view(Helper::setViewDashboard())->with(['detail' => $data->get()]);
     }
 
     public function configuration()
@@ -140,7 +159,8 @@ class HomeController extends Controller
             }
 
             session()->put('success', 'Configuration Success !');
-            return Response::redirectBack();;
+            return Response::redirectBack();
+            ;
         }
 
         $frontend = array_map('basename', File::directories(resource_path('views/frontend/')));

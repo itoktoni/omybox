@@ -10,6 +10,8 @@
     </thead>
     <tbody>
         @foreach ($brands as $brand)
+        @if (Auth::user()->group_user != 'operation')
+            
         <tr>
             <td data-title="Brand" colspan="2">
                 <span class="text-danger">
@@ -27,6 +29,8 @@
                     class="form-control text-right number temp_qty" value="{{ $brand->sales_order_detail_waybill ?? '' }}">
             </td>
         </tr>
+        @endif
+        
         @foreach ($detail as $item)
         @if ($item->product->item_product_item_brand_id == $brand->item_brand_id)
 
@@ -74,7 +78,7 @@
             </td>
             <td data-title="Ongkir" colspan="1">
                 <input type="text" name="sales_order_rajaongkir_ongkir" readonly class="form-control text-right number temp_total"
-                    value="{{ old('sales_order_rajaongkir_ongkir') ?? $brands->sum('sales_order_detail_ongkir') }}">
+                    value="{{ old('sales_order_rajaongkir_ongkir') ?? $model->sales_order_rajaongkir_ongkir }}">
             </td>
         </tr>
         @if ($model->sales_order_marketing_promo_code)

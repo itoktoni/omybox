@@ -231,11 +231,14 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                       <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">Notes</label>
-                                <textarea name="finance_payment_note" class="form-control" id="" cols="30"
-                                    rows="3">{{ old('finance_payment_note') ?? '' }}</textarea>
+                                <label for="">Handphone</label>
+                                <input type="text" class="form-control {{ $errors->has('finance_payment_phone') ? 'error' : ''}}"
+                                    name="finance_payment_phone" value="{{ old('finance_payment_phone') ?? $order->sales_order_total ?? '' }}"
+                                    placeholder="Handphone">
+                                {!! $errors->first('finance_payment_phone', '<p class="help-block text-danger">:message
+                                </p>') !!}
                             </div>
                         </div>
 
@@ -245,6 +248,14 @@
                                 <input type="file" name="files"
                                     class="form-control {{ $errors->has('files') ? 'error' : ''}} btn btn-default btn-sm btn-block">
                                 {!! $errors->first('files', '<p class="help-block text-danger">:message</p>') !!}
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="">Notes</label>
+                                <textarea name="finance_payment_note" class="form-control" id="" cols="30"
+                                    rows="3">{{ old('finance_payment_note') ?? '' }}</textarea>
                             </div>
                         </div>
 

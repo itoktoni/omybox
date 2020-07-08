@@ -54,7 +54,7 @@ class SendEmail extends Command
 
             foreach ($order_data as $order_item) {
 
-                $data = $order->showRepository($order_item->sales_order_id, ['customer', 'forwarder', 'detail', 'detail.product']);
+                $data = $order->showRepository($order_item->sales_order_id, ['customer', 'detail', 'detail.product']);
                 Mail::to([config('website.email')])->send(new CreateOrderEmail($data));
                 // Mail::to([$order_item->sales_order_email, config('website.email')])->send(new CreateOrderEmail($data));
                 $data->sales_order_email_date = date('Y-m-d H:i:s');

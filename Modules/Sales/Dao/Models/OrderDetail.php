@@ -2,6 +2,7 @@
 
 namespace Modules\Sales\Dao\Models;
 
+use Modules\Item\Dao\Models\Brand;
 use Modules\Item\Dao\Models\Color;
 use Modules\Item\Dao\Models\Product;
 use Illuminate\Database\Eloquent\Model;
@@ -29,6 +30,7 @@ class OrderDetail extends Model
     'sales_order_detail_waybill',
     'sales_order_detail_ongkir',
     'sales_order_detail_tax_value',
+    'sales_order_detail_item_brand',
     'sales_order_detail_notes'
   ];
 
@@ -43,6 +45,11 @@ class OrderDetail extends Model
   public function product()
   {
     return $this->hasOne(Product::class, 'item_product_id', 'sales_order_detail_item_product_id');
+  }
+
+  public function brand()
+  {
+    return $this->hasOne(Brand::class, 'item_brand_id', 'sales_order_detail_item_brand');
   }
 
   public function color()
