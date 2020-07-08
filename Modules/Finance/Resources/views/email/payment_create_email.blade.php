@@ -5,6 +5,10 @@
 h5{
     margin-top: 50px;
 }  
+
+body{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
 </style>
 <body>
     <div id='page'>
@@ -30,8 +34,7 @@ h5{
                 <p>
                     Notes : {{ $data->finance_payment_note }}
                 </p>
-                <a style="background-color:#{{ config('website.color') }};color:white;text-decoration: none;padding:12px 10px;border-radius:20px;margin-top:0px;position:absolute;right:50%;margin-right:-80px;"
-                    href="{{ Helper::base_url() }}">Contact {{ config('website.name') }}</a>
+                
             </div>
 
         </div>

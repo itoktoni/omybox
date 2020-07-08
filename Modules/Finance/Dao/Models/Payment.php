@@ -64,7 +64,7 @@ class Payment extends Model
     'finance_payment_id'             => [false => 'ID'],
     'finance_payment_voucher'           => [true => 'Voucher'],
     'finance_payment_sales_order_id'         => [true => 'Order No'],
-    'finance_payment_reference'         => [true => 'Reference'],
+    'finance_payment_reference'         => [false => 'Reference'],
     'finance_payment_email'         => [false => 'Email'],
     'finance_payment_from'         => [false => 'From'],
     'finance_payment_to'         => [false => 'To'],
@@ -86,8 +86,8 @@ class Payment extends Model
   ];
 
   public $status = [
-    '0' => ['APPROVE', 'success'],
-    '1' => ['PENDING', 'warning'],
+    '0' => ['PENDING', 'warning'],
+    '1' => ['APPROVE', 'success'],
     '2' => ['REJECT', 'danger'],
   ];
 

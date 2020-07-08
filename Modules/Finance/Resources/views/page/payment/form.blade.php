@@ -134,7 +134,7 @@
 
     @if ($model->order)
     <div class="col-md-6">
-        <h2>Total Order : {{ $model->order ? number_format($model->order->sales_order_total) : 0 }}</h2>
+        <h2>Total Order : {{ $model->order ? number_format($model->order->sales_order_total + $model->order->sales_order_rajaongkir_ongkir) : 0 }}</h2>
     </div>
     @endif
 </div>

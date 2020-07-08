@@ -26,7 +26,7 @@
             </td>
             <td colspan="2" data-title="Waybill" class="text-right col-lg-1">
                 <input type="text" name="brand[{{ $brand->item_brand_id }}][temp_brand_waybill]" placeholder="Waybill"
-                    class="form-control text-right number temp_qty" value="{{ $brand->sales_order_detail_waybill ?? '' }}">
+                    class="form-control text-right temp_qty" value="{{ $brand->sales_order_detail_waybill ?? '' }}">
             </td>
         </tr>
         @endif

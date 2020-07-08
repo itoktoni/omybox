@@ -20,7 +20,7 @@
                                                 <div style="margin:10px 2px -25px">
                                                     <p
                                                         style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:15px;font-weight:bold;margin:0;padding:0">
-                                                        Notification Order From
+                                                        Notification Estimasi Harga dari
                                                         {{ config('website.name') }},
                                                     </p>
 
@@ -116,7 +116,43 @@
                                                                         style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">{{ $master->sales_order_rajaongkir_address ?? '' }}</span>
                                                                 </td>
                                                             </tr>
+                                                            
+                                                            @foreach ($detail->groupBy('sales_order_detail_item_brand')
+                                                            as $brand)
+                                                            @php
+                                                            $clone = clone($brand);
+                                                            $single_brand = $clone->first();
+                                                            @endphp
+                                                            <tr>
+                                                                <th colspan="4" style="border-bottom-style:none;color:#ffffff;padding-left:10px;padding-right:10px"
+                                                                    bgcolor="#{{ config('website.color') }}"></th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="2" align="left" valign="middle" width="15%"
+                                                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;"
+                                                                    bgcolor="#FFFFFF">
+                                                                    <span>
+                                                                        - Outlet
+                                                                        {{ $single_brand->brand->item_brand_name ?? ''}}
+                                                                    </span>
+                                                                </td>
+                                                                <td align="center" valign="middle" width="10%"
+                                                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;"
+                                                                    bgcolor="#FFFFFF">
+                                                                    <span>
+                                                                        Outlet
+                                                                        {{ $single_brand->brand->item_brand_description }}
+                                                                    </span>
+                                                                </td>
 
+                                                                <td align="right" valign="middle" width="15%"
+                                                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;"
+                                                                    bgcolor="#FFFFFF">
+                                                                    <span>
+                                                                        {{ number_format($single_brand->sales_order_detail_ongkir) }}
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
                                                             <tr>
                                                                 <th colspan="4"
                                                                     style="border-bottom-style:none;color:#ffffff;padding-left:10px;padding-right:10px"
@@ -161,7 +197,7 @@
                                                             $sub = 0;
                                                             $total = 0;
                                                             ?>
-                                                            @foreach ($detail as $item)
+                                                            @foreach ($brand as $item)
                                                             <?php
                                                             $sub = $item->sales_order_detail_qty_order * $item->sales_order_detail_price_order;
                                                             $total = $total + $sub;
@@ -171,7 +207,7 @@
                                                                 <td align="left" valign="middle" width="50%"
                                                                     style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
                                                                     bgcolor="#FFFFFF">
-                                                                    {{ $item->product->item_product_name }} {{ $item->sales_order_detail_notes ? ' ( '.$item->sales_order_detail_notes.' )' : '' }}
+                                                                    {{ $item->product->item_product_name }}
                                                                 </td>
                                                                 <td align="center" valign="middle" width="10%"
                                                                     style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
@@ -195,8 +231,8 @@
                                                                 </td>
                                                             </tr>
                                                             @endforeach
+                                                            @endforeach
 
-                                                           
                                                             @if ($master->sales_order_marketing_promo_value)
                                                             <tr>
                                                                 <td align="left" colspan="2" valign="top"
@@ -217,12 +253,34 @@
                                                             </tr>
                                                             @endif
                                                             <tr>
+                                                                <th colspan="4" style="border-bottom-style:none;color:#ffffff;padding-left:10px;padding-right:10px"
+                                                                    bgcolor="#{{ config('website.color') }}"></th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="left" colspan="3" valign="top"
+                                                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
+                                                                    bgcolor="#f0f0f0">
+                                                                    <span
+                                                                        style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">Total
+                                                                        Ongkir
+                                                                        :
+                                                                </td>
+                                                                <td align="right" valign="top" colspan="1"
+                                                                    style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
+                                                                    bgcolor="#f0f0f0">
+                                                                    <span
+                                                                        style="text-align: right;font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">{{ number_format($master->sales_order_rajaongkir_ongkir,0,",",".") }}</span>
+                                                                </td>
+                                                            </tr>
+                                                             
+                                                           
+                                                            <tr>
                                                                 <th colspan="1"
                                                                     style="text-align: left;border-bottom-style:none;color:#ffffff;padding-left:10px;padding-right:10px"
                                                                     bgcolor="#{{ config('website.color') }}">
                                                                     <h2
                                                                         style="font-family:Arial,sans-serif;color:#ffffff;line-height:1.5;font-size:13px;margin:0;padding:5px 0">
-                                                                        Total
+                                                                        Grand Total
                                                                     </h2>
                                                                 </th>
                                                                 <th colspan="3"
@@ -230,7 +288,7 @@
                                                                     bgcolor="#{{ config('website.color') }}">
                                                                     <h2
                                                                         style="text-align: right;font-family:Arial,sans-serif;color:#ffffff;line-height:1.5;font-size:13px;margin:0;padding:5px 0">
-                                                                        {{ number_format($master->sales_order_total,0,",",".") }}
+                                                                        {{ number_format($master->sales_order_total + $master->sales_order_rajaongkir_ongkir,0,",",".") }}
                                                                     </h2>
                                                                 </th>
                                                             </tr>
@@ -238,8 +296,40 @@
                                                         </tbody>
                                                     </table>
 
+                                                    <table>
+                                                        <tr>
+                                                            <td align="left" colspan="2" valign="top"
+                                                                style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;margin:0;padding:5px 10px"
+                                                                bgcolor="#FFFFFF">
+                                                                <span
+                                                                    style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:14px;margin:0;padding:0;font-weight:bold">
+                                                                    Rekening :
+                                                                </span>
+                                                            </td>
+
+                                                        </tr>
+                                                        @foreach($account as $a)
+                                                        <tr>
+                                                            <td align="left" colspan="2" valign="top"
+                                                                style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;margin:0;padding:5px 10px"
+                                                                bgcolor="#FFFFFF">
+                                                                <span
+                                                                    style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">{{ $a->finance_bank_name }}</span>
+                                                            </td>
+                                                            <td>:</td>
+                                                            <td align="left" colspan="2" valign="top"
+                                                                style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;margin:0;padding:5px 10px"
+                                                                bgcolor="#FFFFFF">
+                                                                <span
+                                                                    style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">{{ $a->finance_bank_account_number }}
+                                                                    ( {{ $a->finance_bank_account_name }} )</span>
+                                                            </td>
+                                                        </tr>
+                                                        @endforeach
+                                                    </table>
+
                                                     <br>
-                                                    
+
                                                     <p
                                                         style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:15px;margin:0;padding:0">
                                                         silakan hubungi kami melalui halaman

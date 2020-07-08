@@ -13,7 +13,7 @@
     }
 
     .even{
-        background-color: ivory;
+        background-color: rgb(247, 245, 234);
     }
 </style>
 @endpush

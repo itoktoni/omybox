@@ -449,14 +449,14 @@ a, h3 a, h4 a, h5 a, h6 a {
                         style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;"
                         bgcolor="#FFFFFF">
                         <span>
-                            Ongkir
+                            {{ $single_brand->brand->item_brand_description }}
                         </span>
                     </td>
-                    <td align="right" valign="middle" width="15%"
+                    <td align="left" valign="middle" width="15%"
                         style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;"
                         bgcolor="#FFFFFF">
                         <span>
-                            {{ $single_brand->brand->item_brand_description }}
+                            {{ $single_brand->sales_order_detail_waybill }}
                         </span>
                     </td>
                     <td align="right" valign="middle" width="15%"
@@ -504,23 +504,6 @@ a, h3 a, h4 a, h5 a, h6 a {
 
                 @endforeach
                 <tr>
-                    <td align="left" colspan="7" valign="top"
-                        style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                        bgcolor="#f0f0f0">
-                        <span
-                            style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">Total
-                            Ongkir
-                            :
-                            {{ $master->sales_order_rajaongkir_service ?? '' }}</span>
-                    </td>
-                    <td align="right" valign="top" colspan="1"
-                        style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
-                        bgcolor="#f0f0f0">
-                        <span
-                            style="text-align: right;font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">{{ number_format($master->sales_order_rajaongkir_ongkir,0,",",".") }}</span>
-                    </td>
-                </tr>
-                <tr>
                     <th colspan='8' style='background: #{{ config('website.color') }} !important'></th>
                 </tr>
                 @if ($master->sales_order_marketing_promo_value)
@@ -528,8 +511,7 @@ a, h3 a, h4 a, h5 a, h6 a {
                     <td align="left" colspan="7" valign="top"
                         style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
                         bgcolor="#f0f0f0">
-                        <span
-                            style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">
+                        <span style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">
                             {{ $master->sales_order_marketing_promo_code ?? '' }}
                             :
                             {{ $master->sales_order_marketing_promo_name ?? '' }}</span>
@@ -543,12 +525,32 @@ a, h3 a, h4 a, h5 a, h6 a {
                 </tr>
                 @endif
                 <tr>
+                    <td align="left" colspan="7" valign="top"
+                        style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
+                        bgcolor="#f0f0f0">
+                        <span
+                            style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">Total
+                            Ongkir
+                            :
+                    </td>
+                    <td align="right" valign="top" colspan="1"
+                        style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
+                        bgcolor="#f0f0f0">
+                        <span
+                            style="text-align: right;font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">{{ number_format($master->sales_order_rajaongkir_ongkir,0,",",".") }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan='8' style='background: #{{ config('website.color') }} !important'></th>
+                </tr>
+                
+                <tr>
                     <th colspan="7"
                         style="text-align: left;border-bottom-style:none;color:#ffffff;padding-left:10px;padding-right:10px"
                         bgcolor="#{{ config('website.color') }}">
                         <h2
                             style="font-family:Arial,sans-serif;color:#ffffff;line-height:1.5;font-size:13px;margin:0;padding:5px 0">
-                            Total
+                           Grand Total
                         </h2>
                     </th>
                     <th colspan="1"
@@ -556,7 +558,7 @@ a, h3 a, h4 a, h5 a, h6 a {
                         bgcolor="#{{ config('website.color') }}">
                         <h2
                             style="text-align: right;font-family:Arial,sans-serif;color:#ffffff;line-height:1.5;font-size:13px;margin:0;padding:5px 0">
-                            {{ number_format($master->sales_order_total,0,",",".") }}
+                            {{ number_format($master->sales_order_total + $master->sales_order_rajaongkir_ongkir,0,",",".") }}
                         </h2>
                     </th>
                 </tr>

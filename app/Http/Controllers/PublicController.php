@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
 use App;
-use Illuminate\Support\Facades\Auth;
+use Cart;
+use Exception;
 use Plugin\Helper;
 use Illuminate\Http\Request;
 use Ixudra\Curl\Facades\Curl;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Modules\Sales\Dao\Models\Area;
 use Modules\Sales\Dao\Models\City;
 use Modules\Sales\Dao\Models\Order;
 use Darryldecode\Cart\CartCondition;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Modules\Item\Dao\Models\Product;
 use Illuminate\Support\Facades\Cache;
@@ -21,12 +23,14 @@ use Illuminate\Support\Facades\Config;
 use Modules\Sales\Dao\Models\Province;
 use App\Http\Services\EcommerceService;
 use Illuminate\Support\Facades\Artisan;
+use Modules\Finance\Dao\Models\Account;
 use App\Dao\Repositories\TeamRepository;
-use Exception;
 use Modules\Marketing\Dao\Models\Slider;
 use Illuminate\Support\Facades\Validator;
 use Modules\Marketing\Emails\ContactEmail;
 use Modules\Sales\Emails\CreateOrderEmail;
+use Modules\Procurement\Dao\Models\Purchase;
+use Modules\Sales\Emails\CreateEstimateEmail;
 use Jackiedo\DotenvEditor\Facades\DotenvEditor;
 use Modules\Item\Dao\Repositories\TagRepository;
 use Modules\Item\Dao\Repositories\TaxRepository;
@@ -38,20 +42,17 @@ use Modules\Finance\Dao\Repositories\BankRepository;
 use Modules\Item\Dao\Repositories\ProductRepository;
 use Modules\Item\Dao\Repositories\CategoryRepository;
 use Modules\Item\Dao\Repositories\WishlistRepository;
+use Modules\Sales\Dao\Repositories\CourierRepository;
 use Modules\Marketing\Dao\Repositories\PageRepository;
+use Modules\Finance\Dao\Repositories\AccountRepository;
 use Modules\Finance\Dao\Repositories\PaymentRepository;
 use Modules\Marketing\Dao\Repositories\PromoRepository;
 use Modules\Marketing\Dao\Repositories\SliderRepository;
 use Modules\Marketing\Dao\Repositories\SosmedRepository;
 use Modules\Marketing\Dao\Repositories\ContactRepository;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Modules\Finance\Dao\Models\Account;
-use Modules\Finance\Dao\Repositories\AccountRepository;
-use Modules\Procurement\Dao\Models\Purchase;
 use Modules\Procurement\Dao\Repositories\PurchasePrepareRepository;
 use Modules\Procurement\Emails\CreateOrderEmail as EmailsCreateOrderEmail;
-use Cart;
-use Modules\Sales\Dao\Repositories\CourierRepository;
 
 class PublicController extends Controller
 {
