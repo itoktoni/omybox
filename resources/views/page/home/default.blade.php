@@ -16,6 +16,19 @@
     }
 </style>
 @endpush
+
+@push('javascript')
+    <script>
+        function startRefresh() {
+            $.get('', function(data) {
+                $(document.body).html(data);    
+            });
+        }
+        $(function() {
+            setTimeout(startRefresh,1000);
+        });
+    </script>
+@endpush
 @section('content')
 <div class="row">
     <div class="panel-body">
