@@ -1,10 +1,9 @@
 @extends(Helper::setExtendBackend())
 @push('css')
 <style>
-
     #transaction {
         font-size: 20px;
-        border: 1.4px solid grey;    
+        border: 1.4px solid grey;
     }
 
     #transaction td {
@@ -12,7 +11,7 @@
         font-size: 18px;
     }
 
-    .even{
+    .even {
         background-color: rgb(247, 245, 234);
     }
 </style>
@@ -21,7 +20,10 @@
 <div class="row">
     <div class="panel-body">
 
-        <table id="transaction" style="margin-top: 0px !important" class="table table-no-more table-bordered table-striped">
+        @if(!empty($detail))
+
+        <table id="transaction" style="margin-top: 0px !important"
+            class="table table-no-more table-bordered table-striped">
             <thead>
                 <tr>
                     <th class="text-left" style="width:100px;">No. Order</th>
@@ -56,7 +58,8 @@
                         {{ empty($item->sales_order_detail_notes) ? '-' : $item->sales_order_detail_notes }}
                     </td>
                     <td data-title="Action" align="center">
-                        <a href="{{ route('home', ['order' => $item->sales_order_id, 'id' => $item->item_product_id]) }}" class="btn btn-success btn-block">
+                        <a href="{{ route('home', ['order' => $item->sales_order_id, 'id' => $item->item_product_id]) }}"
+                            class="btn btn-success btn-block">
                             Completed
                         </a>
                     </td>
@@ -64,6 +67,7 @@
                 @endforeach
         </table>
 
+        @endif
     </div>
 </div>
 @endsection
