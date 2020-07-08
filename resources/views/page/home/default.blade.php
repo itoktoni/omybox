@@ -19,8 +19,7 @@
 @section('content')
 <div class="row">
     <div class="panel-body">
-
-        @if(!empty($detail))
+        @if($detail->count() > 0)
 
         <table id="transaction" style="margin-top: 0px !important"
             class="table table-no-more table-bordered table-striped">
