@@ -28,7 +28,7 @@
                             <th class="text-right" scope="col">Ongkir</th>
                             <th class="text-right" scope="col">Total</th>
                             <th class="text-right" scope="col">Status</th>
-                            <th class="text-right" scope="col">Resi</th>
+                            <th class="text-right" scope="col">Notes</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,7 +47,7 @@
                                 {{ number_format($item->sales_order_total) ?? '' }}
                             </td>
                             <td data-header="Discount" class="text-right">
-                                {{ number_format($item->sales_order_marketing_promo_value) ?? '' }}
+                                -{{ number_format($item->sales_order_marketing_promo_value) ?? '' }}
                             </td>
                             <td data-header="Discount" class="text-right">
                                 {{ number_format($item->sales_order_rajaongkir_ongkir) ?? '' }}
@@ -58,8 +58,8 @@
                             <td data-header="Status" class="text-right">
                                 {{ $status[$item->sales_order_status] ?? '' }}
                             </td>
-                            <td data-header="Courier" class="text-right">
-                                {{ strtoupper($item->sales_order_rajaongkir_waybill) ?? '' }}
+                            <td data-header="Notes" class="text-right">
+                                {{ strtoupper($item->sales_order_rajaongkir_notes) ?? '' }}
                             </td>
 
                         </tr>
@@ -93,7 +93,9 @@
                                                 {{ number_format($detail->sales_order_detail_price_order) }}
                                                 ]
                                                 <br>
+                                                Total :
                                                 {{ number_format($detail->sales_order_detail_price_order * $detail->sales_order_detail_qty_order) }}
+
                                                 <span class="col-md-2">
                                                     <div class="row">
                                                         @isset($detail->product->item_product_image)
@@ -107,9 +109,16 @@
                                             </li>
                                             @endforeach
                                             @endif
+                                            @if ($item->sales_order_marketing_promo_name)
                                             <li
                                                 class="list-group-item d-flex justify-content-between align-items-center">
-                                                Total Ongkir :
+                                                Voucher : {{ $item->sales_order_marketing_promo_name }}
+                                                <span>-{{ number_format($item->sales_order_marketing_promo_value) ?? '' }}</span>
+                                            </li>
+                                            @endif
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center">
+                                                Total Ongkir
                                                 <span>{{ number_format($item->sales_order_rajaongkir_ongkir) }}</span>
                                             </li>
                                         </ul>
@@ -117,15 +126,12 @@
                                     <div class="modal-footer">
                                         <div class="row">
                                             <div style="position:absolute;bottom:20px;left:20px;">
-                                                Voucher
-                                                {{ $item->sales_order_marketing_promo_name }}
-                                                :
-                                                -
-                                                {{ number_format($item->sales_order_marketing_promo_value) ?? '' }}
+                                                <div class="container">
+                                                    Grand Total
+                                                </div>
                                             </div>
-                                            <div class="text-right" style="margin-left:5px;margin-right:30px;">
-                                                Total :
-                                                {{ number_format($item->sales_order_total) ?? '' }}
+                                            <div class="text-right" style="margin-right:35px;">
+                                                {{ number_format($item->sales_order_total + $item->sales_order_rajaongkir_ongkir) ?? '' }}
                                             </div>
                                         </div>
                                     </div>

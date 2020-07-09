@@ -90,12 +90,33 @@ class HomeController extends Controller
                 } else {
                     Cache::put('toggle', true);
                 }
-            }
-            else{
+            } else {
                 Cache::put('toggle', true);
             }
 
             return redirect()->back();
+        }
+
+        if (request()->has('refresh')) {
+            $list = [
+                'sales_order_id',
+                'item_brand_name',
+                'item_product_id',
+                'item_product_name',
+                'sales_order_detail_qty_order',
+                'sales_order_detail_notes',
+            ];
+            $query = Order::select($list)->join('sales_order_detail', 'sales_order_detail_sales_order_id', 'sales_order_id')
+                ->join('item_product', 'item_product_id', 'sales_order_detail_item_product_id')
+                ->leftJoin('item_brand', 'item_brand_id', 'item_product_item_brand_id');
+
+            $data = $query->where('sales_order_status', '=', 3)->whereNull('sales_order_detail_qty_prepare');
+
+            if (Auth::user()->group_user == 'partner') {
+                $data->where('sales_order_detail_item_brand', Auth::user()->brand);
+            }
+
+            return view(Helper::setViewDashboard('table'))->with(['detail' => $data->get()]);
         }
         
         if (request()->has('order') && request()->has('id')) {
@@ -108,25 +129,8 @@ class HomeController extends Controller
             return redirect()->back();
         }
         // return view(Helper::setViewDashboard())->with(['chart' => $chart]);
-        $list = [
-            'sales_order_id',
-            'item_brand_name',
-            'item_product_id',
-            'item_product_name',
-            'sales_order_detail_qty_order',
-            'sales_order_detail_notes',
-        ];
-        $query = Order::select($list)->join('sales_order_detail', 'sales_order_detail_sales_order_id', 'sales_order_id')
-            ->join('item_product', 'item_product_id', 'sales_order_detail_item_product_id')
-            ->leftJoin('item_brand', 'item_brand_id', 'item_product_item_brand_id');
-
-        $data = $query->where('sales_order_status', '=', 3)->whereNull('sales_order_detail_qty_prepare');
-
-        if (Auth::user()->group_user == 'partner') {
-            $data->where('sales_order_detail_item_brand', Auth::user()->brand);
-        }
-
-        return view(Helper::setViewDashboard())->with(['detail' => $data->get()]);
+        
+        return view(Helper::setViewDashboard());
     }
 
     public function configuration()
