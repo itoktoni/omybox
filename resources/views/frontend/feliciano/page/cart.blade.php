@@ -16,6 +16,20 @@
             </div>
         </div>
         <div class="row no-gutters">
+            <div class="container">
+            
+                @if ($errors)
+                @foreach ($errors->all() as $error)
+                <div class="col-md-12 alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>{{ $error }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </strong>
+                </div>
+                @endforeach
+                @endif
+            </div>
 
             <div class="col-md-6 col-lg-6">
                 {!!Form::open(['route' => 'cart', 'class' => 'form-cart', 'files' => true]) !!}
@@ -167,21 +181,6 @@
                         <div class="menus cart-list d-sm-flex ftco-animate align-items-stretch">
 
                             <div id="billing" class="col-lg-12">
-                                <div class="container">
-
-                                    @if ($errors)
-                                    @foreach ($errors->all() as $error)
-                                    <div class="col-md-12 alert alert-danger alert-dismissible fade show" role="alert">
-                                        <strong>{{ $error }}
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </strong>
-                                    </div>
-                                    @endforeach
-                                    @endif
-                                </div>
-
 
                                 {!!Form::open(['route' => 'checkout', 'class' => 'checkout-form', 'files' => true]) !!}
 
@@ -296,7 +295,7 @@
                                     <div class="col-md-12 mb-2">
                                         <div class="row">
                                             <div class="col-md-12 text-right">
-                                                {{-- <a class="btn btn-success" href="{{ route('login') }}">Login</a> --}}
+                                                <a class="btn btn-success" href="{{ route('login') }}">Login</a>
                                                 <button type="submit" name="submit"
                                                     class="btn btn-info">Proceed</button>
                                             </div>
@@ -336,7 +335,6 @@
         </p>
     </div>
 </div>
-
 @endif
 
 @endsection
