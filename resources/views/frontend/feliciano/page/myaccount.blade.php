@@ -28,7 +28,6 @@
                             <th class="text-right" scope="col">Ongkir</th>
                             <th class="text-right" scope="col">Total</th>
                             <th class="text-right" scope="col">Status</th>
-                            <th class="text-right" scope="col">Notes</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,10 +57,7 @@
                             <td data-header="Status" class="text-right">
                                 {{ $status[$item->sales_order_status] ?? '' }}
                             </td>
-                            <td data-header="Notes" class="text-right">
-                                {{ strtoupper($item->sales_order_rajaongkir_notes) ?? '' }}
-                            </td>
-
+                           
                         </tr>
                         <!-- Modal Order -->
                         <div class="modal fade" id="{{ $item->sales_order_id ?? '' }}" tabindex="-1" role="dialog"
