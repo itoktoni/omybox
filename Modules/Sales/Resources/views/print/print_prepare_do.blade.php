@@ -154,8 +154,9 @@
                                                 $total = 0;
                                                 ?>
             @foreach ($detail as $item)
-            @if(empty(Auth::user()->brand) || (!empty(Auth::user()->brand) && $item->product->item_product_item_brand_id
-            == Auth::user()->brand ))
+            @if(Auth::user()->group_user != 'partner' || (Auth::user()->group_user == 'partner') &&
+            $item->product->item_product_item_brand_id
+            == Auth::user()->brand )
             <?php
                                                 $sub = $item->sales_order_detail_qty_order * $item->sales_order_detail_price_order;
                                                 $total = $total + $sub;
@@ -165,7 +166,8 @@
                 <td align="left" valign="middle" width="10%"
                     style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
                     bgcolor="#FFFFFF">
-                    {{ $item->product->item_product_name }} {{ $item->sales_order_detail_notes ? '( '.$item->sales_order_detail_notes.' )' : '' }}
+                    {{ $item->product->item_product_name }}
+                    {{ $item->sales_order_detail_notes ? '( '.$item->sales_order_detail_notes.' )' : '' }}
                 </td>
                 <td align="center" valign="middle" width="10%"
                     style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"

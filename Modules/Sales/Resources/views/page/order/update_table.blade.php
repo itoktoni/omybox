@@ -10,7 +10,6 @@
     </thead>
     <tbody>
         @foreach ($brands as $brand)
-        @if (Auth::user()->group_user != 'operation')
             
         <tr>
             <td data-title="Brand" colspan="2">
@@ -29,7 +28,6 @@
                     class="form-control text-right temp_qty" value="{{ $brand->sales_order_detail_waybill ?? '' }}">
             </td>
         </tr>
-        @endif
         
         @foreach ($detail as $item)
         @if ($item->product->item_product_item_brand_id == $brand->item_brand_id)
