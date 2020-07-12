@@ -116,7 +116,7 @@
                                                                         style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">{{ $master->sales_order_rajaongkir_address ?? '' }}</span>
                                                                 </td>
                                                             </tr>
-                                                            
+
                                                             @foreach ($detail->groupBy('sales_order_detail_item_brand')
                                                             as $brand)
                                                             @php
@@ -124,7 +124,8 @@
                                                             $single_brand = $clone->first();
                                                             @endphp
                                                             <tr>
-                                                                <th colspan="4" style="border-bottom-style:none;color:#ffffff;padding-left:10px;padding-right:10px"
+                                                                <th colspan="4"
+                                                                    style="border-bottom-style:none;color:#ffffff;padding-left:10px;padding-right:10px"
                                                                     bgcolor="#{{ config('website.color') }}"></th>
                                                             </tr>
                                                             <tr>
@@ -253,7 +254,8 @@
                                                             </tr>
                                                             @endif
                                                             <tr>
-                                                                <th colspan="4" style="border-bottom-style:none;color:#ffffff;padding-left:10px;padding-right:10px"
+                                                                <th colspan="4"
+                                                                    style="border-bottom-style:none;color:#ffffff;padding-left:10px;padding-right:10px"
                                                                     bgcolor="#{{ config('website.color') }}"></th>
                                                             </tr>
                                                             <tr>
@@ -272,8 +274,8 @@
                                                                         style="text-align: right;font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">{{ number_format($master->sales_order_rajaongkir_ongkir,0,",",".") }}</span>
                                                                 </td>
                                                             </tr>
-                                                             
-                                                           
+
+
                                                             <tr>
                                                                 <th colspan="1"
                                                                     style="text-align: left;border-bottom-style:none;color:#ffffff;padding-left:10px;padding-right:10px"
@@ -332,9 +334,12 @@
 
                                                     <p
                                                         style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:15px;margin:0;padding:0">
-                                                        silakan hubungi kami melalui halaman
-                                                        <a href=""
-                                                            style="font-family:Arial,sans-serif;color:#{{ config('website.color') }}!important;line-height:1.5;text-decoration:none;font-size:13px;margin:0;padding:0"
+                                                        Untuk menkonfirmasi pembayaran <a
+                                                            style="color:#{{ config('website.color') }} !important"
+                                                            href="{{ config('app.url').'#form' }}">Klik Disini</a>, atau
+                                                        hubungi kami
+                                                        <a href="{{ route('contact') }}"
+                                                            style="font-family:Arial,sans-serif;color:#{{ config('website.color') }} !important;line-height:1.5;text-decoration:none;font-size:13px;margin:0;padding:0"
                                                             target="_blank">
                                                             Hubungi {{ config('website.name') }} Telp
                                                             {{ config('website.phone') }}.

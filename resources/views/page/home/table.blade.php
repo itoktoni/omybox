@@ -10,6 +10,7 @@
                     @if (Auth::user()->group_user != 'partner')
                     <th class="text-left col-md-1">Brand</th>
                     @endif
+                    <th class="text-left col-md-2">Customer Name</th>
                     <th class="text-left col-md-2">Product Name</th>
                     <th class="text-center col-md-1" style="width:50px;">Qty</th>
                     <th class="text-left col-md-2">Notes</th>
@@ -28,6 +29,9 @@
                         {{ $item->item_brand_name }}
                     </td>
                     @endif
+                    <td data-title="Customer">
+                        {{ $item->sales_order_rajaongkir_name }}
+                    </td>
                     <td data-title="Product">
                         {{ $item->item_product_name }}
                     </td>
@@ -40,7 +44,7 @@
                     <td data-title="Action" align="center">
                         <a href="{{ route('home', ['order' => $item->sales_order_id, 'id' => $item->item_product_id]) }}"
                             class="btn btn-success btn-block">
-                            Completed
+                            Ready
                         </a>
                     </td>
                 </tr>

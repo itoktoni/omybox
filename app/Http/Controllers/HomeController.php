@@ -82,16 +82,18 @@ class HomeController extends Controller
             return redirect()->to('/');
         }
 
+        $username = Auth::user()->username;
+        
         if (request()->has('toggle')) {
-            if (Cache::has('toggle')) {
-                $check = Cache::get('toggle');
+            if (Cache::has($username.'_toggle')) {
+                $check = Cache::get($username.'_toggle');
                 if ($check) {
-                    Cache::put('toggle', false);
+                    Cache::put($username.'_toggle', false);
                 } else {
-                    Cache::put('toggle', true);
+                    Cache::put($username.'_toggle', true);
                 }
             } else {
-                Cache::put('toggle', true);
+                Cache::put($username.'_toggle', true);
             }
 
             return redirect()->back();
@@ -100,6 +102,7 @@ class HomeController extends Controller
         if (request()->has('refresh')) {
             $list = [
                 'sales_order_id',
+                'sales_order_rajaongkir_name',
                 'item_brand_name',
                 'item_product_id',
                 'item_product_name',
@@ -110,7 +113,7 @@ class HomeController extends Controller
                 ->join('item_product', 'item_product_id', 'sales_order_detail_item_product_id')
                 ->leftJoin('item_brand', 'item_brand_id', 'item_product_item_brand_id');
 
-            $data = $query->where('sales_order_status', '=', 3)->whereNull('sales_order_detail_qty_prepare');
+            $data = $query->whereIn('sales_order_status', [3,4])->whereNull('sales_order_detail_qty_prepare');
 
             if (Auth::user()->group_user == 'partner') {
                 $data->where('sales_order_detail_item_brand', Auth::user()->brand);
@@ -123,9 +126,17 @@ class HomeController extends Controller
             $order = request()->get('order');
             $id = request()->get('id');
 
+            $prepare = Order::find($order)->update(['sales_order_status' => 4]);
+            
             $delete = OrderDetail::where('sales_order_detail_sales_order_id', $order)->where('sales_order_detail_item_product_id', $id);
             $delete->update(['sales_order_detail_qty_prepare' => $delete->first()->sales_order_detail_qty_order]);
             
+            $ready = OrderDetail::whereNull('sales_order_detail_qty_prepare')->first();
+
+            if(empty($ready)){
+                Order::find($order)->update(['sales_order_status' => 5]);
+            }
+
             return redirect()->back();
         }
         // return view(Helper::setViewDashboard())->with(['chart' => $chart]);

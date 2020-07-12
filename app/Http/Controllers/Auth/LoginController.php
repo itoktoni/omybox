@@ -101,7 +101,6 @@ class LoginController extends Controller
         $tokenData = DB::table('password_resets')
             ->where('token', $request->token)->first();
         // Redirect the user back to the password reset request form if the token is invalid
-        dd($tokenData);
         if (!$tokenData) return view('auth.passwords.email');
 
         $user = User::where('email', $tokenData->email)->first();

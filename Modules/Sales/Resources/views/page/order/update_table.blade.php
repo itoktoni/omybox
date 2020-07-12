@@ -3,6 +3,7 @@
         <tr>
             <th class="text-left" style="width:100px;">ID</th>
             <th class="text-left col-md-4">Product Name</th>
+            <th class="text-center col-md-1">Status</th>
             <th class="text-right col-md-2">Price</th>
             <th class="text-right col-md-1">Qty</th>
             <th class="text-right col-md-2">Total</th>
@@ -10,9 +11,9 @@
     </thead>
     <tbody>
         @foreach ($brands as $brand)
-            
+
         <tr>
-            <td data-title="Brand" colspan="2">
+            <td data-title="Brand" colspan="3">
                 <span class="text-danger">
                     {{ $brand->item_brand_name }} - {{ $brand->item_brand_description }}
                     <input type="hidden" value="{{ $brand->item_brand_id }}"
@@ -20,15 +21,16 @@
                 </span>
             </td>
             <td data-title="Ongkir">
-                <input type="text" name="brand[{{ $brand->item_brand_id }}][temp_brand_ongkir]" required placeholder="Ongkir"
-            class="form-control text-right number temp_qty" value="{{ $brand->sales_order_detail_ongkir ?? '' }}">
+                <input type="text" name="brand[{{ $brand->item_brand_id }}][temp_brand_ongkir]" required
+                    placeholder="Ongkir" class="form-control text-right number temp_qty"
+                    value="{{ $brand->sales_order_detail_ongkir ?? '' }}">
             </td>
             <td colspan="2" data-title="Waybill" class="text-right col-lg-1">
                 <input type="text" name="brand[{{ $brand->item_brand_id }}][temp_brand_waybill]" placeholder="Waybill"
                     class="form-control text-right temp_qty" value="{{ $brand->sales_order_detail_waybill ?? '' }}">
             </td>
         </tr>
-        
+
         @foreach ($detail as $item)
         @if ($item->product->item_product_item_brand_id == $brand->item_brand_id)
 
@@ -44,6 +46,11 @@
             </td>
             <td data-title="Product">
                 {{ $item->product->item_product_name }}
+            </td>
+            <td data-title="Status">
+                <span class="btn btn-{{ $item->sales_order_detail_qty_prepare ? 'primary' : 'warning' }} btn-xs btn-block">
+                    {{ $item->sales_order_detail_qty_prepare ? 'Ready' : 'Prepare' }}
+                </span>
             </td>
             <td data-title="Price" class="text-right col-lg-2">
                 <input type="text" name="temp_price[]" readonly class="form-control text-right money temp_price"
@@ -62,7 +69,7 @@
         @endforeach
         @endforeach
         <tr>
-            <td data-title="Courier" colspan="4">
+            <td data-title="Courier" colspan="5">
                 Total Order
             </td>
             <td data-title="Courier" colspan="1">
@@ -71,17 +78,18 @@
             </td>
         </tr>
         <tr>
-            <td data-title="Ongkir" colspan="4">
+            <td data-title="Ongkir" colspan="5">
                 Total Ongkir
             </td>
             <td data-title="Ongkir" colspan="1">
-                <input type="text" name="sales_order_rajaongkir_ongkir" readonly class="form-control text-right number temp_total"
-                    value="{{ old('sales_order_rajaongkir_ongkir') ?? $model->sales_order_rajaongkir_ongkir }}">
+                <input type="text" name="sales_order_rajaongkir_ongkir" readonly
+                    class="form-control text-right number temp_total"
+                    value="{{ $model->sales_order_rajaongkir_ongkir }}">
             </td>
         </tr>
         @if ($model->sales_order_marketing_promo_code)
         <tr>
-            <td data-title="Voucher" colspan="4">
+            <td data-title="Voucher" colspan="5">
                 {{ $model->sales_order_marketing_promo_code }} {{ $model->sales_order_marketing_promo_name }}
             </td>
             <td data-title="Value" colspan="1">
@@ -91,11 +99,12 @@
         </tr>
         @endif
         <tr class="well success">
-            <td data-title="Total" colspan="4">
+            <td data-title="Total" colspan="5">
                 ( Total Order + Ongkir ) - Discount
             </td>
             <td class="text-right" data-title="Value" colspan="1">
-                <h5 style="margin-right:13px;">{{ number_format($model->sales_order_total + $brands->sum('sales_order_detail_ongkir')) }}</h5>
+                <h5 style="margin-right:13px;">
+                    {{ number_format($model->sales_order_total + $brands->sum('sales_order_detail_ongkir')) }}</h5>
             </td>
         </tr>
 </table>

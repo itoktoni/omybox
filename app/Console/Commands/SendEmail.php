@@ -23,7 +23,7 @@ class SendEmail extends Command
      *
      * @var string
      */
-    protected $signature = 'email:system';
+    protected $signature = 'email:cronjob';
 
     /**
      * The console command description.

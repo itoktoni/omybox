@@ -25,7 +25,7 @@
             </h2>
 
             <div
-                style="color:white;text-align:center;padding:20px;background-color:#{{ config('website.colors') }};border-radius:20px;">
+                style="color:white;text-align:center;padding:20px;background-color:#{{ config('website.color') }};border-radius:20px;">
                 <h3 style="text-align:center;"> Pembayaran Berhasil untuk : {{ $data->finance_payment_sales_order_id ?? $data->finance_payment_reference  }} </h3>
                 <p style="text-align: center;">
                     Tanggal Bayar : {{ $data->finance_payment_approved_at->format('d M Y') }}

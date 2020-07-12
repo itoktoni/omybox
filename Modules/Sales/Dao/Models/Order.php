@@ -113,11 +113,12 @@ class Order extends Model
   ];
 
     public $status = [
-    '1' => ['CREATE', 'warning'],
-    '2' => ['ESTIMATE', 'info'],
-    '3' => ['APPROVE', 'primary'],
-    '4' => ['PREPARE', 'success'],
-    '5' => ['DELIVERED', 'dark'],
+    '1' => ['CREATE', 'default'],
+    '2' => ['ESTIMATE', 'warning'],
+    '3' => ['APPROVE', 'info'],
+    '4' => ['PREPARE', 'primary'],
+    '5' => ['READY', 'success'],
+    '6' => ['DELIVERED', 'dark'],
     '0' => ['CANCEL', 'danger'],
   ];
 
@@ -217,7 +218,7 @@ class Order extends Model
             }
 
             $model->sales_order_status = 1;
-            $model->sales_order_id = Helper::autoNumber($model->getTable(), $model->getKeyName(), 'SO' . date('Ym'), config('website.autonumber'));
+            $model->sales_order_id = Helper::autoNumber($model->getTable(), $model->getKeyName(), 'S' . date('Ym'), config('website.autonumber'));
         });
     }
 

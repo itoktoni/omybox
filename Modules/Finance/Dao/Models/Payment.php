@@ -135,7 +135,7 @@ class Payment extends Model
           $getOrder = $order->showRepository($model->finance_payment_sales_order_id);
           if ($getOrder && $getOrder->sales_order_status < 2) {
             $order->updateRepository($model->finance_payment_sales_order_id, [
-              'sales_order_status' => 2
+              'sales_order_status' => 3
             ]);
           }
         }
@@ -160,7 +160,7 @@ class Payment extends Model
       }
 
       if ($model->finance_payment_sales_order_id) {
-        $model->finance_payment_status = 1;
+        $model->finance_payment_status = 0;
         $model->finance_payment_account_id = 1;
         $model->finance_payment_created_by = request()->get('finance_payment_person');
       }

@@ -21,7 +21,7 @@
                 <table id="force-responsive" class="table table-table table-bordered">
                     <thead>
                         <tr>
-                            <th scope="col">No. Order</th>
+                            <th width="100" scope="col">No. Order</th>
                             <th class="text-right" scope="col">Tanggal</th>
                             <th class="text-right" scope="col">Harga</th>
                             <th class="text-right" scope="col">Discount</th>
@@ -34,13 +34,13 @@
                         @forelse ($order as $item)
                         <tr style="position:relative">
                             <td data-header="No. Order">
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                                <button type="button" class="btn btn-primary btn-sm btn-block" data-toggle="modal"
                                     data-target="#{{ $item->sales_order_id ?? '' }}">
                                     {{ $item->sales_order_id ?? '' }}
                                 </button>
                             </td>
                             <td data-header="Tanggal" class="text-right">
-                                {{ $item->sales_order_date->format('d M y') }}
+                                {{ $item->sales_order_date->format('d M Y') }}
                             </td>
                             <td data-header="Harga" class="text-right">
                                 {{ number_format($item->sales_order_total) ?? '' }}

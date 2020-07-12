@@ -159,6 +159,28 @@
                 <div class="heading-section mb-5 text-center">
                     <h2 class="mb-4">Make Confirmation</h2>
                 </div>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        @if(session()->has('success'))
+                        <div style="margin-top:-20px;" class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Konfirmasi Pemesanan Success !</strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @if ($errors->any())
+                        @foreach ($errors->all() as $error)
+                        @if ($loop->first)
+                        <p class="help-block text-danger text-sm-left text-left">
+                            * <strong>{{ $error }}</strong><br>
+                        </p>
+                        @endif
+                        @endforeach
+                        @endif
+                        @endif
+                    </div>
+                </div>
+               
                 {!!Form::open(['route' => 'confirmation', 'class' => 'contact-form', 'files' => true]) !!}
                 <div class="row">
                     <div class="col-md-6">
@@ -274,32 +296,8 @@
                             </div>
                         </div>
 
-                        
-
                         <div class="col-md-12 mt-3">
-                            <div class="row">
-                                <div class="col-md-7 text-center">
-                                    @if(session()->has('success'))
-                                    <div style="margin-top:-20px;"
-                                        class="alert alert-success alert-dismissible fade show" role="alert">
-                                        <strong>Konfirmasi Pemesanan Success !</strong>
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    @endif
-                                </div>
-                            </div>
-
-                            @if ($errors->any())
-                            @foreach ($errors->all() as $error)
-                            @if ($loop->first)
-                            <p class="help-block text-danger text-sm-left text-left">
-                                * <strong>{{ $error }}</strong><br>
-                            </p>
-                            @endif
-                            @endforeach
-                            @endif
+                           
                             <div class="form-group text-right">
                                 <input type="submit" value="Konfirmasi Pembayaran" class="btn btn-primary py-3 px-5">
                             </div>

@@ -25,7 +25,7 @@ body{
             </h2>
 
             <div
-                style="color:white;text-align:center;padding:20px;background-color:#{{ config('website.colors') }};border-radius:20px;">
+                style="color:white;text-align:center;padding:20px;background-color:#{{ config('website.color') }};border-radius:20px;">
                 <h3 style="text-align:center;"> Konfirmasi pembayaran {{ $data->finance_payment_sales_order_id }} </h3>
                 <p style="text-align: center;">
                    Tanggal : {{ $data->finance_payment_date->format('d M Y') }}

@@ -8,7 +8,7 @@
         </div>
         {{-- <div class="sidebar-toggle hidden-xs" data-toggle-class="sidebar-left-collapsed" data-target="html" data-fire-event="sidebar-left-toggle"> --}}
         <div class="sidebar-toggle hidden-xs">
-        <a href="{{ route('home', ['toggle']) }}"><i style="font-size: 25px;" class="fa fa-chevron-circle-{{ Cache::get('toggle') ? 'right' : 'left' }}" aria-label="Toggle sidebar"></i></a> 
+        <a href="{{ route('home', ['toggle']) }}"><i style="font-size: 25px;" class="fa fa-chevron-circle-{{ Cache::get(Auth::user()->username.'_toggle') ? 'right' : 'left' }}" aria-label="Toggle sidebar"></i></a> 
         </div>
     </div>
     <div class="nano">
