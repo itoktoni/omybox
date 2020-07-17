@@ -169,10 +169,12 @@
             var total_name = $('#total_name');
             var total_value = $('#total_value');
             var total_input = $('#hidden_total');
+            var total_product = $('#total_product');
 
             total_name.text('Total :');
             total_input.val(sum);
             total_value.text(numeral(sum).format('0,0'));
+            total_product.val(numeral(sum).format('0,0'));
         }
         
         function addDetail(e)
@@ -222,7 +224,7 @@
                         }
                     }
                     var total = numeral(real_price).value() * numeral(value_qty).value();
-                    var markup = "<tr><td data-title='ID Product'>" + product_id + "</td><td data-title='Product'>" + product_name + "</td><td data-title='Price' class='text-right col-lg-1'><input name='temp_price[]' class='form-control text-right number temp_price' value='" + real_price + "'></td><td data-title='Qty' class='text-right col-lg-1'><input class='form-control text-right number temp_qty' name='temp_qty[]' value='" + value_qty + "'></td><td data-title='Total' class='text-right col-lg-1'><input type='text' name='temp_total[]' readonly class='form-control text-right money temp_total' value='" + numeral(total).format('0,0') + "'></td><td data-title='Action'><button id='delete' value='" + product_id + "' type='button' class='btn btn-danger btn-block'>Delete</button></td><input type='hidden' value=" + product_id + " name='temp_id[]'><input type='hidden' value='" + product_name + "' name='temp_name[]'></tr>";
+                    var markup = "<tr><td data-title='ID Product'>" + product_id + "</td><td data-title='Product'>" + product_name + "</td><td data-title='Price' class='text-right col-lg-1'><input name='temp_price[]' readonly class='form-control text-right number temp_price' value='" + real_price + "'></td><td data-title='Qty' class='text-right col-lg-1'><input class='form-control text-right number temp_qty' name='temp_qty[]' value='" + value_qty + "'></td><td data-title='Total' class='text-right col-lg-1'><input type='text' name='temp_total[]' readonly class='form-control text-right money temp_total' value='" + numeral(total).format('0,0') + "'></td><td data-title='Action'><button id='delete' value='" + product_id + "' type='button' class='btn btn-danger btn-block'>Delete</button></td><input type='hidden' value=" + product_id + " name='temp_id[]'><input type='hidden' value='" + product_name + "' name='temp_name[]'></tr>";
                     $("table tbody").append(markup);
                     sumTotal();
                     maskNumber();
@@ -232,7 +234,6 @@
                     $('input[name=price]').attr("placeholder", "").blur();
                     $('input[name=qty]').attr("placeholder", "").blur();
 
-                    $('select[name="product"]').select2('open');
                     return false;
                 }
                 else {

@@ -24,7 +24,11 @@
             </div>
         </div>
     </div>
+    @if ($action_function == 'create')
+    @include($folder.'::page.'.$template.'.detail')
+    @elseif($action_function == 'update')
     @include($folder.'::page.'.$template.'.update')
+    @endif
     @include($folder.'::page.'.$template.'.action')
     {!! Form::close() !!}
 </div>

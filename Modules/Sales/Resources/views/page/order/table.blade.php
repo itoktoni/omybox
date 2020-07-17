@@ -76,5 +76,44 @@
         </tr>
         @endforeach
         @endif
+
     </tbody>
+    <tfoot>
+        <tr>
+            <td data-title="Courier" colspan="5">
+                Total Order
+            </td>
+            <td data-title="Courier" colspan="1">
+                <input type="text" id="total_product" readonly class="form-control text-right money" value="">
+            </td>
+        </tr>
+        <tr>
+            <td data-title="Ongkir" colspan="2">
+                Voucher
+            </td>
+            <td data-title="Ongkir" colspan="3">
+                <select name="" id="" class="form-control">
+                    @foreach($promo as $key => $val)
+                    <option value="{{ $key }}">
+                        {{ $val }}
+                    </option>
+                    @endforeach
+                </select>
+            </td>
+            <td data-title="Ongkir" colspan="1">
+                <input type="text" name="sales_order_rajaongkir_ongkir" readonly
+                    class="form-control text-right number temp_total" value="">
+            </td>
+        </tr>
+        <tr class="well success">
+            <td data-title="Total" colspan="5">
+                ( Total Order + Ongkir ) - Discount
+            </td>
+            <td class="text-right" data-title="Value" colspan="1">
+                <h5 style="margin-right:13px;">
+
+                </h5>
+            </td>
+        </tr>
+    </tfoot>
 </table>
