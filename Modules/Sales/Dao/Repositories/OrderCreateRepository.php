@@ -15,7 +15,8 @@ class OrderCreateRepository extends OrderRepository implements MasterInterface
         'foreign' => 'sales_order_detail_item_product_id',
         'detail' => [
             'sales_order_detail_item_product_id' =>  'temp_id',
-            'sales_order_detail_qty_prepare' => 'temp_qty',
+            'sales_order_detail_qty_order' => 'temp_qty',
+            'sales_order_detail_notes' => 'temp_notes',
             'sales_order_detail_price_order' => 'temp_price',
         ]
     ];
@@ -29,7 +30,7 @@ class OrderCreateRepository extends OrderRepository implements MasterInterface
         try {
             $data[$this->mapping['primary']] = $id;
             $data['sales_order_detail_total_order'] = $data['sales_order_detail_qty_order'] * $data['sales_order_detail_price_order'];
-            DB::table($this->detail_table)->insert($data);
+            $check = DB::table($this->detail_table)->insert($data);
             return Notes::create();
         } catch (\Illuminate\Database\QueryException $ex) {
             return Notes::error($ex->getMessage());

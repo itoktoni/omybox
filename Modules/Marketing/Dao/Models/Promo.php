@@ -52,6 +52,7 @@ class Promo extends Model
   public $searching = 'marketing_promo_name';
   public $datatable = [
     'marketing_promo_id'          => [false => 'ID'],
+    'marketing_promo_code'        => [true => 'Code'],
     'marketing_promo_name'        => [true => 'Name'],
     'marketing_promo_default'        => [true => 'Default'],
     'marketing_promo_slug'        => [false => 'Slug'],

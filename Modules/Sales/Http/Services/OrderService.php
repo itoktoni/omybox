@@ -16,7 +16,6 @@ class OrderService extends TransactionService
 {
     public function save(MasterInterface $repository)
     {
-
         $check = $this->saveDetail($repository);
         // $send = $check['data'];
         // $data = $repository->showRepository($send->{$repository->getKeyName()}, ['customer', 'forwarder', 'detail', 'detail.product']);
@@ -30,11 +29,15 @@ class OrderService extends TransactionService
         return $check;
     }
 
-    public function saveDetail(MasterInterface $repository){
-
+    public function saveDetail(MasterInterface $repository)
+    {
         DB::beginTransaction();
-        $check = $this->setRules(array_merge($repository->rules, ['temp_id' => 'required']))->validate($repository);
-        $check->saveRepository($this->data);
+        $this->setRules(array_merge($repository->rules, ['temp_id' => 'required']))->validate($repository);
+        $save = $this->data;
+        $save['sales_order_marketing_promo_value'] = isset($save['promo_value']) ? Helper::filterInput($save['promo_value']) : 0;
+        $save['sales_order_total'] = isset($save['hidden_total']) ? Helper::filterInput($save['hidden_total']) : 0;
+        $this->data = array_merge($save, $this->data);
+        $check = $repository->saveRepository($this->data);
         
         if ($check['status']) {
             $id = !DB::getPDO()->lastInsertId() ? $check['data']->{$repository->getKeyName()} : DB::getPDO()->lastInsertId();
@@ -49,6 +52,13 @@ class OrderService extends TransactionService
         }
 
         DB::commit();
+
+        if ($check['status']) {
+            Alert::create();
+        } else {
+            Alert::error($check['data']);
+        }
+        return $check;
     }
 
     public function saveWo(MasterInterface $repository)
@@ -121,5 +131,4 @@ class OrderService extends TransactionService
         Alert::create();
         return Notes::create($this->data);
     }
-
 }

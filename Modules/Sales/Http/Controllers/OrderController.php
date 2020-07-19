@@ -19,6 +19,7 @@ use Modules\Crm\Dao\Repositories\CustomerRepository;
 use Modules\Finance\Dao\Repositories\BankRepository;
 use Modules\Item\Dao\Repositories\ProductRepository;
 use Modules\Finance\Dao\Repositories\AccountRepository;
+use Modules\Marketing\Dao\Repositories\PromoRepository;
 use Modules\Sales\Dao\Repositories\OrderCreateRepository;
 use Modules\Sales\Dao\Repositories\OrderPrepareRepository;
 use Modules\Sales\Dao\Repositories\OrderDeliveryRepository;
@@ -65,6 +66,8 @@ class OrderController extends Controller
         $product = Helper::createOption((new ProductRepository()), false, true);
         $account = Helper::createOption((new AccountRepository()));
         $bank = Helper::createOption((new BankRepository()));
+        $promo = Helper::createOption((new PromoRepository()), false, true);
+        // dd($promo);
         $status = Helper::shareStatus(self::$model->status);
 
         $view = [
@@ -73,6 +76,7 @@ class OrderController extends Controller
             'forwarder'  => $forwarder,
             'product'  => $product,
             'account'  => $account,
+            'promo'  => $promo,
             'bank'  => $bank,
             'status'  => $status,
         ];
@@ -85,14 +89,19 @@ class OrderController extends Controller
         if (request()->isMethod('POST')) {
             $post = $service->save(self::$detail);
             if ($post['status']) {
-                return Response::redirectToRoute($this->getModule() . '_data');
+                return Response::redirectToRoute($this->getModule() . '_update', ['code' => $post['data']->sales_order_id]);
             }
             return Response::redirectBackWithInput();
         }
+
+        $collection = collect(Helper::shareStatus(self::$model->status));
+        $status = $collection->only([1])->toArray();
+
         return view(Helper::setViewSave($this->template, $this->folder))->with($this->share([
             'data_product' => [],
             'customer' => [0 => 'Customer Cash'],
             'model' => self::$model,
+            'status' => $status,
         ]));
     }
 

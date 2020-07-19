@@ -1,5 +1,6 @@
 <?php
 
+use Plugin\Helper;
 use Illuminate\Http\Request;
 use Ixudra\Curl\Facades\Curl;
 use Illuminate\Support\Facades\DB;
@@ -7,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Modules\Item\Dao\Repositories\StockRepository;
+use Modules\Marketing\Dao\Repositories\PromoRepository;
 // use Helper;
 // use Curl;
 /*
@@ -235,3 +237,46 @@ Route::match(
         return response()->json($save);
     }
 )->name('purchase_api');
+
+
+Route::match(
+    [
+        'GET',
+        'POST'
+    ],
+    'promo_api',
+    function () {
+        $code = request()->get('code');
+        $value = request()->get('value');
+        $promo = new PromoRepository();
+
+        $data = $promo->codeRepository(strtoupper($code));
+        if ($data) {
+            $matrix = $data->marketing_promo_matrix;
+            if ($matrix) {
+
+                // validate with minimal
+                $minimal = $data->marketing_promo_minimal;
+                if ($minimal) {
+                    if ($minimal > $value) {
+                         return response()->json(['code' => 0, 'message' => 'Minimal value ' . number_format($minimal) . ' !']);
+                    }
+                }
+
+                $string = str_replace('@value', $value, $matrix);
+                $total = $value;
+
+                try {
+                    $total = Helper::calculate($string);
+                } catch (\Throwable $th) {
+                    $total = $value;
+                }
+
+                return response()->json(['code' => 1, 'message' => $total]);
+
+            }
+        } else {
+             return response()->json(['code' => 0, 'message' => 'Voucher Not Valid !']);
+        }
+    }
+)->name('promo_api');

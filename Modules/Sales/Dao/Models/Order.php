@@ -66,7 +66,10 @@ class Order extends Model
     public $timestamps = true;
     public $incrementing = false;
     public $rules = [
-    'sales_order_email' => 'required',
+    'sales_order_rajaongkir_name' => 'required',
+    'sales_order_rajaongkir_phone' => 'required',
+    'sales_order_rajaongkir_address' => 'required',
+    'sales_order_email' => 'email',
   ];
 
     public $validate = true;

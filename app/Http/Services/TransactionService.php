@@ -14,8 +14,8 @@ class TransactionService extends MasterService
     public function mapping(MasterInterface $repository)
     {
         $detail = [];
-        $count = $repository->mapping['detail'][$repository->mapping['foreign']];
-        for ($i = 0; $i < count($this->data[$count]); $i++) {
+        $count = $repository->mapping['detail'];
+        for ($i = 0; $i < count($this->data['temp_id']); $i++) {
             # mapping for detail become key array 
             foreach ($repository->mapping['detail'] as $key => $val) {
                 # mapping for detail become value
