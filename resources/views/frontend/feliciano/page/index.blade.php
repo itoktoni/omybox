@@ -114,7 +114,9 @@
                                     </div>
                                     <div class="col-xs-12">
                                         <div class="container mt-2">
+                                        <p>
                                             {!! $item_product->item_product_description !!}
+                                        </p>
                                         </div>
                                     </div>
                                 </div>

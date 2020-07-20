@@ -16,22 +16,6 @@
 
 <div class="form-group">
 
-    {!! Form::label('name', 'Color', ['class' => 'col-md-2 control-label']) !!}
-    <div class="col-md-4 {{ $errors->has($form.'color') ? 'has-error' : ''}}">
-        {{ Form::select($form.'color', $color, null, ['class'=> 'form-control option']) }}
-        {!! $errors->first($form.'color', '<p class="help-block">:message</p>') !!}
-    </div>
-
-    {!! Form::label('name', 'Size', ['class' => 'col-md-2 control-label']) !!}
-    <div class="col-md-4 {{ $errors->has($form.'size') ? 'has-error' : ''}}">
-        {{ Form::select($form.'size', $size, null, ['class'=> 'form-control option']) }}
-        {!! $errors->first($form.'size', '<p class="help-block">:message</p>') !!}
-    </div>
-
-</div>
-
-<div class="form-group">
-
    {!! Form::label('name', 'Location', ['class' => 'col-md-2 control-label']) !!}
     <div class="col-md-4 {{ $errors->has($form.'location') ? 'has-error' : ''}}">
         {{ Form::select($form.'location', $location, null, ['class'=> 'form-control option']) }}

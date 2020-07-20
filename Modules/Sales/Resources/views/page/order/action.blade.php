@@ -34,11 +34,11 @@
                 <a id="linkMenu" href="{!! route($module.'_data') !!}" class="btn btn-warning">Back</a>
                 <button type="reset" class="btn btn-default">Reset</button>
                 @isset($action['prepare'])
-                @if ($model->sales_order_status >= 4)
+                @if ($model->sales_order_status >= 5)
                 <a id="linkMenu" href="{!! route($module.'_print_prepare_do', ['code'=> $model->{$key}]) !!}"
                         class="btn btn-danger">PDF</a>
                 @endif
-                @if ($model->sales_order_status <= 3) <button type="submit" class="btn btn-primary">Save</button>
+                @if ($model->sales_order_status <= 4) <button type="submit" class="btn btn-primary">Save</button>
                         @endif
                         @endisset
                         @break

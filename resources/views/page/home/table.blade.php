@@ -6,7 +6,7 @@
             class="table table-no-more table-bordered table-striped">
             <thead>
                 <tr>
-                    <th class="text-left" style="width:100px;">No. Order</th>
+                    <th class="text-left" style="width:120px;">No. Order</th>
                     @if (Auth::user()->group_user != 'partner')
                     <th class="text-left col-md-1">Brand</th>
                     @endif

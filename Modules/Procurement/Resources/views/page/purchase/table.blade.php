@@ -25,19 +25,13 @@
     <tbody>
         @if(isset($model->detail) && !old('temp_id'))
         @foreach ($model->detail as $item)
-        <tr id="{{ $item->purchase_detail_option }}">
+        <tr id="{{ $item->purchase_detail_item_product_id }}">
             <td data-title="ID Product">
-                {{ $item->purchase_detail_option }}
+                {{ $item->purchase_detail_item_product_id }}
             </td>
             <td data-title="Product">
-                @php
-                $product = $item->product->item_product_name;
-                $size = ' '.$item->purchase_detail_size.' ' ?? '';
-                $color = $item->color->item_color_name ?? '';
-                $name = $product.$size.$color;
-                @endphp
-                {{ $name ?? '' }}
-                <input type="hidden" value="{{ $name }}" name="temp_name[]">
+                {{ $item->product->procurement_product_name ?? '' }}
+                <input type="hidden" value="{{ $item->product->procurement_product_name ?? '' }}" name="temp_name[]">
             </td>
             <td data-title="Price" class="text-right col-lg-1">
                 <input type="text" name="temp_price[]" class="form-control text-right number temp_price"
@@ -52,10 +46,6 @@
                     value="{{ $item->purchase_detail_total_order }}">
             </td>
             <td data-title="Action">
-                <input type="hidden" value="{{ $item->purchase_detail_option }}" name="temp_id[]">
-                <input type="hidden" value="{{ $item->purchase_detail_color_id ?? '0' }}" name="temp_color[]">
-                <input type="hidden" value="{{ $item->purchase_detail_size ?? '0' }}" name="temp_size[]">
-                <input type="hidden" value="{{ $item->purchase_detail_option }}" name="temp_option[]">
                 <input type="hidden" value="{{ $item->purchase_detail_item_product_id }}" name="temp_product[]">
 
                 <a id="delete" value="{{ $item->purchase_detail_option }}"
@@ -87,12 +77,6 @@
             <td data-title="Action">
                 <input type="hidden" value="{{ old('temp_id')[$loop->index] }}" name="temp_id[]">
                 <input type="hidden" value="{{ old('temp_product')[$loop->index] }}" name="temp_product[]">
-                <input type="hidden" value="{{ old('temp_color') ? old('temp_color')[$loop->index] : '0' }}"
-                    name="temp_color[]">
-                <input type="hidden" value="{{ old('temp_size') ? old('temp_size')[$loop->index] : '0' }}"
-                    name="temp_size[]">
-                <input type="hidden" value="{{ old('temp_option') ? old('temp_option')[$loop->index] : '0' }}"
-                    name="temp_option[]">
                 @if ($model->$key && $detail->contains('item_product_id', $product))
                 <a id="delete"
                     href="{{ route(config('module').'_delete', ['code' => $model->procurement_vendor_id, 'detail' => $product ]) }}"

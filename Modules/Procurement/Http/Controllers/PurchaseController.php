@@ -13,7 +13,7 @@ use App\Http\Services\TransactionService;
 use Modules\Inventory\Dao\Models\Location;
 use Modules\Item\Dao\Repositories\SizeRepository;
 use Modules\Item\Dao\Repositories\ColorRepository;
-use Modules\Item\Dao\Repositories\ProductRepository;
+use Modules\Procurement\Dao\Repositories\ProductRepository;
 use Modules\Inventory\Dao\Repositories\LocationRepository;
 use Modules\Procurement\Dao\Repositories\VendorRepository;
 use Modules\Procurement\Dao\Repositories\PurchaseRepository;
@@ -139,23 +139,19 @@ class PurchaseController extends Controller
     public function receive(TransactionService $service)
     {
         if (request()->isMethod('POST')) {
-
             $post = $service->setRules([
                 'purchase_detail_qty_receive.*' => 'required',
                 'purchase_detail_location_id.*' => 'required',
             ])->update(self::$receive);
-
-            if ($post['data']['purchase_status'] == 4) {
-                return redirect()->back();
-            }
-            return Response::redirectBackWithInput();
+            
+            return redirect()->back();
         }
 
         if (request()->has('code')) {
 
             $data = $service->show(self::$model);
             $collection = collect(self::$model->status);
-            $status = $collection->forget([1, 2, 3, 5])->toArray();
+            $status = $collection->forget([1])->toArray();
             $location = Helper::shareOption((new LocationRepository()), false, true, false)->mapWithKeys(function ($data) {
                 return [$data->inventory_location_id => $data->inventory_location_name . ' - ' . $data->inventory_warehouse_name];
             });
@@ -172,7 +168,7 @@ class PurchaseController extends Controller
     public function print_order(TransactionService $service)
     {
         if (request()->has('code')) {
-            $data = $service->show(self::$model, ['detail', 'detail.product', 'detail.color']);
+            $data = $service->show(self::$model, ['detail', 'detail.product']);
             $id = request()->get('code');
             $pasing = [
                 'master' => $data,

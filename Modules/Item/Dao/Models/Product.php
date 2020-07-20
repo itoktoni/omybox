@@ -6,6 +6,7 @@ use Plugin\Helper;
 use Illuminate\Support\Str;
 use Modules\Item\Dao\Models\Brand;
 use Illuminate\Support\Facades\Cache;
+use Modules\Item\Dao\Models\Material;
 use Modules\Production\Models\Vendor;
 use Modules\Sales\Models\OrderDetail;
 use Illuminate\Database\Eloquent\Model;
@@ -60,7 +61,7 @@ class Product extends Model
     'item_product_file' => 'file|image|mimes:jpeg,png,jpg|max:4048',
   ];
 
-  public $with = ['brand'];
+  public $with = ['brand', 'material'];
 
   const CREATED_AT = 'item_product_created_at';
   const UPDATED_AT = 'item_product_updated_at';
@@ -71,7 +72,7 @@ class Product extends Model
     'item_product_id'          => [false => 'ID'],
     'item_category_name'        => [true => 'Category'],
     'item_category_slug'        => [false => 'Category'],
-    'item_product_name'        => [true => 'Group Name'],
+    'item_product_name'        => [true => 'Product Name'],
     'item_product_flag'        => [false => 'Flag'],
     'item_brand_name'        => [true => 'Brand'],
     'item_brand_slug'        => [false => 'Brand'],
@@ -124,6 +125,11 @@ class Product extends Model
    public function brand()
   {
     return $this->hasOne(Brand::class, 'item_brand_id', 'item_product_item_brand_id');
+  }
+
+   public function material()
+  {
+    return $this->hasMany(Material::class, 'item_material_item_product_id', 'item_product_id');
   }
 
   public static function boot()

@@ -4,8 +4,12 @@ namespace Modules\Sales\Dao\Repositories;
 
 use Plugin\Notes;
 use Illuminate\Support\Facades\DB;
+use Modules\Item\Dao\Models\Stock;
+use Illuminate\Support\Facades\Auth;
+use Modules\Item\Dao\Models\Product;
 use App\Dao\Interfaces\MasterInterface;
 use Modules\Sales\Dao\Repositories\OrderRepository;
+use Modules\Inventory\Dao\Repositories\LocationRepository;
 
 class OrderCreateRepository extends OrderRepository implements MasterInterface
 {
@@ -16,6 +20,7 @@ class OrderCreateRepository extends OrderRepository implements MasterInterface
         'detail' => [
             'sales_order_detail_item_product_id' =>  'temp_id',
             'sales_order_detail_qty_order' => 'temp_qty',
+            'sales_order_detail_qty_prepare' => 'temp_prepare',
             'sales_order_detail_notes' => 'temp_notes',
             'sales_order_detail_price_order' => 'temp_price',
         ]
@@ -44,7 +49,38 @@ class OrderCreateRepository extends OrderRepository implements MasterInterface
                 $this->mapping['primary'] => $id,
                 $this->mapping['foreign'] => $data[$this->mapping['foreign']],
             ];
-            // $data['sales_order_detail_total_order'] = $data['sales_order_detail_qty_order'] * $data['sales_order_detail_price_order'];
+
+            if (request()->get('sales_order_status') == 5) {
+                $model_location = new LocationRepository();
+                $location = $model_location->dataRepository()->where('inventory_warehouse_brand_id', Auth::user()->brand)->get();
+                $data_location = $location->pluck('inventory_location_id')->toArray();
+
+
+                $product = Product::find($data['sales_order_detail_item_product_id']);
+                $material = $product->material ?? false;
+                if ($material) {
+                    foreach ($material as $materi) {
+                        $stock = new Stock();
+                        $pesanan = $data['sales_order_detail_qty_prepare'] * $materi->item_material_value;
+                        $cek_stock = $stock->where('item_stock_product', $materi->item_material_procurement_product_id)->whereIn('item_stock_location', $data_location)->orderBy('item_stock_qty', 'DESC');
+                        $single_stock = $cek_stock->first();
+                        if ($single_stock) {
+                            $jumlah = $cek_stock->sum('item_stock_qty');
+                            if ($single_stock->item_stock_qty >= $pesanan) {
+                                $pengurangan = $single_stock->item_stock_qty - $pesanan;
+                            } elseif ($jumlah >= $pesanan) {
+                                $pengurangan = $jumlah - $pesanan;
+                                $stock->where('item_stock_product', $materi->item_material_procurement_product_id)->update(['item_stock_qty' => 0]);
+                            } else {
+                                $pengurangan = $jumlah - $pesanan;
+                                $stock->where('item_stock_product', $materi->item_material_procurement_product_id)->update(['item_stock_qty' => 0]);
+                            }
+                            $stock->find($single_stock->item_stock_id)->update(['item_stock_qty' => $pengurangan]);
+                        }
+                    }
+                }
+            }
+            
             $check = DB::table($this->detail_table)->updateOrInsert($where, $data);
 
             return Notes::create();

@@ -29,8 +29,8 @@
                         <select class="form-control col-md-4" id="product" name="product">
                             <option value="">Select Product</option>
                             @foreach($product as $value)
-                            <option value="{{ $value->item_product_id.'#'.floatval($value->item_product_sell) }}">
-                                {{ $value->item_product_name }}
+                            <option value="{{ $value->procurement_product_id.'#'.floatval($value->procurement_product_buy) }}">
+                                {{ $value->procurement_product_name }} / {{ $value->procurement_unit_name ?? '' }}
                             </option>
                             @endforeach
                         </select>
@@ -42,24 +42,6 @@
                     <label class="col-md-1 control-label" for="inputDefault">Qty</label>
                     <div class="col-md-2">
                         {!! Form::text('qty', null, ['id' => 'qty', 'class' => 'number form-control']) !!}
-                    </div>
-                    <hr>
-                    <label class="col-md-2 control-label" for="inputDefault">Size</label>
-                    <div class="col-md-4 {{ $errors->has('size') ? 'has-error' : ''}}">
-                        <select class="form-control col-md-4" id="size" name="size">
-                            <option value="">Select Size</option>
-                            @foreach($size as $key => $s)
-                            <option value="{{ $key }}">
-                                {{ $key }}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    {!! Form::label('name', 'Color', ['class' => 'col-md-1 control-label']) !!}
-                    <div class="col-md-5 {{ $errors->has('color') ? 'has-error' : ''}}">
-                        {{ Form::select('color', $color , null, ['class'=> 'form-control', 'id' => 'color']) }}
-                        {!! $errors->first('color', '<p class="help-block">:message</p>') !!}
                     </div>
                     
                 </div>
@@ -215,8 +197,6 @@
             var input_qty = $('input[name=qty]');
             var input_price = $('input[name="price"]');
             var input_product = $('select[name="product"] option:selected');
-            var input_size = $('select[name="size"] option:selected');
-            var input_color = $('select[name="color"] option:selected');
 
             if(input_product.val() == ''){
                 new PNotify({
@@ -233,9 +213,6 @@
             var value_price = input_price.val();
             var product_value = input_product.val();
             var product_name = input_product.text().trim();
-            var color_value = input_color.val();
-            var color_name = input_color.text().trim();
-            var size_value = input_size.val();
             
             var real_price = numeral(value_price).value();
             if (product_value) {
@@ -245,25 +222,8 @@
                 var product_id = split[0];
                 var product_price = numeral(split[1]).value();
 
-                if(color_value != '' && size_value != ''){
-                    var id = product_id+size_value+color_value;
-                    var name = product_name+' '+size_value+' '+color_name;
-                }
-                else if(color_value != '' && size_value == ''){
-                    var id = product_id+color_value;
-                    var name = product_name+' '+color_name;
-                    size_value = '0';
-                }
-                else if(color_value == '' && size_value != ''){
-                    var id = product_id+size_value;
-                    var name = product_name+' '+size_value;
-                }
-                else{
-                    var id = product_id;
-                    var name = product_name;
-                    size_value = '0';
-                    color_value = '0';
-                }
+                var id = product_id;
+                var name = product_name;
 
                 if (product_name) {
 
@@ -282,7 +242,7 @@
                         }
                     }
                     var total = numeral(real_price).value() * numeral(value_qty).value();
-                    var markup = "<tr><td data-title='ID Product'>" + id + "</td><td data-title='Product'>" + name + "</td><td data-title='Price' class='text-right col-lg-1'><input name=temp_price[] class='form-control text-right number temp_price' value='" + real_price + "'></td><td data-title='Qty' class='text-right col-lg-1'><input class='form-control text-right number temp_qty' name=temp_qty[] value='" + value_qty + "'></td><td data-title='Total' class='text-right col-lg-1'><input type='text' name=temp_total[] readonly class='form-control text-right money temp_total' value='" + numeral(total).format('0,0') + "'></td><td data-title='Action'><button id='delete' value='" + id + "' type='button' class='btn btn-danger btn-block'>Delete</button></td><input type='hidden' value=" + id + " name=temp_id[]><input type='hidden' value=" + color_value + " name=temp_color[]><input type='hidden' value=" + size_value + " name=temp_size[]><input type='hidden' value=" + product_id + " name=temp_product[]><input type='hidden' value='" + name + "' name=temp_name[]></tr>";
+                    var markup = "<tr><td data-title='ID Product'>" + id + "</td><td data-title='Product'>" + name + "</td><td data-title='Price' class='text-right col-lg-1'><input name=temp_price[] class='form-control text-right number temp_price' value='" + real_price + "'></td><td data-title='Qty' class='text-right col-lg-1'><input class='form-control text-right number temp_qty' name=temp_qty[] value='" + value_qty + "'></td><td data-title='Total' class='text-right col-lg-1'><input type='text' name=temp_total[] readonly class='form-control text-right money temp_total' value='" + numeral(total).format('0,0') + "'></td><td data-title='Action'><button id='delete' value='" + id + "' type='button' class='btn btn-danger btn-block'>Delete</button></td><input type='hidden' value=" + id + " name=temp_id[]><input type='hidden' value=" + product_id + " name=temp_product[]><input type='hidden' value='" + name + "' name=temp_name[]></tr>";
                     $("table tbody").append(markup);
                     sumTotal();
                     maskNumber();

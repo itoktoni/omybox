@@ -2,8 +2,8 @@
 
 namespace Modules\Item\Http\Controllers;
 
-use Plugin\Helper;
 use Plugin\Notes;
+use Plugin\Helper;
 use Plugin\Response;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -18,6 +18,8 @@ use Modules\Item\Dao\Repositories\BrandRepository;
 use Modules\Item\Dao\Repositories\ColorRepository;
 use Modules\Item\Dao\Repositories\ProductRepository;
 use Modules\Item\Dao\Repositories\CategoryRepository;
+use Modules\Item\Dao\Repositories\MaterialRepository;
+use Modules\Procurement\Dao\Repositories\ProductRepository as RawRepository;
 
 class ProductController extends Controller
 {
@@ -42,11 +44,9 @@ class ProductController extends Controller
     private function share($data = [])
     {
         $brand = Helper::createOption((new BrandRepository()));
+        $raw = Helper::createOption((new RawRepository()), false, true, true);
         $category = Helper::createOption((new CategoryRepository()));
-        $tax = Helper::createOption((new TaxRepository()));
         $tag = Helper::shareTag((new TagRepository()), 'item_tag_slug');
-        $color = Helper::shareOption((new ColorRepository()), false);
-        $size = Helper::shareTag((new SizeRepository()), 'item_size_code');
         $type = Helper::shareStatus(self::$model->promo);
 
         $view = [
@@ -54,9 +54,7 @@ class ProductController extends Controller
             'brand'      => $brand,
             'category'  => $category,
             'tag'  => $tag,
-            'tax'  => $tax,
-            'color'  => $color,
-            'size'  => $size,
+            'raw'  => $raw,
             'type'  => $type,
         ];
 
@@ -109,7 +107,6 @@ class ProductController extends Controller
     public function upload()
     {
         if (request()->has('code')) {
-
             $code = request()->get('code');
             $path = public_path('files/product_detail');
             $photos = request()->file('file');
@@ -137,7 +134,8 @@ class ProductController extends Controller
     public function delete(MasterService $service)
     {
         $service->delete(self::$model);
-        return Response::redirectBack();;
+        return Response::redirectBack();
+        ;
     }
 
     public function data(MasterService $service)
@@ -161,13 +159,24 @@ class ProductController extends Controller
 
     public function show(MasterService $service)
     {
+        $material = new MaterialRepository();
+        if (request()->isMethod('POST')) {
+            $check = $service->save($material);
+            return redirect()->back();
+        }
+        
         if (request()->has('code')) {
             $data = $service->show(self::$model);
-            return view(Helper::setViewShow())->with($this->share([
-                'fields' => Helper::listData(self::$model->datatable),
+            return view(Helper::setViewShow($this->template, $this->folder))->with($this->share([
+                'fields' => Helper::listData(self::$model->datatable)->forget(['item_brand_name', 'item_category_name','item_product_image']),
                 'model'   => $data,
                 'key'   => self::$model->getKeyName()
-            ]));
+                ]));
+        }
+            
+        if (request()->has('delete')) {
+            $material->find(request()->get('delete'))->delete();
+            return redirect()->back();
         }
     }
 }

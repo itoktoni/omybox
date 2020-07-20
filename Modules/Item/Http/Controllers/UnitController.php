@@ -28,6 +28,7 @@ class UnitController extends Controller
 
     private function share($data = [])
     {
+        
         $view = [
             'template' => $this->template,
         ];

@@ -48,7 +48,8 @@
                 {{ $item->product->item_product_name }}
             </td>
             <td data-title="Status">
-                <span class="btn btn-{{ $item->sales_order_detail_qty_prepare ? 'primary' : 'warning' }} btn-xs btn-block">
+                <span
+                    class="btn btn-{{ $item->sales_order_detail_qty_prepare ? 'primary' : 'warning' }} btn-xs btn-block">
                     {{ $item->sales_order_detail_qty_prepare ? 'Ready' : 'Prepare' }}
                 </span>
             </td>
@@ -104,7 +105,10 @@
             </td>
             <td class="text-right" data-title="Value" colspan="1">
                 <h5 style="margin-right:13px;">
-                    {{ number_format($model->sales_order_total + $brands->sum('sales_order_detail_ongkir')) }}</h5>
+                    <input type="hidden" value="{{ $model->sales_order_total + $brands->sum('sales_order_detail_ongkir') }}" name="total">
+
+                    {{ number_format($model->sales_order_total + $brands->sum('sales_order_detail_ongkir')) }}
+                </h5>
             </td>
         </tr>
 </table>

@@ -4,7 +4,7 @@ namespace Modules\Procurement\Dao\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Modules\Item\Dao\Models\Color;
-use Modules\Item\Dao\Models\Product;
+use Modules\Procurement\Dao\Models\Product;
 
 class PurchaseDetail extends Model
 {
@@ -29,7 +29,7 @@ class PurchaseDetail extends Model
     'purchase_detail_barcode',
   ];
 
-  protected $with = ['product', 'color'];
+  protected $with = ['product'];
 
   public $timestamps = false;
   public $incrementing = false;
@@ -41,14 +41,8 @@ class PurchaseDetail extends Model
 
   public function product()
   {
-    return $this->hasOne(Product::class, 'item_product_id', 'purchase_detail_item_product_id');
+    return $this->hasOne(Product::class, 'procurement_product_id', 'purchase_detail_item_product_id');
   }
-
-  public function color()
-  {
-    return $this->hasOne(Color::class, 'item_color_id', 'purchase_detail_color_id');
-  }
-
 
   // const CREATED_AT = 'purchase_created_at';
   // const UPDATED_AT = 'purchase_updated_at';

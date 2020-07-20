@@ -27,25 +27,36 @@
         </div>
     </div>
     <div class="form-group">
-        <label class="col-md-2 control-label" for="textareaDefault">Notes</label>
-        <div class="col-md-4">
-            {!! Form::textarea($form.'rajaongkir_notes', null, ['class' => 'form-control', 'rows' => '3']) !!}
-        </div>
 
         {!! Form::label('name', 'Status', ['class' => 'col-md-2 control-label']) !!}
         <div class="col-md-4 {{ $errors->has('sales_order_status') ? 'has-error' : ''}}">
             {{ Form::select('sales_order_status', $status , null, ['class'=> 'form-control']) }}
             {!! $errors->first('sales_order_status', '<p class="help-block">:message</p>') !!}
         </div>
+
+        <label class="col-md-2 control-label" for="textareaDefault">Notes</label>
+        <div class="col-md-4">
+            {!! Form::textarea($form.'rajaongkir_notes', null, ['class' => 'form-control', 'rows' => '3']) !!}
+        </div>
+
+
     </div>
 </div>
 <hr>
 <div id="input-form">
     <div class="form-group">
         {!! Form::label('name', 'Address', ['class' => 'col-md-2 control-label']) !!}
-        <div class="col-md-10">
-            {!! Form::textarea('sales_order_rajaongkir_address', $model->sales_order_rajaongkir_address, ['class' => 'form-control', 'rows' => 3]) !!}
+        <div class="col-md-4">
+            {!! Form::textarea('sales_order_rajaongkir_address', $model->sales_order_rajaongkir_address, ['class' =>
+            'form-control', 'rows' => 3]) !!}
         </div>
+        @if ($action_function == 'update')
+        {!! Form::label('name', 'Paid', ['class' => 'col-md-2 control-label']) !!}
+        <div class="col-md-4 {{ $errors->has('paid') ? 'has-error' : ''}}">
+            {{ Form::select('paid', ['0' => 'NO', '1' => 'YES'] , null, ['class'=> 'form-control']) }}
+            {!! $errors->first('paid', '<p class="help-block">:message</p>') !!}
+        </div>
+        @endif
     </div>
 </div>
 

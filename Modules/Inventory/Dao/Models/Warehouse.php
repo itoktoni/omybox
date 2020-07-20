@@ -11,6 +11,7 @@ class Warehouse extends Model
   protected $fillable = [
     'inventory_warehouse_id',
     'inventory_warehouse_name',
+    'inventory_warehouse_brand_id',
     'inventory_warehouse_description',
     'inventory_warehouse_created_at',
     'inventory_warehouse_created_by',

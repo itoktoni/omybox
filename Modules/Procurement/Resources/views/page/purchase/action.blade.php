@@ -22,12 +22,7 @@
                 <a id="linkMenu" href="{!! route($module.'_data') !!}" class="btn btn-warning">Back</a>
                 <button type="reset" class="btn btn-default">Reset</button>
                 @isset($action['update'])
-                <a target="__blank" id="linkMenu"
-                        href="{!! route($module.'_print_order', ['code'=> $model->{$key}]) !!}" class="btn
-                        btn-danger">PDF</a>
-                @if ($model->status == 1)
                 <button type="submit" class="btn btn-primary">Save</button>
-                @endif
                 @endisset
                 @break
 
@@ -47,11 +42,9 @@
                 @case('receive')
                 <a id="linkMenu" href="{!! route($module.'_data') !!}" class="btn btn-warning">Back</a>
                 <button type="reset" class="btn btn-default">Reset</button>
-                @if($model->purchase_status == 3)
                 <button type="submit" class="btn btn-primary">Save</button>
-                @endif
                 @if(Auth::user()->group_user == 'developer')
-                <button name="action" value="revisi" type="submit" class="btn btn-primary">Revisi</button>
+                <!-- <button name="action" value="revisi" type="submit" class="btn btn-primary">Revisi</button> -->
                 @endif
                 @break
 
@@ -66,8 +59,8 @@
                 @case('show')
                 <a id="linkMenu" href="{!! route($module.'_data') !!}" class="btn btn-warning">Back</a>
                 @isset($action['print_order'])
-                <a id="linkMenu" href="{!! route(trim(" {$module}_print_order"), ["code"=> $model->{$key}]) !!}"
-                        class="btn btn-danger">Pdf</a>
+                <a id="linkMenu" target="_blank" href="{!! route(trim(" {$module}_print_order"), ["code"=> $model->{$key}]) !!}"
+                        class="btn btn-danger">PDF</a>
                 @endisset
                 @isset($action['update'])
                 <a id="linkMenu" href="{!! route(trim(" {$module}_update"), ["code"=> $model->{$key}]) !!}" class="btn

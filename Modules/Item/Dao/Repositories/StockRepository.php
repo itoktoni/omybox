@@ -2,22 +2,35 @@
 
 namespace Modules\Item\Dao\Repositories;
 
-use Plugin\Helper;
 use Plugin\Notes;
+use Plugin\Helper;
 use Illuminate\Support\Facades\DB;
 use Modules\Item\Dao\Models\Stock;
+use Modules\Item\Dao\Models\Product;
 use App\Dao\Interfaces\MasterInterface;
 use Illuminate\Database\QueryException;
-use Modules\Item\Dao\Models\Product;
+use Modules\Procurement\Dao\Repositories\UnitRepository;
+use Modules\Procurement\Dao\Repositories\ProductRepository;
 
 class StockRepository extends Stock implements MasterInterface
 {
-    public function dataRepository()
+    public function dataRepository($product = null)
     {
         $product = new ProductRepository();
-        $table = $product->select([DB::raw('IFNULL(view_stock_product.id, item_product.item_product_id) AS item_product_id'), 'item_color_name', 'item_product_name', 'view_stock_product.*'])
-            ->leftJoin('view_stock_product', 'product', 'item_product_id')
-            ->leftJoin('item_color', 'color', 'item_color_id')->orderBy('qty', 'DESC');
+        $unit = new UnitRepository();
+
+        $list = [
+            'item_stock_product',
+            'procurement_product_name',
+            'item_stock_barcode',
+            'procurement_unit_name',
+            DB::raw('sum(item_stock_qty) as qty'),
+        ];
+        $table = $this->select($list)
+            ->leftJoin($product->getTable(), 'item_stock_product', 'procurement_product_id')
+            ->leftJoin($unit->getTable(), $unit->getKeyName(), 'procurement_product_unit_id')
+            ->groupBy('item_stock_product');
+        // ->orderBy('item_stock_qty', 'DESC');
         return $table;
     }
 
@@ -92,7 +105,7 @@ class StockRepository extends Stock implements MasterInterface
 
     public function stockRepository($id)
     {
-        return DB::table('view_stock')->where(['item_product_id' => $id])->first();
+        return $this->where(['item_stock_product' => $id])->first();
     }
 
     public function barcodeRepository($id, $relation = null)
@@ -105,27 +118,9 @@ class StockRepository extends Stock implements MasterInterface
         return $this->where('item_stock_batch', $id)->get();
     }
 
-    public function stockDetailRepository($product, $color = null, $size = null)
+    public function stockDetailRepository($product)
     {
-        if ($color && $size) {
-            $data = $this->where([
-                'item_stock_product' => $product,
-                'item_stock_color' => $color,
-                'item_stock_size' => $size,
-            ]);
-        } else if ($color && !$size) {
-            $data = $this->where([
-                'item_stock_product' => $product,
-                'item_stock_color' => $color,
-            ]);
-        } else if (!$color && $size) {
-            $data = $this->where([
-                'item_stock_product' => $product,
-                'item_stock_size' => $size,
-            ]);
-        } else {
-            $data = $this->where('item_stock_product', $product)->where('item_stock_size', '!=', '')->where('item_stock_color', '!=', '');
-        }
+        $data = $this->where('item_stock_product', $product);
         return $data->get();
     }
 }

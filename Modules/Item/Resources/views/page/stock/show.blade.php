@@ -12,8 +12,6 @@
                     <table id="force-responsive" class="table table-table table-bordered table-striped table-hover">
                         <thead>
                             <tr>
-                                <th scope="col">Color</th>
-                                <th scope="col">Size</th>
                                 <th scope="col">Location</th>
                                 <th scope="col">Warehouse</th>
                                 <th scope="col">Created</th>
@@ -32,8 +30,6 @@
                             $total = $total + $item->item_stock_qty;
                             @endphp
                             <tr>
-                                <td data-header="Color">{{ $item->color->item_color_name ?? '' }}</td>
-                                <td data-header="Size">{{ $item->item_stock_size }}</td>
                                 <td data-header="Location">{{ $item->location->inventory_location_name ?? '' }}</td>
                                 <td data-header="Warehouse">
                                     {{ $item->location->warehouse->inventory_warehouse_name ?? '' }}</td>
@@ -55,13 +51,13 @@
                             </tr>
                             @if ($loop->last)
                             <tr>
-                                <td colspan="8" align="right"><strong>Total</strong></td>
+                                <td colspan="6" align="right"><strong>Total</strong></td>
                                 <td align="right"><strong>{{ number_format($total) }}</strong></td>
                             </tr>
                             @endif
                             @empty
                             <tr>
-                                <td colspan="8" align="center"><strong>No Stock Found</strong></td>
+                                <td colspan="6" align="center"><strong>No Stock Found</strong></td>
                             </tr>
                             @endforelse
                         </tbody>

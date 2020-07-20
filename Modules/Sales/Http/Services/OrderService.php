@@ -35,7 +35,7 @@ class OrderService extends TransactionService
         $this->setRules(array_merge($repository->rules, ['temp_id' => 'required']))->validate($repository);
         $save = $this->data;
         $save['sales_order_marketing_promo_value'] = isset($save['promo_value']) ? Helper::filterInput($save['promo_value']) : 0;
-        $save['sales_order_total'] = isset($save['hidden_total']) ? Helper::filterInput($save['hidden_total']) : 0;
+        $save['sales_order_total'] = isset($save['total']) ? Helper::filterInput($save['total']) : 0;
         $this->data = array_merge($save, $this->data);
         $check = $repository->saveRepository($this->data);
         

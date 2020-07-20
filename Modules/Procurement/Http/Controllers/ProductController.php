@@ -1,15 +1,15 @@
 <?php
 
-namespace Modules\Inventory\Http\Controllers;
+namespace Modules\Procurement\Http\Controllers;
 
 use Plugin\Helper;
 use Plugin\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Services\MasterService;
-use Modules\Item\Dao\Repositories\BrandRepository;
-use Modules\Inventory\Dao\Repositories\WarehouseRepository;
+use Modules\Procurement\Dao\Repositories\UnitRepository;
+use Modules\Procurement\Dao\Repositories\ProductRepository;
 
-class WarehouseController extends Controller
+class ProductController extends Controller
 {
     public $template;
     public static $model;
@@ -17,7 +17,7 @@ class WarehouseController extends Controller
     public function __construct()
     {
         if (self::$model == null) {
-            self::$model = new WarehouseRepository();
+            self::$model = new ProductRepository();
         }
         $this->template  = Helper::getTemplate(__class__);
     }
@@ -29,11 +29,13 @@ class WarehouseController extends Controller
 
     private function share($data = [])
     {
-        $brand = Helper::shareOption(new BrandRepository());
+        $unit = Helper::createOption((new UnitRepository()));
+        $product = Helper::createOption((new ProductRepository()));
 
         $view = [
-            'brand' => $brand,
-            'template' => $this->template,
+            'key'       => self::$model->getKeyName(),
+            'unit'      => $unit,
+            'product'   => $product,
         ];
 
         return array_merge($view, $data);
@@ -70,7 +72,7 @@ class WarehouseController extends Controller
     public function delete(MasterService $service)
     {
         $service->delete(self::$model);
-        return Response::redirectBack();;
+        return Response::redirectBack();
     }
 
     public function data(MasterService $service)

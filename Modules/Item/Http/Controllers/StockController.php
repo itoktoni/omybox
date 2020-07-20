@@ -10,7 +10,7 @@ use App\Http\Services\MasterService;
 use Modules\Item\Dao\Repositories\SizeRepository;
 use Modules\Item\Dao\Repositories\ColorRepository;
 use Modules\Item\Dao\Repositories\StockRepository;
-use Modules\Item\Dao\Repositories\ProductRepository;
+use Modules\Procurement\Dao\Repositories\ProductRepository;
 use Modules\Inventory\Dao\Repositories\LocationRepository;
 
 class StockController extends Controller
@@ -120,17 +120,16 @@ class StockController extends Controller
     {
         if (request()->isMethod('POST')) {
 
-            $datatable = $service->setRaw(['item_stock_product'])->datatable(self::$model);
-            $datatable->editColumn('item_stock_product', function ($select) {
-                return $select->product;
+            $datatable = $service->setRaw(['qty'])->datatable(self::$model);
+            $datatable->editColumn('qty', function ($select) {
+                return '<p align="center">'.$select->qty.'</p>';
             });
             $module = $this->getModule();
             $datatable->editColumn('action', function ($select) use ($module) {
-                return $html = '<p align="center"><a id="linkMenu" href="' . route($module . '_show', ['code' => $select->item_product_id]) . '" class="btn btn-xs btn-success">show</a></p>';
+                return $html = '<p align="center"><a id="linkMenu" href="' . route($module . '_show', ['code' => $select->item_stock_product]) . '" class="btn btn-xs btn-success">show</a></p>';
             });
             return $datatable->make(true);
         }
-
 
         return view(Helper::setViewData())->with([
             'fields'   => Helper::listData(self::$model->datatable),
@@ -145,14 +144,11 @@ class StockController extends Controller
             $check = self::$model->stockRepository($code);
             $stock = $data = false;
             if ($check) {
-                $product = new ProductRepository();
-                $data = $product->showRepository($check->product_id);
-                $stock = self::$model->stockDetailRepository($check->product, $check->color, $check->size);
+                $stock = self::$model->stockDetailRepository($check->item_stock_product);
             }
-
             return view('Item::page.stock.show')->with($this->share([
                 'fields' => Helper::listData(self::$model->datatable),
-                'model'   => $data,
+                'model'   => $check,
                 'stock'   => $stock,
                 'key' => 'item_product_id',
             ]));

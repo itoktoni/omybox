@@ -6,6 +6,7 @@ use Plugin\Helper;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Inventory\Dao\Models\Location;
+use Modules\Procurement\Dao\Models\Product;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Stock extends Model
@@ -37,9 +38,9 @@ class Stock extends Model
   public $rules = [
     'item_stock_product' => 'required',
   ];
-  protected $keyType = 'int';
+  // protected $keyType = 'string';
 
-  public $with = ['color', 'location', 'location.warehouse', 'product'];
+  public $with = ['location', 'location.warehouse', 'product'];
 
   const CREATED_AT = 'item_stock_updated_at';
   const UPDATED_AT = 'item_stock_updated_at';
@@ -49,11 +50,11 @@ class Stock extends Model
   public $order = 'qty';
 
   public $datatable = [
-    'item_product_id'        => [true => 'ID'],
-    'item_product_name'        => [true => 'Full Name'],
-    'item_color_name' => [true => 'Color'],
-    'size' => [true => 'Size'],
+    'item_stock_product'        => [true => 'ID'],
+    'item_stock_barcode'        => [false => 'Barcode'],
+    'procurement_product_name'        => [true => 'Full Name'],
     'qty' => [true => 'Qty'],
+    'procurement_unit_name' => [true => 'Unit'],
   ];
 
   public $status = [
@@ -61,10 +62,7 @@ class Stock extends Model
     '0' => ['Not Active', 'danger'],
   ];
 
-  public function color()
-  {
-    return $this->hasOne(Color::class, 'item_color_id', 'item_stock_color');
-  }
+
 
   public function location()
   {
@@ -73,7 +71,7 @@ class Stock extends Model
 
   public function product()
   {
-    return $this->hasOne(Product::class, 'item_product_id', 'item_stock_product');
+    return $this->hasOne(Product::class, 'procurement_product_id', 'item_stock_product');
   }
 
   public static function boot()

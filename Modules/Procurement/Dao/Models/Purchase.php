@@ -72,15 +72,15 @@ class Purchase extends Model
     'prepare'   => ['primary', 'prepare'],
     'show'   => ['success', 'show'],
     'print_receive'   => ['danger', 'print'],
-    'receive'   => ['primary', 'receive'],
+    'receive'   => ['danger', 'receive'],
   ];
   
   public $status = [
     '1' => ['Create', 'warning'],
-    '2' => ['Prepare', 'primary'],
-    '3' => ['Deliver', 'success'],
-    '4' => ['Receive', 'danger'],
-    '5' => ['Done', 'secondary'],
+    // '2' => ['Prepare', 'primary'],
+    // '3' => ['Deliver', 'success'],
+    '2' => ['Receive', 'danger'],
+    '3' => ['Done', 'success'],
   ];
 
   public $paid = [

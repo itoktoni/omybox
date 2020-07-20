@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Services\MasterService;
 use Illuminate\Support\Facades\Auth;
+use Modules\Finance\Dao\Models\Payment;
 use App\Http\Services\TransactionService;
 use Modules\Sales\Dao\Models\OrderDetail;
 use Modules\Sales\Dao\Models\OrderDelivery;
@@ -131,6 +132,31 @@ class OrderController extends Controller
                 'sales_order_rajaongkir_ongkir' => $total_ongkir
             ]);
 
+            if (request()->get('paid') == 1 && request()->get('sales_order_status') == 2) {
+                DB::table((new Payment())->getTable())->updateOrInsert([
+                'finance_payment_from' => 'Automatic',
+                'finance_payment_to' => 'Automatic',
+                'finance_payment_sales_order_id' => request()->get('code'),
+                'finance_payment_account_id' => '1',
+                'finance_payment_date' => date('Y-m-d'),
+                'finance_payment_person' => request()->get('sales_order_rajaongkir_name'),
+                'finance_payment_phone' => request()->get('sales_order_rajaongkir_phone'),
+                'finance_payment_amount' => request()->get('total') + $total_ongkir,
+                'finance_payment_description' => 'Automatic Paid From Create Order',
+                'finance_payment_approve_amount' => request()->get('total') + $total_ongkir,
+                'finance_payment_status' => '1',
+                'finance_payment_paid' => '1',
+                'finance_payment_voucher' => Helper::autoNumber('finance_payment', 'finance_payment_voucher', 'VC' . date('Ym'), 13),
+                ]);
+
+                OrderRepository::find(request()->get('code'))->update([
+                    'sales_order_status' => 3
+                ]);
+
+                return redirect()->back();
+            }
+
+
             if ($post['status']) {
                 return Response::redirectToRoute($this->getModule() . '_data');
             }
@@ -165,7 +191,7 @@ class OrderController extends Controller
             $data_stock = $stock->dataStockRepository($product)->get();
 
             $collection = collect(self::$model->status);
-            $status = $collection->forget([1, 2, 5, 0])->toArray();
+            $status = $collection->forget([1, 2, 3, 0])->toArray();
 
             $delivery = OrderDelivery::whereIn('so_delivery_option', $product)->where('so_delivery_order', request()->get('code'))->get();
             return view(Helper::setViewForm($this->template, __FUNCTION__, $this->folder))->with($this->share([
