@@ -55,7 +55,6 @@ class OrderCreateRepository extends OrderRepository implements MasterInterface
                 $location = $model_location->dataRepository()->where('inventory_warehouse_brand_id', Auth::user()->brand)->get();
                 $data_location = $location->pluck('inventory_location_id')->toArray();
 
-
                 $product = Product::find($data['sales_order_detail_item_product_id']);
                 $material = $product->material ?? false;
                 if ($material) {

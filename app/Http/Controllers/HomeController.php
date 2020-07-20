@@ -11,10 +11,12 @@ use App\Charts\HomeChart;
 use Illuminate\Http\Request;
 use App\Dao\Models\GroupUser;
 use Illuminate\Support\Facades\DB;
+use Modules\Item\Dao\Models\Stock;
 use Modules\Sales\Dao\Models\Order;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Modules\Item\Dao\Models\Product;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
@@ -130,10 +132,39 @@ class HomeController extends Controller
             
             $delete = OrderDetail::where('sales_order_detail_sales_order_id', $order)->where('sales_order_detail_item_product_id', $id);
             $delete->update(['sales_order_detail_qty_prepare' => $delete->first()->sales_order_detail_qty_order]);
-            
-            $ready = OrderDetail::whereNull('sales_order_detail_qty_prepare')->first();
+            $model_location = new LocationRepository();
+            $location = $model_location->dataRepository()->where('inventory_warehouse_brand_id', Auth::user()->brand)->get();
+            $data_location = $location->pluck('inventory_location_id')->toArray();
 
-            if(empty($ready)){
+            $product = Product::find($id);
+            $material = $product->material ?? false;
+            if ($material) {
+                foreach ($material as $materi) {
+                    $stock = new Stock();
+                    $pesanan = $delete->first()->sales_order_detail_qty_order * $materi->item_material_value;
+                    $cek_stock = $stock->where('item_stock_product', $materi->item_material_procurement_product_id)->whereIn('item_stock_location', $data_location)->orderBy('item_stock_qty', 'DESC');
+                    $single_stock = $cek_stock->first();
+                    if ($single_stock) {
+                        $jumlah = $cek_stock->sum('item_stock_qty');
+                        if ($single_stock->item_stock_qty >= $pesanan) {
+                            $pengurangan = $single_stock->item_stock_qty - $pesanan;
+                        } elseif ($jumlah >= $pesanan) {
+                            $pengurangan = $jumlah - $pesanan;
+                            $stock->where('item_stock_product', $materi->item_material_procurement_product_id)->update(['item_stock_qty' => 0]);
+                        } else {
+                            $pengurangan = $jumlah - $pesanan;
+                            $stock->where('item_stock_product', $materi->item_material_procurement_product_id)->update(['item_stock_qty' => 0]);
+                        }
+                        $stock->find($single_stock->item_stock_id)->update(['item_stock_qty' => $pengurangan]);
+                    }
+                }
+            }
+
+
+
+            $ready = OrderDetail::whereNull('sales_order_detail_qty_prepare')->first();
+            
+            if (empty($ready)) {
                 Order::find($order)->update(['sales_order_status' => 5]);
             }
 
