@@ -6,6 +6,7 @@ use Config;
 // use Illuminate\Support\Facades\Config;
 use Helper;
 use Closure;
+use Plugin\Notes;
 use Plugin\Response;
 use App\Charts\HomeChart;
 use Illuminate\Http\Request;
@@ -24,6 +25,7 @@ use Illuminate\Support\Facades\Storage;
 use Modules\Sales\Dao\Models\OrderDetail;
 use Modules\Sales\Dao\Repositories\OrderRepository;
 use Alkhachatryan\LaravelWebConsole\LaravelWebConsole;
+use Modules\Inventory\Dao\Repositories\LocationRepository;
 
 class HomeController extends Controller
 {
@@ -128,14 +130,18 @@ class HomeController extends Controller
             $order = request()->get('order');
             $id = request()->get('id');
 
+            DB::beginTransaction();
+
             $prepare = Order::find($order)->update(['sales_order_status' => 4]);
-            
             $delete = OrderDetail::where('sales_order_detail_sales_order_id', $order)->where('sales_order_detail_item_product_id', $id);
             $delete->update(['sales_order_detail_qty_prepare' => $delete->first()->sales_order_detail_qty_order]);
             $model_location = new LocationRepository();
-            $location = $model_location->dataRepository()->where('inventory_warehouse_brand_id', Auth::user()->brand)->get();
+            $location = $model_location->dataRepository()->where('inventory_warehouse_brand_id', Auth::user()->branch)->get();
             $data_location = $location->pluck('inventory_location_id')->toArray();
-
+            if (empty($data_location)) {
+                DB::rollback();
+                return redirect()->back()->withErrors('Stock in this location is Empty !');
+            }
             $product = Product::find($id);
             $material = $product->material ?? false;
             if ($material) {
@@ -146,27 +152,32 @@ class HomeController extends Controller
                     $single_stock = $cek_stock->first();
                     if ($single_stock) {
                         $jumlah = $cek_stock->sum('item_stock_qty');
-                        if ($single_stock->item_stock_qty >= $pesanan) {
+                        if ($jumlah < $pesanan) {
+                            DB::rollback();
+                            return redirect()->back()->withErrors(['Stock Not Enough !']);
+                        } elseif ($single_stock->item_stock_qty >= $pesanan) {
                             $pengurangan = $single_stock->item_stock_qty - $pesanan;
                         } elseif ($jumlah >= $pesanan) {
                             $pengurangan = $jumlah - $pesanan;
                             $stock->where('item_stock_product', $materi->item_material_procurement_product_id)->update(['item_stock_qty' => 0]);
                         } else {
-                            $pengurangan = $jumlah - $pesanan;
-                            $stock->where('item_stock_product', $materi->item_material_procurement_product_id)->update(['item_stock_qty' => 0]);
+                            DB::rollback();
+                            return redirect()->back()->withErrors(['Stock Not Enough !']);
+
+                            // $pengurangan = $jumlah - $pesanan;
+                            // $stock->where('item_stock_product', $materi->item_material_procurement_product_id)->update(['item_stock_qty' => 0]);
                         }
                         $stock->find($single_stock->item_stock_id)->update(['item_stock_qty' => $pengurangan]);
                     }
                 }
             }
 
-
-
             $ready = OrderDetail::whereNull('sales_order_detail_qty_prepare')->first();
             
             if (empty($ready)) {
                 Order::find($order)->update(['sales_order_status' => 5]);
             }
+            DB::commit();
 
             return redirect()->back();
         }
@@ -197,6 +208,7 @@ class HomeController extends Controller
                 'live' => request()->get('live'),
                 'seo' => request()->get('seo'),
                 'name' => request()->get('name'),
+                'sign' => request()->get('sign'),
                 'email' => request()->get('email'),
                 'cache' => request()->get('website_cache'),
                 'session' => request()->get('website_session'),

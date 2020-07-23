@@ -2,11 +2,14 @@
 
 namespace Modules\Procurement\Dao\Repositories;
 
-use Plugin\Helper;
 use Plugin\Notes;
+use Plugin\Helper;
 use Illuminate\Support\Facades\DB;
 use App\Dao\Interfaces\MasterInterface;
+use Modules\Procurement\Dao\Models\Convert;
 use Modules\Item\Dao\Repositories\StockRepository;
+use Modules\Procurement\Dao\Repositories\UnitRepository;
+use Modules\Procurement\Dao\Repositories\ProductRepository;
 use Modules\Procurement\Dao\Repositories\PurchaseRepository;
 
 class PurchaseReceiveRepository extends PurchaseRepository implements MasterInterface
@@ -49,8 +52,17 @@ class PurchaseReceiveRepository extends PurchaseRepository implements MasterInte
                     $item['item_stock_batch'] = $batch;
                 }
 
-               
-                // dd($item);
+                $data_product = ProductRepository::find((int)$item['item_stock_product']);
+                if($data_product){
+
+                    $convert = Convert::where('procurement_convert_from', $data_product->procurement_product_unit_display)->where('procurement_convert_to', $data_product->procurement_product_unit_id)->first();
+                    if(empty($convert)){
+                        return Notes::error('Converter Unit Not Found !');
+                    }
+
+                    $item['item_stock_qty'] = $item['item_stock_qty'] * $convert->procurement_convert_value;
+                }   
+
                 $check = $stock->saveRepository($item);
                 // if ($check_stock['status'] && isset($check_stock['data']->item_stock_barcode)) {
                 //     $data['purchase_detail_barcode'] = $check_stock['data']->item_stock_barcode;

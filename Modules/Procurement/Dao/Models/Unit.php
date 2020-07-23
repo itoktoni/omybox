@@ -16,8 +16,6 @@ class Unit extends Model
     'procurement_unit_id',
     'procurement_unit_code',
     'procurement_unit_name',
-    'procurement_unit_operator',
-    'procurement_unit_value',
     'procurement_unit_description',
   ];
 
@@ -36,8 +34,6 @@ class Unit extends Model
     'procurement_unit_id'          => [false => 'ID'],
     'procurement_unit_code'        => [true => 'Code'],
     'procurement_unit_name'        => [true => 'Name'],
-    'procurement_unit_operator'        => [true => 'Operator'],
-    'procurement_unit_value'        => [true => 'Value'],
     'procurement_unit_description'        => [true => 'Description'],
   ];
   

@@ -23,7 +23,6 @@
                     <th class="text-left col-md-2">Product Name</th>
                     <th class="text-right col-md-1">Qty</th>
                     <th class="text-right col-md-1">Receive</th>
-                    <th class="text-right col-md-1">Satuan</th>
                     <th class="text-right col-md-2">Location</th>
                 </tr>
             </thead>
@@ -41,7 +40,7 @@
                         @php
                         $product = $item->product->procurement_product_name ?? '';
                         @endphp
-                        {{ old('temp_name')[$loop->index] ?? $product }}
+                        {{ old('temp_name')[$loop->index] ?? $product }} / {{ old('satuan')[$loop->index] ?? $item->product->display->procurement_unit_name ?? '' }}
                         <input type="hidden" value="{{ old('temp_name')[$loop->index] ?? $product }}"
                             name="temp_name[]">
                     </td>
@@ -53,9 +52,6 @@
                         <input type="text" name="temp_receive[]" {{ $model->purchase_status > 3 ? 'readonly' : '' }}
                             class="form-control text-right number"
                             value="{{ old('temp_receive')[$loop->index] ?? $item->purchase_detail_qty_receive }}">
-                    </td>
-                    <td data-title="Satuan" class="text-right col-lg-3">
-                        {{ old('satuan')[$loop->index] ?? $item->product->unit->procurement_unit_code ?? '' }}
                     </td>
                     <td data-title="Location"
                         class="text-right col-lg-3 {{ $errors->has('purchase_detail_location_id.'.$loop->index) ? 'has-error' : ''}}">

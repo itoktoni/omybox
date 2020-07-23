@@ -28,9 +28,10 @@
         <tr id="{{ $item->purchase_detail_item_product_id }}">
             <td data-title="ID Product">
                 {{ $item->purchase_detail_item_product_id }}
+                <input type="hidden" value="{{ $item->purchase_detail_item_product_id }}" name="temp_id[]">
             </td>
             <td data-title="Product">
-                {{ $item->product->procurement_product_name ?? '' }}
+                {{ $item->product->procurement_product_name ?? '' }} {{ $item->product->display->procurement_unit_name ?? '' }}
                 <input type="hidden" value="{{ $item->product->procurement_product_name ?? '' }}" name="temp_name[]">
             </td>
             <td data-title="Price" class="text-right col-lg-1">

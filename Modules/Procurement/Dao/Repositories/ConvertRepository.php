@@ -2,20 +2,19 @@
 
 namespace Modules\Procurement\Dao\Repositories;
 
-use Plugin\Notes;
 use Plugin\Helper;
+use Plugin\Notes;
 use Illuminate\Support\Facades\DB;
+use Modules\Procurement\Dao\Models\Convert;
 use App\Dao\Interfaces\MasterInterface;
-use Modules\Procurement\Dao\Models\Product;
-use Modules\Procurement\Dao\Repositories\UnitRepository;
 
-class ProductRepository extends Product implements MasterInterface
+class ConvertRepository extends Convert implements MasterInterface
 {
     public function dataRepository()
     {
         $list = Helper::dataColumn($this->datatable, $this->getKeyName());
-        $unit = new UnitRepository();
-        return $this->select($list)->join($unit->getTable(), $unit->getKeyName(), 'procurement_product_unit_display');
+        return $this->select(['procurement_convert.*', DB::raw('a.procurement_unit_name as unit_from'),DB::raw('b.procurement_unit_name as unit_to')])->leftJoin(DB::raw('procurement_unit as a'), 'a.procurement_unit_id', 'procurement_convert_from')
+        ->leftJoin(DB::raw('procurement_unit as b'), 'b.procurement_unit_id', 'procurement_convert_to');
     }
 
     public function saveRepository($request)
@@ -46,11 +45,6 @@ class ProductRepository extends Product implements MasterInterface
         } catch (\Illuminate\Database\QueryException $ex) {
             return Notes::error($ex->getMessage());
         }
-    }
-
-    public function dataProduct($id)
-    {
-        return DB::table($this->table . '_product')->where($this->table . '_product_vendor_id', $id)->get();
     }
 
     public function showRepository($id, $relation)

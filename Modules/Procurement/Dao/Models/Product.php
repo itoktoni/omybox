@@ -36,6 +36,8 @@ class Product extends Model
   public $searching = 'procurement_product_name';
   public $datatable = [
     'procurement_product_id'          => [false => 'ID'],
+    'procurement_product_unit_id'          => [false => 'ID'],
+    'procurement_product_unit_display'          => [false => 'ID'],
     'procurement_product_name'        => [true => 'Name'],
     'procurement_product_buy'        => [true => 'Buy'],
     'procurement_product_sell'        => [true => 'Sell'],
@@ -47,6 +49,8 @@ class Product extends Model
     '1' => ['Active', 'primary'],
     '0' => ['Not Active', 'danger'],
   ];
+
+  protected $with = ['display'];
 
   public function Unit()
   {

@@ -22,7 +22,8 @@
 </head>
 
 <body>
-    <table id="border" align="center" border="0" cellpadding="5" cellspacing="0" id="m_-3784408755349078820templateList" width="100%"
+    <table id="border" align="center" border="0" cellpadding="5" cellspacing="0" id="m_-3784408755349078820templateList"
+        width="100%"
         style="border-collapse:collapse;border-spacing:0;font-size:13px;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0 0 25px;padding:0"
         bgcolor="#FFFFFF">
         <tbody>
@@ -31,10 +32,11 @@
                     bgcolor="#{{ config('website.color') }}">
                     <h2
                         style="font-family:Arial,sans-serif;color:#ffffff;line-height:1.5;font-size:15px;font-weight:bold;margin-top:5px;">
-                        {{ config('website.name') }} 
+                        {{ config('website.name') }}
                     </h2>
-                    <h2 style="position:absolute;right:10px;color:#ffffff;line-height:1.5;font-size:15px;top:10px;font-family:Arial,sans-serif;">
-                    Purchase Order : {{ $master->purchase_id }}
+                    <h2
+                        style="position:absolute;right:10px;color:#ffffff;line-height:1.5;font-size:15px;top:10px;font-family:Arial,sans-serif;">
+                        Purchase Order : {{ $master->purchase_id }}
                     </h2>
                 </th>
             </tr>
@@ -129,7 +131,7 @@
                     <strong style="color:#555;font-size:13px">Product
                     </strong>
                 </td>
-                
+
                 <td align="center" class="m_-3784408755349078820headingList" valign="top" width="10%"
                     style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;font-size:11px;margin:0;padding:5px 10px"
                     bgcolor="#F0F0F0">
@@ -168,11 +170,11 @@
                     bgcolor="#FFFFFF">
                     {{ $item->product->procurement_product_name }}
                 </td>
-                
+
                 <td align="center" valign="middle" width="15%"
                     style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
                     bgcolor="#FFFFFF">
-                    {{ Helper::calculate($item->purchase_detail_qty_order.''.$item->product->display->procurement_unit_operator.''.$item->product->display->procurement_unit_value) }} {{ $item->product->display->procurement_unit_name ?? '' }}
+                    {{ $item->purchase_detail_qty_order }} {{ $item->product->display->procurement_unit_name ?? '' }}
                 </td>
                 <td align="center" valign="middle" width="15%"
                     style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
@@ -212,6 +214,16 @@
 
         </tbody>
     </table>
+
+    <div class="sign" style="margin-top:-30px;">
+        <h5 style="font-family:Arial,sans-serif;text-align:right">
+            Menyetujui,
+        </h5>
+
+         <h5 style="font-family:Arial,sans-serif;text-align:right;margin-top:80px">
+            {{ config('website.sign') }}
+        </h5>
+    </div>
 
 </body>
 

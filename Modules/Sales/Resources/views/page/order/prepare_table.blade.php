@@ -14,7 +14,7 @@
         $harga = $total_harga = $total = 0;
         @endphp
         @foreach ($detail as $item)
-        @if ($item->product->item_product_item_brand_id == Auth::user()->brand)
+        @if ($item->product->item_product_item_brand_id == Auth::user()->branch)
         @php
         $harga = $item->sales_order_detail_qty_order * $item->sales_order_detail_price_order;
         $total_harga = $harga + $total_harga;

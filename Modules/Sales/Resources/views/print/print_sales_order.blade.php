@@ -8,297 +8,297 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     <style>
-        body {
-            margin: 10px;
+    body {
+        margin: 10px;
+    }
+
+    table#border {
+        border: 0.5px solid grey;
+    }
+
+    .print-only {
+        display: none !important
+    }
+
+    * {
+        background: transparent !important;
+        color: black !important;
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+        -webkit-filter: none !important;
+        filter: none !important;
+        -ms-filter: none !important
+    }
+
+    *,
+    *:before,
+    *:after {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box
+    }
+
+    a,
+    a:visited {
+        text-decoration: underline
+    }
+
+    a[href]:after {
+        content: "
+(" attr(href) ")"}abbr[title]:after{content:"(" attr(title) ")"}.ir
+a:after, a[href^="javascript:"]:after, a[href^="#"]:after {
+            content: ""
         }
 
-        table#border {
-            border: 0.5px solid grey;
+        pre,
+        blockquote {
+            border: 1px solid #999;
+            page-break-inside: avoid
         }
 
-        .print-only {
+        thead {
+            display: table-header-group
+        }
+
+        tr,
+        img {
+            page-break-inside: avoid
+        }
+
+        img {
+            max-width: 100% !important;
+            vertical-align: middle;
+            max-height: 100% !important
+        }
+
+        table {
+            border-collapse: collapse
+        }
+
+        th,
+        td {
+            border: solid 1px #333;
+            padding: 0.25em 8px;
+            vertical-align: top
+        }
+
+        dl {
+            margin: 0
+        }
+
+        dd {
+            margin: 0
+        }
+
+        @page {
+            margin: 1.25cm 0.5cm
+        }
+
+        p,
+        h2,
+        h3 {
+            orphans: 3;
+            widows: 3
+        }
+
+        h2,
+        h3 {
+            page-break-after: avoid
+        }
+
+        .hide-on-print {
             display: none !important
         }
 
-        * {
-            background: transparent !important;
-            color: black !important;
-            -webkit-box-shadow: none !important;
-            box-shadow: none !important;
-            text-shadow: none !important;
-            -webkit-filter: none !important;
-            filter: none !important;
-            -ms-filter: none !important
+        .print-only {
+            display: block !important
         }
 
-        *,
-        *:before,
-        *:after {
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            box-sizing: border-box
+        .hide-for-print {
+            display: none !important
         }
 
-        a,
-        a:visited {
-            text-decoration: underline
+        .show-for-print {
+            display: inherit !important
         }
 
-        a[href]:after {
-            content: "
-(" attr(href) ")"}abbr[title]:after{content:"(" attr(title) ")"}.ir
-a:after, a[href^="javascript:"]:after, a[href^="#"]:after {
-                content: ""
-            }
+        .break-page-after {
+            page-break-after: always;
+            page-break-inside: avoid
+        }
 
-            pre,
-            blockquote {
-                border: 1px solid #999;
-                page-break-inside: avoid
-            }
+        html {
+            overflow-x: visible
+        }
 
-            thead {
-                display: table-header-group
-            }
+        body {
+            font-size: 12px;
+            line-height: 1.5;
 
-            tr,
-            img {
-                page-break-inside: avoid
-            }
-
-            img {
-                max-width: 100% !important;
-                vertical-align: middle;
-                max-height: 100% !important
-            }
-
-            table {
-                border-collapse: collapse
-            }
-
-            th,
-            td {
-                border: solid 1px #333;
-                padding: 0.25em 8px;
-                vertical-align: top
-            }
-
-            dl {
-                margin: 0
-            }
-
-            dd {
-                margin: 0
-            }
-
-            @page {
-                margin: 1.25cm 0.5cm
-            }
-
-            p,
-            h2,
-            h3 {
-                orphans: 3;
-                widows: 3
-            }
-
-            h2,
-            h3 {
-                page-break-after: avoid
-            }
-
-            .hide-on-print {
-                display: none !important
-            }
-
-            .print-only {
-                display: block !important
-            }
-
-            .hide-for-print {
-                display: none !important
-            }
-
-            .show-for-print {
-                display: inherit !important
-            }
-
-            .break-page-after {
-                page-break-after: always;
-                page-break-inside: avoid
-            }
-
-            html {
-                overflow-x: visible
-            }
-
-            body {
-                font-size: 12px;
-                line-height: 1.5;
-
-                font-family: "Lucida
+            font-family: "Lucida
 Grande", "Lucida Sans Unicode", "Lucida Sans", Arial, sans-serif;padding:0}h1,h2,h3,h4,h5,h6{font-weight:normal}h1 a,h2
 a, h3 a, h4 a, h5 a, h6 a {
-                    font-weight: inherit
-                }
+                font-weight: inherit
+            }
 
-                h2 {
-                    font-size: 2em;
-                    line-height: 1.5;
-                    margin-bottom: 0.75em
-                }
+            h2 {
+                font-size: 2em;
+                line-height: 1.5;
+                margin-bottom: 0.75em
+            }
 
-                h3 {
-                    font-size: 1.5em;
-                    line-height: 1;
-                    margin-top: 2em;
-                    margin-bottom: 1em
-                }
+            h3 {
+                font-size: 1.5em;
+                line-height: 1;
+                margin-top: 2em;
+                margin-bottom: 1em
+            }
 
-                h4 {
-                    font-size: 1.25em;
-                    line-height: 2.4
-                }
+            h4 {
+                font-size: 1.25em;
+                line-height: 2.4
+            }
 
-                h5 {
-                    font-weight: bold;
-                    margin-top: 2.25em;
-                    margin-bottom: 0.75em
-                }
+            h5 {
+                font-weight: bold;
+                margin-top: 2.25em;
+                margin-bottom: 0.75em
+            }
 
-                h6 {
-                    text-transform: uppercase;
-                    margin-top: 2.25em;
-                    margin-bottom: 0.75em
-                }
+            h6 {
+                text-transform: uppercase;
+                margin-top: 2.25em;
+                margin-bottom: 0.75em
+            }
 
-                #page {
-                    width: 100%;
-                    position: relative
-                }
+            #page {
+                width: 100%;
+                position: relative
+            }
 
-                .bukalapak-transaction-slip {
-                    padding: 8px 9px;
-                    border: solid 1px #000;
-                    margin-bottom: 18px;
-                    width: 100%;
-                    position: relative
-                }
+            .bukalapak-transaction-slip {
+                padding: 8px 9px;
+                border: solid 1px #000;
+                margin-bottom: 18px;
+                width: 100%;
+                position: relative
+            }
 
-                .bukalapak-transaction-slip--brand {
-                    height: 27px;
-                    display: block;
-                    float: left
-                }
+            .bukalapak-transaction-slip--brand {
+                height: 27px;
+                display: block;
+                float: left
+            }
 
-                .bukalapak-transaction-slip--heading {
-                    margin-top: 0;
-                    display: block;
-                    float: right;
-                    line-height: 1;
-                    font-size: 18px
-                }
+            .bukalapak-transaction-slip--heading {
+                margin-top: 0;
+                display: block;
+                float: right;
+                line-height: 1;
+                font-size: 18px
+            }
 
-                .bukalapak-transaction-slip--courier {
-                    margin-top: -5px;
-                    display: block;
-                    float: right;
-                    font-size: 14px;
-                    position: relative;
-                    width: 100%;
-                    text-align: right
-                }
+            .bukalapak-transaction-slip--courier {
+                margin-top: -5px;
+                display: block;
+                float: right;
+                font-size: 14px;
+                position: relative;
+                width: 100%;
+                text-align: right
+            }
 
-                .bukalapak-transaction-slip-buyer {
-                    margin-top: 9px;
-                    margin-bottom: 9px;
-                    padding-right: 18px;
-                    clear: both;
-                    float: left;
-                    width: 62%;
-                    border-right: dotted 1px #000
-                }
+            .bukalapak-transaction-slip-buyer {
+                margin-top: 9px;
+                margin-bottom: 9px;
+                padding-right: 18px;
+                clear: both;
+                float: left;
+                width: 62%;
+                border-right: dotted 1px #000
+            }
 
-                .bukalapak-transaction-slip-buyer--heading {
-                    font-weight: bold;
-                    margin-top: 0
-                }
+            .bukalapak-transaction-slip-buyer--heading {
+                font-weight: bold;
+                margin-top: 0
+            }
 
-                .bukalapak-transaction-slip-buyer--label {
-                    display: block;
-                    float: left;
-                    clear: both;
-                    width: 25%
-                }
+            .bukalapak-transaction-slip-buyer--label {
+                display: block;
+                float: left;
+                clear: both;
+                width: 25%
+            }
 
-                .bukalapak-transaction-slip-buyer--label:after {
-                    content: ":"
-                }
+            .bukalapak-transaction-slip-buyer--label:after {
+                content: ":"
+            }
 
-                .bukalapak-transaction-slip-buyer--name,
-                .bukalapak-transaction-slip-buyer--phone {
-                    font-weight: bold
-                }
+            .bukalapak-transaction-slip-buyer--name,
+            .bukalapak-transaction-slip-buyer--phone {
+                font-weight: bold
+            }
 
-                .bukalapak-transaction-slip-buyer--address {
-                    display: block;
-                    float: left;
-                    font-weight: bold;
-                    width: 75%;
-                    white-space: -moz-pre-wrap !important;
-                    white-space: -pre-wrap;
-                    white-space: -o-pre-wrap;
-                    white-space: pre-wrap;
-                    white-space: normal
-                }
+            .bukalapak-transaction-slip-buyer--address {
+                display: block;
+                float: left;
+                font-weight: bold;
+                width: 75%;
+                white-space: -moz-pre-wrap !important;
+                white-space: -pre-wrap;
+                white-space: -o-pre-wrap;
+                white-space: pre-wrap;
+                white-space: normal
+            }
 
-                .bukalapak-transaction-slip-seller {
-                    display: block;
-                    float: left;
-                    width: 38%;
-                    margin-top: 9px;
-                    margin-bottom: 9px;
-                    padding-left: 18px
-                }
+            .bukalapak-transaction-slip-seller {
+                display: block;
+                float: left;
+                width: 38%;
+                margin-top: 9px;
+                margin-bottom: 9px;
+                padding-left: 18px
+            }
 
-                .bukalapak-transaction-slip-seller--heading {
-                    font-weight: bold;
-                    margin-top: 0em
-                }
+            .bukalapak-transaction-slip-seller--heading {
+                font-weight: bold;
+                margin-top: 0em
+            }
 
-                .bukalapak-transaction-slip-seller--lapak,
-                .bukalapak-transaction-slip-seller--name {
-                    white-space: nowrap
-                }
+            .bukalapak-transaction-slip-seller--lapak,
+            .bukalapak-transaction-slip-seller--name {
+                white-space: nowrap
+            }
 
-                .bukalapak-transaction-slip--footer {
-                    display: block;
-                    width: 100%;
-                    clear: both;
-                    margin-top: 18px;
-                    border-top: solid 1px #000;
-                    padding-top: 5px;
-                    font-size: 9px
-                }
+            .bukalapak-transaction-slip--footer {
+                display: block;
+                width: 100%;
+                clear: both;
+                margin-top: 18px;
+                border-top: solid 1px #000;
+                padding-top: 5px;
+                font-size: 9px
+            }
 
-                .bukalapak-transaction-product {
-                    clear: both;
-                    position: relative;
-                    width: 100%
-                }
+            .bukalapak-transaction-product {
+                clear: both;
+                position: relative;
+                width: 100%
+            }
 
-                .bukalapak-transaction-product-item {
-                    width: 80%
-                }
+            .bukalapak-transaction-product-item {
+                width: 80%
+            }
 
-                .bukalapak-transaction-product-quantity {
-                    width: 20%
-                }
+            .bukalapak-transaction-product-quantity {
+                width: 20%
+            }
 
-                .address p {
-                    margin-top: 0px;
-                    margin-bottom: 0px;
-                }
+            .address p {
+                margin-top: 0px;
+                margin-bottom: 0px;
+            }
     </style>
 
     <title>Document</title>
@@ -449,7 +449,7 @@ a, h3 a, h4 a, h5 a, h6 a {
                         style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;"
                         bgcolor="#FFFFFF">
                         <span>
-                            {{ $single_brand->brand->item_brand_description }}
+                            {{ $single_brand->brand->item_brand_description ?? '' }}
                         </span>
                     </td>
                     <td align="left" valign="middle" width="15%"
@@ -511,7 +511,8 @@ a, h3 a, h4 a, h5 a, h6 a {
                     <td align="left" colspan="7" valign="top"
                         style="border-collapse:collapse;border-spacing:0;font-family:Arial,sans-serif;color:#555;line-height:1.5;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0;padding:5px 10px"
                         bgcolor="#f0f0f0">
-                        <span style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">
+                        <span
+                            style="font-family:Arial,sans-serif;color:#555;line-height:1.5;font-size:13px;margin:0;padding:0">
                             {{ $master->sales_order_marketing_promo_code ?? '' }}
                             :
                             {{ $master->sales_order_marketing_promo_name ?? '' }}</span>
@@ -543,14 +544,14 @@ a, h3 a, h4 a, h5 a, h6 a {
                 <tr>
                     <th colspan='8' style='background: #{{ config('website.color') }} !important'></th>
                 </tr>
-                
+
                 <tr>
                     <th colspan="7"
                         style="text-align: left;border-bottom-style:none;color:#ffffff;padding-left:10px;padding-right:10px"
                         bgcolor="#{{ config('website.color') }}">
                         <h2
                             style="font-family:Arial,sans-serif;color:#ffffff;line-height:1.5;font-size:13px;margin:0;padding:5px 0">
-                           Grand Total
+                            Grand Total
                         </h2>
                     </th>
                     <th colspan="1"
@@ -566,6 +567,16 @@ a, h3 a, h4 a, h5 a, h6 a {
                     <th colspan='8' style='background: #{{ config('website.color') }} !important'></th>
                 </tr>
             </table>
+        </div>
+
+        <div class="sign" style="margin-top:0px;">
+            <h4 style="font-family:Arial,sans-serif;text-align:right">
+                Jakarta, {{ date('d F Y') }}
+            </h4>
+
+            <h4 style="font-family:Arial,sans-serif;text-align:right;margin-top:100px">
+                {{ config('website.sign') }}
+            </h4>
         </div>
 
 </body>

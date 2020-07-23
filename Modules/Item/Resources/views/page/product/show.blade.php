@@ -28,7 +28,7 @@
                                 <option value="">Select Product</option>
                                 @foreach($raw as $value)
                                 <option value="{{ $value->procurement_product_id }}">
-                                    {{ $value->procurement_product_name }} / {{ $value->procurement_unit_name ?? '' }}
+                                    {{ $value->procurement_product_name }} / {{ $value->unit->procurement_unit_name ?? '' }}
                                 </option>
                                 @endforeach
                             </select>
