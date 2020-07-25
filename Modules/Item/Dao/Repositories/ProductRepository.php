@@ -129,6 +129,6 @@ class ProductRepository extends Product implements MasterInterface
     }
 
     public function getBestSeller(){
-        return $this->orderBy('item_product_counter', 'DESC')->limit(6);
+        return $this->where('item_product_display', '1')->limit(6);
     }
 }
