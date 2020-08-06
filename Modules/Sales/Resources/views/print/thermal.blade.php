@@ -10,7 +10,7 @@
     <style>
     body {
         margin-left: -10px;
-        margin-right: 15px;
+        margin-right: 20px;
     }
 
     table#border {
