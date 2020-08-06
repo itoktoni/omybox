@@ -459,7 +459,7 @@ class PublicController extends Controller
 
                 $discount = 0;
                 if ($product_single->item_product_discount_type == 1) {
-                    $discount = $product_single->item_product_sell * $item->item_product_discount_value;
+                    $discount = $product_single->item_product_sell * $product_single->item_product_discount_value;
                 } elseif ($product_single->item_product_discount_type == 2) {
                     $discount = $product_single->item_product_discount_value;
                 }
