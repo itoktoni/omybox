@@ -245,9 +245,9 @@
             <h2 style="text-align: center;margin-top:-25px;">
                 <img id="logo" style="height:80px;" src="{{ Helper::print('logo/'.config('website.logo')) }}" alt="">
             </h2>
-            <h3 style="margin-top:-15px;text-align:Center">
+            <h3 style="margin-top:-10px;text-align:Center">
                 <span>
-                    {{ substr(config('app.url'), 0, -1) }}
+                    {{ config('app.url') }}
                 </span>
             </h3>
             <h5 style='margin-top: -10px; margin-bottom: 20px;text-align:center'>
