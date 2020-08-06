@@ -10,7 +10,7 @@
     <style>
     body {
         margin-left: -10px;
-        margin-right: 20px;
+        margin-right: 16px;
     }
 
     table#border {
@@ -340,9 +340,7 @@ a:after, a[href^="javascript:"]:after, a[href^="#"]:after {
         <table border='0' cellpadding='5' cellspacing='0' id='templateList' width='100%'>
             <tr>
                 <td class="name"><strong style="font-size: 15px;">Total</strong></td>
-                <td class="price"><strong
-                        style="font-size: 15px;">{{ number_format( $master->sales_order_total + $master->sales_order_rajaongkir_ongkir ,0,",",".") }}</strong>
-                </td>
+                <td align="right" class="price"><strong style="font-size: 15px;">{{ number_format( $master->sales_order_total + $master->sales_order_rajaongkir_ongkir ,0,",",".") }}</strong></td>
             </tr>
         </table>
 
