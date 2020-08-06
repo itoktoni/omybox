@@ -217,10 +217,10 @@ class OrderController extends Controller
                 'detail' => $data->detail,
             ];
 
-            if(!empty(config('website.header'))){
+            if(!empty(config('website.description'))){
 
                 $dom = new \DomDocument();
-                $dom->loadHtml(config('website.header'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                $dom->loadHtml(config('website.description'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
                 $paragrap = $dom->getElementsByTagName('p');
                 $total = $total + ($paragrap->length ?? 0);
 

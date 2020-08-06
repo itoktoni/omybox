@@ -341,7 +341,7 @@
         <div>
             <h5 style="margin-top:20px;margin-bottom:20px;line-height: 1;">
                 <span>
-                    {!! config('website.header') !!}
+                    {!! config('website.description') !!}
                 </span>
             </h5>
         </div>

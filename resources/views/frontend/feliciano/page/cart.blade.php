@@ -106,19 +106,17 @@
                                     </span>
                                 </div>
                                 <div class="col-md-8 col-sm-12 col-sx-3 promo-code-form">
-                                    {!! Form::open(['route' => 'cart', 'class' => 'promo-code-form', 'files' =>
-                                    true]) !!}
+                                    <!-- {!! Form::open(['route' => 'cart', 'class' => 'promo-code-form', 'files' => true]) !!} -->
 
                                     <div class="input-group">
                                         <input class="form-control" type="text" name="code"
                                             value="{{ old('code') ?? null }}" placeholder="Enter promo code">
                                         <div class="input-group-append">
-                                            <button type="submit" class="btn btn-outline-secondary"
-                                                type="button">Redeem</button>
+                                            <!-- <button type="submit" class="btn btn-outline-secondary" type="button">Redeem</button> -->
                                         </div>
                                     </div>
 
-                                    {!! Form::close() !!}
+                                    <!-- {!! Form::close() !!} -->
                                 </div>
 
                             </div>

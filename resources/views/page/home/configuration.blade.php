@@ -396,7 +396,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-md-2 control-label">Struk</label>
+                                                <label class="col-md-2 control-label">Cart Empty</label>
                                                 <div class="col-md-10">
                                                     <textarea class="form-control lite" rows="3" name="header"
                                                         cols="50">{{ config('website.header') }}</textarea>
