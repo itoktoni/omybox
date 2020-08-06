@@ -209,16 +209,27 @@ class OrderController extends Controller
     {
         if (request()->has('code')) {
             $data = $service->show(self::$model, ['detail', 'detail.product']);
-
+            $total = $data->detail->count();
             $id = request()->get('code');
             $pasing = [
                 'master' => $data,
                 'customer' => $data->customer,
                 'detail' => $data->detail,
             ];
+
+            if(!empty(config('website.header'))){
+
+                $dom = new \DomDocument();
+                $dom->loadHtml(config('website.header'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                $paragrap = $dom->getElementsByTagName('p');
+                $total = $total + ($paragrap->length ?? 0);
+
+            }
+
             // return view(Helper::setViewPrint(__FUNCTION__, $this->folder))->with($this->share($pasing));
-            
-            $pdf = PDF::loadView(Helper::setViewPrint(__FUNCTION__, $this->folder), $pasing);
+            $total = ($total * 15) + 450;
+
+            $pdf = PDF::loadView(Helper::setViewPrint('thermal', $this->folder), $pasing)->setPaper(array( 0 , 0 , 226.77 , $total ));
             return $pdf->stream();
             // return $pdf->download($id . '.pdf');
         }

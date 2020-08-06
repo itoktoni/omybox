@@ -1,4 +1,6 @@
 @extends(Helper::setExtendBackend())
+@component('component.summernote', ['array' => ['lite']])
+@endcomponent
 @component('component.date', ['array' => ['date']])
 @endcomponent
 @component('component.jscolor')
@@ -394,16 +396,16 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-md-2 control-label">Header</label>
+                                                <label class="col-md-2 control-label">Struk</label>
                                                 <div class="col-md-10">
-                                                    <textarea class="form-control basic" rows="3" name="header"
+                                                    <textarea class="form-control lite" rows="3" name="header"
                                                         cols="50">{{ config('website.header') }}</textarea>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label">Description</label>
                                                 <div class="col-md-10" style="margin-bottom: 5px;">
-                                                    <textarea class="form-control lite" rows="2"
+                                                    <textarea class="form-control" rows="2"
                                                         name="description">{{ config('website.description') }}</textarea>
                                                 </div>
                                             </div>

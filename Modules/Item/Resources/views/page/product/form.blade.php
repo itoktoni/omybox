@@ -1,4 +1,4 @@
-@component('component.summernote', ['array' => ['basic']])
+@component('component.summernote', ['array' => ['lite']])
 @endcomponent
 
 <div class="form-group">
@@ -44,7 +44,7 @@
 
     {!! Form::label('name', 'Description', ['class' => 'col-md-2 control-label']) !!}
     <div class="col-md-{{ isset($model->item_product_image) && !empty($model->item_product_image) ? '8' : '10' }}">
-        {!! Form::textarea($form.'description', null, ['class' => 'form-control', 'rows' => '7']) !!}
+        {!! Form::textarea($form.'description', null, ['class' => 'form-control lite', 'rows' => '7']) !!}
     </div>
 
     <div class="col-md-2">

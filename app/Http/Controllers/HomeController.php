@@ -233,8 +233,8 @@ class HomeController extends Controller
             }
 
             session()->put('success', 'Configuration Success !');
-            return Response::redirectBack();
-            ;
+            return redirect()->back();
+            return redirect()->back();
         }
 
         $frontend = array_map('basename', File::directories(resource_path('views/frontend/')));
