@@ -405,7 +405,7 @@
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label">Description</label>
                                                 <div class="col-md-10" style="margin-bottom: 5px;">
-                                                    <textarea class="form-control" rows="2"
+                                                    <textarea class="form-control lite" rows="2"
                                                         name="description">{{ config('website.description') }}</textarea>
                                                 </div>
                                             </div>
