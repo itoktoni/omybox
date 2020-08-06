@@ -45,21 +45,13 @@
         text-decoration: underline
     }
 
-
+    
     a[href]:after {
-        content: "("attr(href) ")"
-    }
-
-    abbr[title]:after {
-        content: "("attr(title) ")"
-    }
-
-    .ira:after,
-    a[href^="javascript:"]:after,
-    a[href^="#"]:after {
-        content: ""
-    }
-
+        content: "
+(" attr(href) ")"}abbr[title]:after{content:"(" attr(title) ")"}.ir
+a:after, a[href^="javascript:"]:after, a[href^="#"]:after {
+            content: ""
+        }
 
     pre,
     blockquote {
