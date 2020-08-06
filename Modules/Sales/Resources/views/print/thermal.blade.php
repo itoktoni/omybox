@@ -45,6 +45,22 @@
         text-decoration: underline
     }
 
+
+    a[href]:after {
+        content: "("attr(href) ")"
+    }
+
+    abbr[title]:after {
+        content: "("attr(title) ")"
+    }
+
+    .ira:after,
+    a[href^="javascript:"]:after,
+    a[href^="#"]:after {
+        content: ""
+    }
+
+
     pre,
     blockquote {
         border: 1px solid #999;
