@@ -8,9 +8,13 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     <style>
+    @page{
+        margin:0px;
+    } 
+    /* html { margin: 0px} */
     body {
-        margin-left: -10px;
-        margin-right: 16px;
+        margin-left: 0px;
+        margin-right: 17px;
     }
 
     table#border {
@@ -345,7 +349,7 @@ a:after, a[href^="javascript:"]:after, a[href^="#"]:after {
         </table>
 
         <div>
-            <h5 style="margin-top:20px;margin-bottom:20px;line-height: 1;">
+            <h5 class="description" style="margin-top:20px;margin-bottom:20px;line-height: 5px;">
                 <span>
                     {!! config('website.description') !!}
                 </span>

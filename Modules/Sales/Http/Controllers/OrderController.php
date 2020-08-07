@@ -222,14 +222,14 @@ class OrderController extends Controller
                 $dom = new \DomDocument();
                 $dom->loadHtml(config('website.description'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
                 $paragrap = $dom->getElementsByTagName('p');
-                $total = $total + ($paragrap->length ?? 0);
+                $total_paragrap = ($paragrap->length ?? 0) * 10;
 
             }
 
-            // return view(Helper::setViewPrint(__FUNCTION__, $this->folder))->with($this->share($pasing));
-            $total = ($total * 15) + 450;
+            // return view(Helper::setViewPrint('thermal', $this->folder))->with($this->share($pasing));
+            $total = ($total * 20) + $total_paragrap + 450;
 
-            $pdf = PDF::loadView(Helper::setViewPrint('thermal', $this->folder), $pasing)->setPaper(array( 0 , 0 , 226.77 , $total ));
+            $pdf = PDF::loadView(Helper::setViewPrint('thermal', $this->folder), $pasing)->setPaper(array( 0 , 0 , 226 , $total ));
             return $pdf->stream();
             // return $pdf->download($id . '.pdf');
         }
