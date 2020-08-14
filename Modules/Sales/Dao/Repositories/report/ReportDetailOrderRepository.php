@@ -2,11 +2,12 @@
 
 namespace Modules\Sales\Dao\Repositories\report;
 
-use Plugin\Helper;
 use Plugin\Notes;
+use Plugin\Helper;
 use Illuminate\Support\Facades\DB;
 use Modules\Item\Dao\Models\Color;
 use Modules\Item\Dao\Models\Stock;
+use Modules\Sales\Dao\Models\Order;
 use Modules\Item\Dao\Models\Product;
 use App\Dao\Interfaces\MasterInterface;
 use Illuminate\Database\QueryException;
@@ -19,11 +20,16 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Modules\Item\Dao\Repositories\StockRepository;
 use Modules\Procurement\Dao\Models\PurchaseDetail;
+use Modules\Sales\Dao\Repositories\OrderRepository;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Modules\Procurement\Dao\Repositories\PurchaseRepository;
+use Modules\Sales\Dao\Models\OrderDetail;
 
-class ReportPenjualanRepository extends Stock implements FromCollection, WithHeadings, ShouldAutoSize, WithColumnFormatting
+class ReportDetailOrderRepository extends Order implements FromCollection, WithHeadings, ShouldAutoSize, WithColumnFormatting
 {
+    public $model;
+    public $detail;
+
     public function headings(): array
     {
         return [
@@ -49,9 +55,15 @@ class ReportPenjualanRepository extends Stock implements FromCollection, WithHea
         ];
     }
 
+    public function __construct()
+    {
+        $this->model = new OrderRepository();
+        $this->detail = new OrderDetail();
+    }
+
     public function collection()
     {
-        $query = DB::table('view_sales_order')
+        $query = $this->model->leftJoin($this->detail->getTable(), $this->model->getKeyName(), $this->detail->getKeyName())
             ->where('sales_order_detail_qty_prepare', '>', 0)
             ->select(['sales_order_id', 'sales_order_date', 'sales_order_rajaongkir_name', 'sales_order_email', 'sales_order_rajaongkir_phone', 'item_product_id', 'item_product_name', 'item_color_name', 'sales_order_detail_item_size', 'sales_order_detail_option', 'sales_order_detail_qty_order', 'sales_order_detail_qty_prepare', 'sales_order_detail_price_order',  'sales_order_detail_tax_name', 'sales_order_detail_tax_value', 'sales_order_detail_total_order', 'sales_order_detail_discount', 'sales_order_rajaongkir_service', 'sales_order_rajaongkir_ongkir']);
         if ($product = request()->get('product')) {

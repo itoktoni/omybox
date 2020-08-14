@@ -219,6 +219,14 @@
                                                 </div>
                                             </div>
             
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label">Promo</label>
+                                                <div class="col-md-10">
+                                                    <textarea class="form-control" rows="3" name="promo"
+                                                        cols="50">{{ config('website.promo') }}</textarea>
+                                                </div>
+                                            </div>
+            
                                         </div>
             
                                     </div>
@@ -407,6 +415,13 @@
                                                 <div class="col-md-10" style="margin-bottom: 5px;">
                                                     <textarea class="form-control lite" rows="2"
                                                         name="description">{{ config('website.description') }}</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label">About Us</label>
+                                                <div class="col-md-10" style="margin-bottom: 5px;">
+                                                    <textarea class="form-control lite" rows="2"
+                                                        name="about">{{ config('website.about') }}</textarea>
                                                 </div>
                                             </div>
                                             <div class="form-group">

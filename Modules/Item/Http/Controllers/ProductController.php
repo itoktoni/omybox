@@ -43,7 +43,7 @@ class ProductController extends Controller
 
     private function share($data = [])
     {
-        $brand = Helper::createOption((new BrandRepository()));
+        $brand = Helper::createOption((new BrandRepository()),false)->prepend('- Select Branch -');
         $raw = Helper::createOption((new RawRepository()), false, true, false);
         $category = Helper::createOption((new CategoryRepository()));
         $tag = Helper::shareTag((new TagRepository()), 'item_tag_slug');

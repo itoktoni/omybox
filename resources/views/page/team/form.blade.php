@@ -40,7 +40,7 @@
 
 <div class="form-group">
 
-    {!! Form::label('name', 'Brand', ['class' => 'col-md-2 control-label']) !!}
+    {!! Form::label('name', 'Branch', ['class' => 'col-md-2 control-label']) !!}
     <div class="col-md-4 {{ $errors->has('brand') ? 'has-error' : ''}}">
         {{ Form::select('brand', $brand, $model->brand ?? null, ['class'=> 'form-control']) }}
         {!! $errors->first('brand', '<p class="help-block">:message</p>') !!}

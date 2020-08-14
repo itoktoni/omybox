@@ -12330,7 +12330,12 @@
         .ftco-footer {
             font-size: 14px;
             background: #141313;
-            padding: 1.5em 0;
+            padding-top: 0.5em;
+            padding-bottom: 0px;
+        }
+
+        .ftco-footer h6{
+            margin-top:10px;
         }
         
         .ftco-footer .ftco-footer-logo {
@@ -12461,6 +12466,10 @@
             -ms-transform: translateY(-50%);
             transform: translateY(-50%);
             color: rgba(255, 255, 255, 0.8);
+        }
+
+        .ftco-footer-social{
+            margin-bottom:0px;
         }
         
         .ftco-footer-social li {
@@ -13487,3 +13496,13 @@
             top: 62%;
             left: 46%;
         }
+
+
+.sosmed{
+    margin-bottom:0px;
+}   
+
+.sosmed li{
+    list-style: none;
+    display: inline;
+}

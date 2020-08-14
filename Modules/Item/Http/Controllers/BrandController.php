@@ -13,6 +13,8 @@ use Modules\Item\Dao\Repositories\BrandRepository;
 class BrandController extends Controller
 {
     public $template;
+    public $folder;
+
     public static $model;
 
     public function __construct()
@@ -20,6 +22,7 @@ class BrandController extends Controller
         if (self::$model == null) {
             self::$model = new BrandRepository();
         }
+        $this->folder = 'Item';
         $this->template  = Helper::getTemplate(__CLASS__);
     }
 
@@ -50,7 +53,7 @@ class BrandController extends Controller
         if (request()->isMethod('POST')) {
             $service->save(self::$model);
         }
-        return view(Helper::setViewCreate())->with($this->share());
+        return view(Helper::setViewCreate($this->template, $this->folder))->with($this->share());
     }
 
     public function update(MasterService $service)
@@ -63,7 +66,7 @@ class BrandController extends Controller
         if (request()->has('code')) {
             $data = $service->show(self::$model);
 
-            return view(Helper::setViewUpdate())->with($this->share([
+            return view(Helper::setViewUpdate($this->template, $this->folder))->with($this->share([
                 'model'        => $data,
                 'key'          => self::$model->getKeyName()
             ]));
@@ -93,7 +96,7 @@ class BrandController extends Controller
     {
         if (request()->has('code')) {
             $data = $service->show(self::$model);
-            return view(Helper::setViewShow())->with($this->share([
+            return view(Helper::setViewShow($this->template, $this->folder))->with($this->share([
                 'fields' => Helper::listData(self::$model->datatable),
                 'model'   => $data,
                 'key'   => self::$model->getKeyName()

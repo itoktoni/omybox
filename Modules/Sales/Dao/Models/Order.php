@@ -99,7 +99,7 @@ class Order extends Model
     'sales_order_rajaongkir_service'  => [false => 'Service'],
     'sales_order_rajaongkir_ongkir'  => [false => 'Ongkir'],
     'sales_order_rajaongkir_waybill'  => [false => 'Waybill'],
-    'item_brand_name'              => [true => 'Brand'],
+    'item_brand_name'              => [true => 'Branch'],
     'sales_order_total'               => [false => 'Total'],
     'sales_order_status'              => [true => 'Status'],
     'sales_order_created_at'          => [false => 'Created At'],

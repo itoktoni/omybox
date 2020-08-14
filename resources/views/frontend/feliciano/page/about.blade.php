@@ -15,7 +15,7 @@
                     <span class="subheading">About</span>
                 <h2 class="mb-4">{{ config('website.name') }}</h2>
                 </div>
-                {!! config('website.description') !!}
+                {!! config('website.about') !!}
             </div>
         </div>
     </div>

@@ -48,7 +48,7 @@
         {!! Form::label('name', 'Address', ['class' => 'col-md-2 control-label']) !!}
         <div class="col-md-4">
             {!! Form::textarea('sales_order_rajaongkir_address', $model->sales_order_rajaongkir_address, ['class' =>
-            'form-control', 'rows' => 3]) !!}
+            'form-control', 'rows' => 5]) !!}
         </div>
         @if ($action_function == 'update')
         {!! Form::label('name', 'Paid', ['class' => 'col-md-2 control-label']) !!}

@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel {
     protected $commands = [
         'App\Console\Commands\Console',
         'App\Console\Commands\SendEmail',
+        'App\Console\Commands\SendWa',
         'App\Console\Commands\CancelOrder',
     ];
 

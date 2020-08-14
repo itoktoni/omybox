@@ -8,7 +8,7 @@
                 <tr>
                     <th class="text-left" style="width:120px;">No. Order</th>
                     @if (Auth::user()->group_user != 'partner')
-                    <th class="text-left col-md-1">Brand</th>
+                    <th class="text-left col-md-1">Branch</th>
                     @endif
                     <th class="text-left col-md-2">Customer Name</th>
                     <th class="text-left col-md-2">Product Name</th>

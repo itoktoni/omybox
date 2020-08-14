@@ -6,7 +6,7 @@
         {!! $errors->first($form.'name', '<p class="help-block">:message</p>') !!}
     </div>
 
-    {!! Form::label('name', 'Warehouse', ['class' => 'col-md-2 control-label']) !!}
+    {!! Form::label('name', 'Branch', ['class' => 'col-md-2 control-label']) !!}
     <div class="col-md-4 {{ $errors->has($form.'brand_id') ? 'has-error' : ''}}">
         {{ Form::select($form.'brand_id', $brand, null, ['class'=> 'form-control', 'data-plugin-selectTwo']) }}
         {!! $errors->first($form.'brand_id', '<p class="help-block">:message</p>') !!}

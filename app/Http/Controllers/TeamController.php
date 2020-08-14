@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Helper;
+use plugin\Helper;
 use Plugin\Response;
 use App\Http\Services\MasterService;
 use App\Dao\Repositories\TeamRepository;
@@ -31,7 +31,7 @@ class TeamController extends Controller
     {
         $status = Helper::shareStatus(self::$model->status)->prepend('- Select Status -', '');
         $group = Helper::shareOption((new GroupUserRepository()));
-        $brand = Helper::shareOption((new BrandRepository()));
+        $brand = Helper::shareOption((new BrandRepository()),false)->prepend('- Select Branch -', '');
         $view = [
             'key'      => self::$model->getKeyName(),
             'template' => $this->template,

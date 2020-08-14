@@ -19,7 +19,7 @@ class WarehouseController extends Controller
         if (self::$model == null) {
             self::$model = new WarehouseRepository();
         }
-        $this->template  = Helper::getTemplate(__class__);
+        $this->template  = Helper::getTemplate(__CLASS__);
     }
 
     public function index()
@@ -29,7 +29,7 @@ class WarehouseController extends Controller
 
     private function share($data = [])
     {
-        $brand = Helper::shareOption(new BrandRepository());
+        $brand = Helper::shareOption(new BrandRepository(),false)->prepend('- Select Branch -', '');
 
         $view = [
             'brand' => $brand,
