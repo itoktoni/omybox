@@ -51,117 +51,117 @@ class SendWa extends Command
     public function handle()
     {
         $order = new OrderRepository();
-        // $order_data = $order->dataRepository()->whereNull('sales_order_email_date')->limit(3)->get();
-        // if ($order_data) {
-        //     foreach ($order_data as $order_item) {
-        //         $data = $order->showRepository($order_item->sales_order_id, ['customer', 'detail', 'detail.product']);
-        //         Mail::to([config('website.email')])->send(new CreateOrderEmail($data));
-        //         // Mail::to([$order_item->sales_order_email, config('website.email')])->send(new CreateOrderEmail($data));
-        //         $data->sales_order_email_date = date('Y-m-d H:i:s');
-        //         $data->save();
-        //     }
-        // }
+        $order_data = $order->dataRepository()->whereNull('sales_order_email_date')->limit(3)->get();
+        if ($order_data) {
+            foreach ($order_data as $order_item) {
+                $data = $order->showRepository($order_item->sales_order_id, ['customer', 'detail', 'detail.product']);
+                Mail::to([config('website.email')])->send(new CreateOrderEmail($data));
+                // Mail::to([$order_item->sales_order_email, config('website.email')])->send(new CreateOrderEmail($data));
+                $data->sales_order_email_date = date('Y-m-d H:i:s');
+                $data->save();
+            }
+        }
 
-        // $order_data = $order->dataRepository()->where('sales_order_status', 2)->whereNull('sales_order_estimate_wa')->limit(1)->get();
-        // if ($order_data) {
-        //     foreach ($order_data as $order_item) {
-        //         $data = $order->showRepository($order_item->sales_order_id, ['customer', 'detail', 'detail.product', 'detail.brand']);
-        //         // Mail::to([config('website.email')])->send(new CreateEstimateEmail($data));
-        //         // Mail::to([$order_item->sales_order_email, config('website.email')])->send(new CreateOrderEmail($data));
+        $order_data = $order->dataRepository()->where('sales_order_status', 2)->whereNull('sales_order_estimate_wa')->limit(1)->get();
+        if ($order_data) {
+            foreach ($order_data as $order_item) {
+                $data = $order->showRepository($order_item->sales_order_id, ['customer', 'detail', 'detail.product', 'detail.brand']);
+                // Mail::to([config('website.email')])->send(new CreateEstimateEmail($data));
+                // Mail::to([$order_item->sales_order_email, config('website.email')])->send(new CreateOrderEmail($data));
                 
-        //         $message = "NOTIFIKASI PESANAN \n \n";
-        //         $message = $message. "No. Order : $data->sales_order_id \n";
-        //         $message = $message. "Customer : $data->sales_order_rajaongkir_name \n";
-        //         $message = $message. "Alamat : $data->sales_order_rajaongkir_address \n \n";
-        //         $message = $message. "Produk : \n";
-        //         $number = 1;
-        //         $total = 0;
-        //         foreach ($data->detail as $detail) {
-        //             $sub = $detail->sales_order_detail_qty_order * $detail->sales_order_detail_price_order;
-        //             $total = $total + $sub;
+                $message = "NOTIFIKASI PESANAN \n \n";
+                $message = $message. "No. Order : $data->sales_order_id \n";
+                $message = $message. "Customer : $data->sales_order_rajaongkir_name \n";
+                $message = $message. "Alamat : $data->sales_order_rajaongkir_address \n \n";
+                $message = $message. "Produk : \n";
+                $number = 1;
+                $total = 0;
+                foreach ($data->detail as $detail) {
+                    $sub = $detail->sales_order_detail_qty_order * $detail->sales_order_detail_price_order;
+                    $total = $total + $sub;
 
-        //             $message = $message.$detail->sales_order_detail_qty_order.' '.$detail->product->item_product_name.' x ('.number_format($detail->sales_order_detail_price_order, 0, ',', '.').')'.' = '.number_format($detail->sales_order_detail_total_order, 0, ',', '.'). '\n' ;
-        //             $number++;
-        //         }
-        //         $message = $message.'\nSub Total : '.number_format($total, 0, ',', '.').'\n';
-        //         $message = $message.'PROMO : '.($data->sales_order_marketing_promo_value ? $data->sales_order_marketing_promo_name.' : -'.number_format($data->sales_order_marketing_promo_value, 0, ',', '.') : '-0').' \n';
-        //         $message = $message.'ONGKIR : '.number_format($data->sales_order_rajaongkir_ongkir, 0, ',', '.').'\n';
-        //         $message = $message.'TOTAL : '.number_format($data->sales_order_total + $data->sales_order_rajaongkir_ongkir, 0, ',', '.').'\n';
+                    $message = $message.$detail->sales_order_detail_qty_order.' '.$detail->product->item_product_name.' x ('.number_format($detail->sales_order_detail_price_order, 0, ',', '.').')'.' = '.number_format($detail->sales_order_detail_total_order, 0, ',', '.'). '\n' ;
+                    $number++;
+                }
+                $message = $message.'\nSub Total : '.number_format($total, 0, ',', '.').'\n';
+                $message = $message.'PROMO : '.($data->sales_order_marketing_promo_value ? $data->sales_order_marketing_promo_name.' : -'.number_format($data->sales_order_marketing_promo_value, 0, ',', '.') : '-0').' \n';
+                $message = $message.'ONGKIR : '.number_format($data->sales_order_rajaongkir_ongkir, 0, ',', '.').'\n';
+                $message = $message.'TOTAL : '.number_format($data->sales_order_total + $data->sales_order_rajaongkir_ongkir, 0, ',', '.').'\n';
 
-        //         $message = $message.'\nPembayaran ke Rekening : \n';
-        //         $bank = new BankRepository();
-        //         foreach ($bank->dataRepository()->get() as $account) {
-        //             $message = $message.$account->finance_bank_name.' a.n '.$account->finance_bank_account_name.' : '.$account->finance_bank_account_number.'\n';
-        //         }
+                $message = $message.'\nPembayaran ke Rekening : \n';
+                $bank = new BankRepository();
+                foreach ($bank->dataRepository()->get() as $account) {
+                    $message = $message.$account->finance_bank_name.' a.n '.$account->finance_bank_account_name.' : '.$account->finance_bank_account_number.'\n';
+                }
                 
-        //         $message = $message.'\nPromo : '.config('website.promo').'\n';
-        //         $this->sendWa($data->sales_order_rajaongkir_phone, $message);
+                $message = $message.'\nPromo : '.config('website.promo').'\n';
+                $this->sendWa($data->sales_order_rajaongkir_phone, $message);
                 
-        //         $data->sales_order_estimate_wa = date('Y-m-d H:i:s');
-        //         $data->save();
-        //     }
-        // }
+                $data->sales_order_estimate_wa = date('Y-m-d H:i:s');
+                $data->save();
+            }
+        }
 
-        // $delivery_data = $order->dataRepository()->where('sales_order_status', 6)->whereNull('sales_order_delivery_wa')->limit(1)->get();
-        // if ($order_data) {
-        //     foreach ($order_data as $order_item) {
-        //         $data = $order->showRepository($order_item->sales_order_id, ['customer', 'detail', 'detail.product', 'detail.brand']);
-        //         $brands = $order->brand()->where($order->getKeyName(), $order_item->sales_order_id)->groupBy('item_brand_id')->get();
-        //         $message = "NOTIFIKASI PENGIRIMAN \n \n";
-        //         $message = $message. "No. Order : $data->sales_order_id \n";
-        //         $message = $message. "Customer : $data->sales_order_rajaongkir_name \n";
-        //         $message = $message. "Alamat : $data->sales_order_rajaongkir_address \n";
+        $delivery_data = $order->dataRepository()->where('sales_order_status', 6)->whereNull('sales_order_delivery_wa')->limit(1)->get();
+        if ($order_data) {
+            foreach ($order_data as $order_item) {
+                $data = $order->showRepository($order_item->sales_order_id, ['customer', 'detail', 'detail.product', 'detail.brand']);
+                $brands = $order->brand()->where($order->getKeyName(), $order_item->sales_order_id)->groupBy('item_brand_id')->get();
+                $message = "NOTIFIKASI PENGIRIMAN \n \n";
+                $message = $message. "No. Order : $data->sales_order_id \n";
+                $message = $message. "Customer : $data->sales_order_rajaongkir_name \n";
+                $message = $message. "Alamat : $data->sales_order_rajaongkir_address \n";
 
-        //         foreach ($brands as $brand) {
-        //             $message = $message. "\n \n Branch : $brand->item_brand_name - $brand->item_brand_description \n";
-        //             $message = $message. "Ongkir : number_format($brand->sales_order_detail_ongkir,0,',','.') \n";
-        //             $message = $message. "No. Resi : $brand->sales_order_detail_waybill \n";
+                foreach ($brands as $brand) {
+                    $message = $message. "\n \n Branch : $brand->item_brand_name - $brand->item_brand_description \n";
+                    $message = $message. "Ongkir : number_format($brand->sales_order_detail_ongkir,0,',','.') \n";
+                    $message = $message. "No. Resi : $brand->sales_order_detail_waybill \n";
                     
-        //             foreach ($data->detail as $detail) {
-        //                 if ($detail->product->item_product_item_brand_id == $brand->item_brand_id) {
-        //                     $message = $message. "Produk : \n";
-        //                     $number = 1;
-        //                     $total = 0;
+                    foreach ($data->detail as $detail) {
+                        if ($detail->product->item_product_item_brand_id == $brand->item_brand_id) {
+                            $message = $message. "Produk : \n";
+                            $number = 1;
+                            $total = 0;
                             
-        //                     $sub = $detail->sales_order_detail_qty_order * $detail->sales_order_detail_price_order;
-        //                     $total = $total + $sub;
+                            $sub = $detail->sales_order_detail_qty_order * $detail->sales_order_detail_price_order;
+                            $total = $total + $sub;
                             
-        //                     $message = $message.$detail->sales_order_detail_qty_order.' '.$detail->product->item_product_name.' x ('.number_format($detail->sales_order_detail_price_order, 0, ',', '.').')'.' = '.number_format($detail->sales_order_detail_total_order, 0, ',', '.'). '\n' ;
-        //                     $number++;
-        //                 }
-        //             }
-        //         }
+                            $message = $message.$detail->sales_order_detail_qty_order.' '.$detail->product->item_product_name.' x ('.number_format($detail->sales_order_detail_price_order, 0, ',', '.').')'.' = '.number_format($detail->sales_order_detail_total_order, 0, ',', '.'). '\n' ;
+                            $number++;
+                        }
+                    }
+                }
 
-        //         $message = $message.'\nSub Total : '.number_format($total, 0, ',', '.').'\n';
-        //         $message = $message.'PROMO : '.($data->sales_order_marketing_promo_value ? $data->sales_order_marketing_promo_name.' : -'.number_format($data->sales_order_marketing_promo_value, 0, ',', '.') : '-0').' \n';
-        //         $message = $message.'ONGKIR : '.number_format($data->sales_order_rajaongkir_ongkir, 0, ',', '.').'\n';
-        //         $message = $message.'TOTAL : '.number_format($data->sales_order_total + $data->sales_order_rajaongkir_ongkir, 0, ',', '.').'\n';
+                $message = $message.'\nSub Total : '.number_format($total, 0, ',', '.').'\n';
+                $message = $message.'PROMO : '.($data->sales_order_marketing_promo_value ? $data->sales_order_marketing_promo_name.' : -'.number_format($data->sales_order_marketing_promo_value, 0, ',', '.') : '-0').' \n';
+                $message = $message.'ONGKIR : '.number_format($data->sales_order_rajaongkir_ongkir, 0, ',', '.').'\n';
+                $message = $message.'TOTAL : '.number_format($data->sales_order_total + $data->sales_order_rajaongkir_ongkir, 0, ',', '.').'\n';
     
-        //         $this->sendWa($data->sales_order_rajaongkir_phone, $message);
+                $this->sendWa($data->sales_order_rajaongkir_phone, $message);
                 
-        //         $data->sales_order_delivery_wa = date('Y-m-d H:i:s');
-        //         $data->save();
-        //     }
-        // }
+                $data->sales_order_delivery_wa = date('Y-m-d H:i:s');
+                $data->save();
+            }
+        }
 
         $payment = new PaymentRepository();
-        // $payment_data = $payment->dataRepository()->whereNull('finance_payment_reference')->whereNull('finance_payment_wa_date')->limit(1)->get();
-        // if ($payment_data) {
-        //     foreach ($payment_data as $payment_item) {
-        //         $data = $payment->showRepository($payment_item->finance_payment_id);
-        //         $message = "NOTIFIKASI KONFIRMASI PEMBAYARAN \n \n";
-        //         $message = $message. "No. Order : $data->finance_payment_sales_order_id \n";
-        //         $message = $message. "Nama : $data->sales_order_rajaongkir_name \n";
-        //         $message = $message. "Tanggal Pembayaran : $data->finance_payment_date->format('d M Y') \n";
-        //         $message = $message. "Jumlah : ". number_format($data->finance_payment_amount, 0, ',', '.')." \n";
-        //         $message = $message. "Catatan : $data->finance_payment_note \n";
-        //         $this->sendWa($data->finance_payment_phone, $message);
+        $payment_data = $payment->dataRepository()->whereNull('finance_payment_reference')->whereNull('finance_payment_wa_date')->limit(1)->get();
+        if ($payment_data) {
+            foreach ($payment_data as $payment_item) {
+                $data = $payment->showRepository($payment_item->finance_payment_id);
+                $message = "NOTIFIKASI KONFIRMASI PEMBAYARAN \n \n";
+                $message = $message. "No. Order : $data->finance_payment_sales_order_id \n";
+                $message = $message. "Nama : $data->sales_order_rajaongkir_name \n";
+                $message = $message. "Tanggal Pembayaran : $data->finance_payment_date->format('d M Y') \n";
+                $message = $message. "Jumlah : ". number_format($data->finance_payment_amount, 0, ',', '.')." \n";
+                $message = $message. "Catatan : $data->finance_payment_note \n";
+                $this->sendWa($data->finance_payment_phone, $message);
                 
-        //         // Mail::to([$payment_item->finance_payment_email, config('website.email')])->send(new ConfirmationPaymentEmail($data));
-        //         $data->finance_payment_wa_date = date('Y-m-d H:i:s');
-        //         $data->save();
-        //     }
-        // }
+                // Mail::to([$payment_item->finance_payment_email, config('website.email')])->send(new ConfirmationPaymentEmail($data));
+                $data->finance_payment_wa_date = date('Y-m-d H:i:s');
+                $data->save();
+            }
+        }
 
         $payment_approve = $payment->dataRepository()->whereNull('finance_payment_wa_approve_date')->whereNotNull('finance_payment_approved_at')->limit(1)->get();
         if ($payment_approve) {
