@@ -43,6 +43,8 @@ class Payment extends Model
     'finance_payment_email',
     'finance_payment_email_date',
     'finance_payment_email_approve_date',
+    'finance_payment_wa_date',
+    'finance_payment_wa_approve_date',
     'finance_payment_phone'
   ];
 
@@ -76,6 +78,8 @@ class Payment extends Model
     'finance_payment_note' => [false => 'Notes'],
     'finance_payment_created_at'     => [false => 'Created At'],
     'finance_payment_created_by'     => [false => 'Updated At'],
+    'finance_payment_wa_date'     => [false => 'Updated At'],
+    'finance_payment_wa_approve_date'     => [false => 'Updated At'],
   ];
 
   protected $dates = [

@@ -61,6 +61,8 @@ class Order extends Model
     'sales_order_rajaongkir_notes',
     'sales_order_rajaongkir_weight',
     'sales_order_rajaongkir_waybill',
+    'sales_order_estimate_wa',
+    'sales_order_delivery_wa',
   ];
 
     public $timestamps = true;
@@ -104,6 +106,8 @@ class Order extends Model
     'sales_order_status'              => [true => 'Status'],
     'sales_order_created_at'          => [false => 'Created At'],
     'sales_order_created_by'          => [false => 'Updated At'],
+    'sales_order_estimate_wa'          => [false => 'Updated At'],
+    'sales_order_delivery_wa'          => [false => 'Updated At'],
   ];
 
     protected $dates = [
@@ -153,6 +157,7 @@ class Order extends Model
     'sales_order_rajaongkir_address' => 'Address',
     'sales_order_rajaongkir_postcode' => 'Postcode',
     'sales_order_rajaongkir_phone' => 'Phone',
+    'sales_order_rajaongkir_name' => 'Name',
 
   ];
 
@@ -184,7 +189,7 @@ class Order extends Model
 
     public function Brand()
     {
-        return $this->select(['item_brand_id','item_brand_name','item_brand_description','sales_order_detail_waybill', 'sales_order_detail_ongkir'])
+        return $this->select(['sales_order_id','sales_order_rajaongkir_name','item_brand_id','item_brand_name','item_brand_phone','item_brand_description','sales_order_detail_waybill', 'sales_order_detail_ongkir'])
         ->leftJoin((new OrderDetail())->getTable(), (new OrderDetail())->getKeyName(), $this->getKeyName())
         ->leftJoin((new Product())->getTable(), (new Product())->getKeyName(), 'sales_order_detail_item_product_id')
         ->leftJoin((new Brand())->getTable(), (new Brand())->getKeyName(), 'item_product_item_brand_id');

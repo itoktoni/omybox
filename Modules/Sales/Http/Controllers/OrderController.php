@@ -146,6 +146,7 @@ class OrderController extends Controller
                 'finance_payment_approve_amount' => request()->get('total') + $total_ongkir,
                 'finance_payment_status' => '1',
                 'finance_payment_paid' => '1',
+                'finance_payment_approved_at' => date('Y-m-d H:i:s'),
                 'finance_payment_voucher' => Helper::autoNumber('finance_payment', 'finance_payment_voucher', 'VC' . date('Ym'), 13),
                 ]);
 

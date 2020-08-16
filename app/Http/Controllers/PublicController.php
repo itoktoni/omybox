@@ -431,26 +431,31 @@ class PublicController extends Controller
 
     public function cart()
     {
+        // dd(request());
         if (request()->isMethod('POST')) {
             $index = 0;
             $request = request()->all();
-            foreach ($request['cart'] as $value) {
-                $validate = Validator::make(
-                    $request,
-                    [
+            $validate = Validator::make(
+                $request,
+                [
+                            'sales_order_rajaongkir_name' => 'required|min:3',
+                            'sales_order_email' => 'required|email',
+                            'sales_order_rajaongkir_phone' => 'required|numeric|starts_with:62',
+                            'sales_order_rajaongkir_address' => 'required',
                             'cart.*.qty' => 'numeric|min:1',
                             'cart.*.product' => 'required',
                         ],
-                    [],
-                    [
+                [],
+                [
                             'cart.' . $index . '.qty' => 'Input must correct',
                         ]
-                );
+            );
 
-                if ($validate->fails()) {
-                    return redirect()->back()->withErrors($validate)->withInput();
-                }
-
+            if ($validate->fails()) {
+                return redirect()->back()->withErrors($validate)->withInput();
+            }
+                
+            foreach ($request['cart'] as $value) {
                 $data_product = $value['product'];
                 $data_qty = $value['qty'];
                 $data_description = $value['description'];
@@ -818,10 +823,16 @@ class PublicController extends Controller
                 'sales_order_rajaongkir_address' => 'required',
                 'sales_order_email' => 'required|email',
                 'sales_order_rajaongkir_name' => 'required',
-                'sales_order_rajaongkir_phone' => 'required',
+                'sales_order_rajaongkir_phone' => 'required|regex:/(62)[0-9]{10}/|min:10',
             ];
             $request['sales_order_total'] = Cart::getTotal();
-            $validate = Validator::make($request, $rules, $order->custom_attribute);
+            $validate = Validator::make($request, $rules, ['sales_order_rajaongkir_phone.regex' => 'Handphone menggunakan awalan 62'], $order->custom_attribute);
+
+            if ($validate->fails()) {
+                return redirect()->back()->withErrors($validate)->withInput();
+            }
+                
+
             $check = $order->saveRepository($request);
             $id = $check['data']->sales_order_id;
             foreach (Cart::getContent() as $item) {

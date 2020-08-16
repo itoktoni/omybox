@@ -15,6 +15,7 @@ class Brand extends Model
     'item_brand_name',
     'item_brand_slug',
     'item_brand_image',
+    'item_brand_phone',
     'item_brand_email',
     'item_brand_description',
     'item_brand_created_at',
@@ -25,6 +26,7 @@ class Brand extends Model
   public $incrementing = true;
   public $rules = [
     'item_brand_name' => 'required|min:3',
+    'item_brand_phone' => 'required|min:3',
   ];
 
   const CREATED_AT = 'item_brand_created_at';
@@ -36,6 +38,7 @@ class Brand extends Model
     'item_brand_description'    => [true => 'Description'],
     'item_brand_slug'           => [false => 'Slug'],
     'item_brand_email'           => [true => 'Email'],
+    'item_brand_phone'           => [true => 'Phone'],
     'item_brand_created_at'     => [false => 'Created At'],
     'item_brand_created_by'     => [false => 'Updated At'],
   ];
