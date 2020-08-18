@@ -113,8 +113,8 @@ class SendWa extends Command
                 $message = $message. "Alamat : $data->sales_order_rajaongkir_address \n";
 
                 foreach ($brands as $brand) {
-                    $message = $message. "\n \n Branch : $brand->item_brand_name - $brand->item_brand_description \n";
-                    $message = $message. "Ongkir : number_format($brand->sales_order_detail_ongkir,0,',','.') \n";
+                    $message = $message. "\n \nBranch : $brand->item_brand_name - $brand->item_brand_description \n";
+                    $message = $message. "Ongkir : ".number_format($brand->sales_order_detail_ongkir,0,',','.')." \n";
                     $message = $message. "No. Resi : $brand->sales_order_detail_waybill \n";
                     
                     foreach ($data->detail as $detail) {
@@ -152,7 +152,7 @@ class SendWa extends Command
                 $message = "NOTIFIKASI KONFIRMASI PEMBAYARAN \n \n";
                 $message = $message. "No. Order : $data->finance_payment_sales_order_id \n";
                 $message = $message. "Nama : $data->sales_order_rajaongkir_name \n";
-                $message = $message. "Tanggal Pembayaran : $data->finance_payment_date->format('d M Y') \n";
+                $message = $message. "Tanggal Pembayaran : ".$data->finance_payment_date->format('d M Y'). "\n";
                 $message = $message. "Jumlah : ". number_format($data->finance_payment_amount, 0, ',', '.')." \n";
                 $message = $message. "Catatan : $data->finance_payment_note \n";
                 $this->sendWa($data->finance_payment_phone, $message);
