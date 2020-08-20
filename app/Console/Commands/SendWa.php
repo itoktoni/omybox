@@ -51,14 +51,17 @@ class SendWa extends Command
     public function handle()
     {
         $order = new OrderRepository();
-        $order_data = $order->dataRepository()->whereNull('sales_order_email_date')->limit(3)->get();
+        $order_data = $order->dataRepository()->where('sales_order_status', 1)->limit(1)->get();
         if ($order_data) {
             foreach ($order_data as $order_item) {
-                $data = $order->showRepository($order_item->sales_order_id, ['customer', 'detail', 'detail.product']);
-                Mail::to([config('website.email')])->send(new CreateOrderEmail($data));
-                // Mail::to([$order_item->sales_order_email, config('website.email')])->send(new CreateOrderEmail($data));
-                $data->sales_order_email_date = date('Y-m-d H:i:s');
-                $data->save();
+                $data_admin = $order->showRepository($order_item->sales_order_id, ['customer', 'detail', 'detail.product']);
+                
+                $message_admin = "NOTIFIKASI ADMIN \n \n";
+                $message_admin = $message_admin. "No. Order : $data_admin->sales_order_id \n";
+                $message_admin = $message_admin. "Customer : $data_admin->sales_order_rajaongkir_name \n";
+                $message_admin = $message_admin. "Alamat : $data_admin->sales_order_rajaongkir_address \n \n";
+
+                $this->sendWa($data_admin->sales_order_rajaongkir_phone, $message_admin);
             }
         }
 
