@@ -63,6 +63,7 @@ class Order extends Model
     'sales_order_rajaongkir_waybill',
     'sales_order_estimate_wa',
     'sales_order_delivery_wa',
+    'sales_order_admin_wa',
   ];
 
     public $timestamps = true;
@@ -108,6 +109,7 @@ class Order extends Model
     'sales_order_created_by'          => [false => 'Updated At'],
     'sales_order_estimate_wa'          => [false => 'Updated At'],
     'sales_order_delivery_wa'          => [false => 'Updated At'],
+    'sales_order_admin_wa'          => [false => 'Updated At'],
   ];
 
     protected $dates = [

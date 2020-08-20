@@ -77,6 +77,7 @@ class Payment extends Model
     'finance_payment_status'  => [true => 'Status'],
     'finance_payment_note' => [false => 'Notes'],
     'finance_payment_created_at'     => [false => 'Created At'],
+    'finance_payment_person'     => [false => 'Person'],
     'finance_payment_created_by'     => [false => 'Updated At'],
     'finance_payment_wa_date'     => [false => 'Updated At'],
     'finance_payment_wa_approve_date'     => [false => 'Updated At'],

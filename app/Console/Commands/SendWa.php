@@ -51,27 +51,56 @@ class SendWa extends Command
     public function handle()
     {
         $order = new OrderRepository();
-        $order_data = $order->dataRepository()->where('sales_order_status', 1)->limit(1)->get();
+        $payment = new PaymentRepository();
+
+        //model
+
+        $order_data = $data = $message = null;
+        $order_data = $order->dataRepository()->where('sales_order_status', 1)->whereNull('sales_order_admin_wa')->limit(1)->get();
         if ($order_data) {
             foreach ($order_data as $order_item) {
-                $data_admin = $order->showRepository($order_item->sales_order_id, ['customer', 'detail', 'detail.product']);
-                
-                $message_admin = "NOTIFIKASI ADMIN \n \n";
-                $message_admin = $message_admin. "No. Order : $data_admin->sales_order_id \n";
-                $message_admin = $message_admin. "Customer : $data_admin->sales_order_rajaongkir_name \n";
-                $message_admin = $message_admin. "Alamat : $data_admin->sales_order_rajaongkir_address \n \n";
+                $data = $order->showRepository($order_item->sales_order_id, ['customer', 'detail', 'detail.product']);
+                $brands = $order->brand()->where($order->getKeyName(), $order_item->sales_order_id)->groupBy('item_brand_id')->get();
+                $message = "NOTIFIKASI PENGIRIMAN \n \n";
+                $message = $message. "No. Order : $data->sales_order_id \n";
+                $message = $message. "Customer : $data->sales_order_rajaongkir_name \n";
+                $message = $message. "Alamat : $data->sales_order_rajaongkir_address \n";
 
-                $this->sendWa($data_admin->sales_order_rajaongkir_phone, $message_admin);
+                foreach ($brands as $brand) {
+                    $message = $message. "Branch : $brand->item_brand_name - $brand->item_brand_description \n";
+                    
+                    foreach ($data->detail as $detail) {
+                        if ($detail->product->item_product_item_brand_id == $brand->item_brand_id) {
+                            $message = $message. "Produk : \n";
+                            $number = 1;
+                            $total = 0;
+                            
+                            $sub = $detail->sales_order_detail_qty_order * $detail->sales_order_detail_price_order;
+                            $total = $total + $sub;
+                            
+                            $message = $message.$detail->sales_order_detail_qty_order.' '.$detail->product->item_product_name.' x ('.number_format($detail->sales_order_detail_price_order, 0, ',', '.').')'.' = '.number_format($detail->sales_order_detail_total_order, 0, ',', '.'). '\n' ;
+                            $number++;
+                        }
+                    }
+                }
+
+                $message = $message.'\nSub Total : '.number_format($total, 0, ',', '.').'\n';
+                $message = $message.'PROMO : '.($data->sales_order_marketing_promo_value ? $data->sales_order_marketing_promo_name.' : -'.number_format($data->sales_order_marketing_promo_value, 0, ',', '.') : '-0').' \n';
+                $message = $message.'TOTAL : '.number_format($data->sales_order_total, 0, ',', '.').'\n';
+    
+                $this->sendWa(config('website.phone'), $message);
+
+                $data->sales_order_admin_wa = date('Y-m-d H:i:s');
+                $data->save();
             }
         }
 
+        $order_data = $data = $message = null;
         $order_data = $order->dataRepository()->where('sales_order_status', 2)->whereNull('sales_order_estimate_wa')->limit(1)->get();
         if ($order_data) {
             foreach ($order_data as $order_item) {
                 $data = $order->showRepository($order_item->sales_order_id, ['customer', 'detail', 'detail.product', 'detail.brand']);
-                // Mail::to([config('website.email')])->send(new CreateEstimateEmail($data));
-                // Mail::to([$order_item->sales_order_email, config('website.email')])->send(new CreateOrderEmail($data));
-                
+
                 $message = "NOTIFIKASI PESANAN \n \n";
                 $message = $message. "No. Order : $data->sales_order_id \n";
                 $message = $message. "Customer : $data->sales_order_rajaongkir_name \n";
@@ -105,7 +134,8 @@ class SendWa extends Command
             }
         }
 
-        $delivery_data = $order->dataRepository()->where('sales_order_status', 6)->whereNull('sales_order_delivery_wa')->limit(1)->get();
+        $order_data = $data = $message = null;
+        $order_data = $order->dataRepository()->where('sales_order_status', 6)->whereNull('sales_order_delivery_wa')->limit(1)->get();
         if ($order_data) {
             foreach ($order_data as $order_item) {
                 $data = $order->showRepository($order_item->sales_order_id, ['customer', 'detail', 'detail.product', 'detail.brand']);
@@ -147,14 +177,14 @@ class SendWa extends Command
             }
         }
 
-        $payment = new PaymentRepository();
+        $payment_data = $data = $message = null;
         $payment_data = $payment->dataRepository()->whereNull('finance_payment_reference')->whereNull('finance_payment_wa_date')->limit(1)->get();
         if ($payment_data) {
             foreach ($payment_data as $payment_item) {
                 $data = $payment->showRepository($payment_item->finance_payment_id);
                 $message = "NOTIFIKASI KONFIRMASI PEMBAYARAN \n \n";
                 $message = $message. "No. Order : $data->finance_payment_sales_order_id \n";
-                $message = $message. "Nama : $data->sales_order_rajaongkir_name \n";
+                $message = $message. "Nama : $data->finance_payment_person \n";
                 $message = $message. "Tanggal Pembayaran : ".$data->finance_payment_date->format('d M Y'). "\n";
                 $message = $message. "Jumlah : ". number_format($data->finance_payment_amount, 0, ',', '.')." \n";
                 $message = $message. "Catatan : $data->finance_payment_note \n";
@@ -166,10 +196,11 @@ class SendWa extends Command
             }
         }
 
-        $payment_approve = $payment->dataRepository()->whereNull('finance_payment_wa_approve_date')->whereNotNull('finance_payment_approved_at')->limit(1)->get();
-        if ($payment_approve) {
-            foreach ($payment_approve as $payment_aprove) {
-                $data = $payment->showRepository($payment_aprove->finance_payment_id);
+        $payment_data = $data_order = $data = $message = null;
+        $payment_data = $payment->dataRepository()->whereNull('finance_payment_wa_approve_date')->whereNotNull('finance_payment_approved_at')->limit(1)->get();
+        if ($payment_data) {
+            foreach ($payment_data as $payment_item) {
+                $data = $payment->showRepository($payment_item->finance_payment_id);
                 $message = "NOTIFIKASI TERIMA PEMBAYARAN \n \n";
                 $message = $message. "No. Order : $data->finance_payment_sales_order_id \n";
                 $message = $message. "Nama : $data->finance_payment_person \n";
