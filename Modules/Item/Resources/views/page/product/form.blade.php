@@ -115,10 +115,9 @@
         {{ Form::select($form.'item_category_id', $category, null, ['class'=> 'form-control', 'data-plugin-selectTwo']) }}
         {!! $errors->first($form.'item_category_id', '<p class="help-block">:message</p>') !!}
     </div>
-
     {!! Form::label('name', 'Branch', ['class' => 'col-md-2 control-label']) !!}
     <div class="col-md-4 {{ $errors->has($form.'item_brand_id') ? 'has-error' : ''}}">
-        {{ Form::select($form.'item_brand_id', $brand, null, ['class'=> 'form-control', 'data-plugin-selectTwo']) }}
+        {{ Form::select($form.'item_brand_id', $brand, $model->item_product_item_brand_id ?? null, ['class'=> 'form-control', 'data-plugin-selectTwo']) }}
         {!! $errors->first($form.'item_brand_id', '<p class="help-block">:message</p>') !!}
     </div>
 </div>

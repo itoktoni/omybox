@@ -8,4 +8,4 @@
 <link rel="stylesheet" href="{{ Helper::frontend('css/bootstrap-datepicker.css') }}" />
 <link rel="stylesheet" href="{{ Helper::frontend('css/jquery.timepicker.css') }}" />
 <link rel="stylesheet" href="{{ Helper::frontend('css/icomoon.css') }}" />
-<link rel="stylesheet" href="{{ Helper::frontend('css/style.css') }}" />
+<link rel="stylesheet" href="{{ Helper::frontend('css/style.min.css') }}" />

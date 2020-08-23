@@ -10,6 +10,7 @@ use Modules\Item\Dao\Models\Brand;
 use Modules\Item\Dao\Models\Product;
 use Modules\Item\Dao\Models\Category;
 use App\Dao\Interfaces\MasterInterface;
+use Illuminate\Database\QueryException;
 use Modules\Production\Dao\Models\Vendor;
 
 class ProductRepository extends Product implements MasterInterface
@@ -43,8 +44,7 @@ class ProductRepository extends Product implements MasterInterface
         $query = $this->select($list)
             ->leftJoin('item_wishlist', 'item_wishlist_item_product_id', 'item_product_id')
             ->leftJoin($brand->getTable(), $brand->getKeyName(), 'item_product_item_brand_id')
-            ->leftJoin($category->getTable(), $category->getKeyName(), 'item_product_item_category_id')
-            ->orderBy('item_product_created_at', 'DESC')->orderBy('item_product_name', 'ASC');
+            ->leftJoin($category->getTable(), $category->getKeyName(), 'item_product_item_category_id');
         return $query;
     }
 
@@ -79,7 +79,7 @@ class ProductRepository extends Product implements MasterInterface
         try {
             $activity = $this->findOrFail($id)->update($request);
             return Notes::update($activity);
-        } catch (QueryExceptionAlias $ex) {
+        } catch (QueryException $ex) {
             return Notes::error($ex->getMessage());
         }
     }

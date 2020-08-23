@@ -56,10 +56,6 @@ class Brand extends Model
       if ($model->item_brand_name && empty($model->item_brand_slug)) {
         $model->item_brand_slug = Str::slug($model->item_brand_name);
       }
-
-      if (Cache::has('item_brand_api')) {
-        Cache::forget('item_brand_api');
-      }
     });
   }
 }
