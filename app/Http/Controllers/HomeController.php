@@ -234,6 +234,20 @@ class HomeController extends Controller
                 Config::write('website', ['logo' => $name]);
             }
 
+            if (request()->exists('about1')) {
+                $file   = request()->file('about1');
+                $name   = config('app.name') . '_about1.' . $file->extension();
+                $simpen = $file->storeAs('logo', $name);
+                Config::write('website', ['about1' => $name]);
+            }
+
+            if (request()->exists('about2')) {
+                $file   = request()->file('about2');
+                $name   = config('app.name') . '_about2.' . $file->extension();
+                $simpen = $file->storeAs('logo', $name);
+                Config::write('website', ['about2' => $name]);
+            }
+
             session()->put('success', 'Configuration Success !');
             return redirect()->back();
             return redirect()->back();

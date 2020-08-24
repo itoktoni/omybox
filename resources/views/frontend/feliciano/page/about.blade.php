@@ -7,8 +7,8 @@
     <div class="container">
         <div class="row">
             <div class="col-md-7 d-flex">
-                <div class="img img-1 mr-md-2" style="background-image: url(public/frontend/feliciano/images/about.jpg);"></div>
-                <div class="img img-2 ml-md-2" style="background-image: url(public/frontend/feliciano/images/about-1.jpg);"></div>
+                <div class="img img-1 mr-md-2" style="background-image: url(public/files/logo/{{ config('website.about1') }});"></div>
+                <div class="img img-2 ml-md-2" style="background-image: url(public/files/logo/{{ config('website.about2') }});"></div>
             </div>
             <div class="col-md-5 wrap-about pt-5 pt-md-5 pb-md-3 ftco-animate">
                 <div class="heading-section mb-4 my-5 my-md-0">

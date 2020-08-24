@@ -73,6 +73,51 @@
                         <div class="col-md-12">
                             {!! Form::text('colors', config('website.colors'), ['class' => 'form-control jscolor']) !!}
                         </div>
+
+                        <br>
+                        <hr>
+
+                        <section class="panel">
+                            <div class="">
+                                <div class="text-center">
+                                    @if(empty(config('website.about1')))
+                                    <img src="{{ Helper::asset('/files/logo/default_logo.png') }}"
+                                        class="img-thumbnail rounded center-block img-responsive">
+                                    @else
+                                    <img src="{{ Helper::asset('/files/logo/'.config('website.about1')) }}"
+                                        class="img-thumbnail rounded center-block img-responsive">
+                                    @endif
+                                </div>
+                            </div>
+                        </section>
+                        <h5 class="text-center">About 1 :</h5>
+                        <hr class="dotted short">
+                        <div class="col-md-12">
+                            <input type="file" name="about1" class="btn btn-default btn-sm btn-block">
+                        </div>
+                        <br>
+                        <br>
+                        <hr>
+
+                        <section class="panel">
+                            <div class="">
+                                <div class="text-center">
+                                    @if(empty(config('website.about2')))
+                                    <img src="{{ Helper::asset('/files/logo/default_logo.png') }}"
+                                        class="img-thumbnail rounded center-block img-responsive">
+                                    @else
+                                    <img src="{{ Helper::asset('/files/logo/'.config('website.about2')) }}"
+                                        class="img-thumbnail rounded center-block img-responsive">
+                                    @endif
+                                </div>
+                            </div>
+                        </section>
+                        <h5 class="text-center">About 2 :</h5>
+                        <hr class="dotted short">
+                        <div class="col-md-12">
+                            <input type="file" name="about2" class="btn btn-default btn-sm btn-block">
+                        </div>
+                        <br>
             
                     </div>
             
