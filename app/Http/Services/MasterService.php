@@ -306,7 +306,7 @@ class MasterService
         $ce = request()->validate($this->rules);
         $check = $repository->updateRepository($id, request()->all());
         if ($check['status']) {
-            Alert::delete();
+            Alert::update();
         } else {
             Alert::error($check['data']);
         }

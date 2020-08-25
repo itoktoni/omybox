@@ -58,7 +58,6 @@ class Product extends Model
   public $rules = [
     'item_product_name' => 'required|min:3',
     'item_product_sell' => 'required',
-    'item_product_gram' => 'required|numeric',
     'item_product_file' => 'file|image|mimes:jpeg,png,jpg|max:4048',
   ];
 
