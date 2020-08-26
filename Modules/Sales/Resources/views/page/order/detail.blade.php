@@ -31,9 +31,18 @@
                         <select class="form-control col-md-4" id="product" name="product">
                             <option value="">Select Product</option>
                             @foreach($product as $value)
+                            @if ($value->item_product_discount_type)
+                            @php
+                            $harga = $value->item_product_discount_type == 1 ? $value->item_product_sell - ($value->item_product_discount_value * $value->item_product_sell) : $value->item_product_sell - $value->item_product_discount_value;
+                            @endphp
+                            <option value="{{ $value->item_product_id.'#'.floatval($harga) }}">
+                                {{ $value->item_product_name }}
+                            </option>
+                            @else
                             <option value="{{ $value->item_product_id.'#'.floatval($value->item_product_sell) }}">
                                 {{ $value->item_product_name }}
                             </option>
+                            @endif
                             @endforeach
                         </select>
                     </div>

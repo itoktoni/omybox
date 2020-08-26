@@ -61,7 +61,7 @@ class SendWa extends Command
             foreach ($order_data as $order_item) {
                 $data = $order->showRepository($order_item->sales_order_id, ['customer', 'detail', 'detail.product']);
                 $brands = $order->brand()->where($order->getKeyName(), $order_item->sales_order_id)->groupBy('item_brand_id')->get();
-                $message = "NOTIFIKASI PENGIRIMAN \n \n";
+                $message = "NOTIFIKASI CUSTOMER \n \n";
                 $message = $message. "No. Order : $data->sales_order_id \n";
                 $message = $message. "Customer : $data->sales_order_rajaongkir_name \n";
                 $message = $message. "Alamat : $data->sales_order_rajaongkir_address \n";

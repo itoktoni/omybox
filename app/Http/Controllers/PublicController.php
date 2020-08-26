@@ -438,10 +438,6 @@ class PublicController extends Controller
             $validate = Validator::make(
                 $request,
                 [
-                            'sales_order_rajaongkir_name' => 'required|min:3',
-                            'sales_order_email' => 'required|email',
-                            'sales_order_rajaongkir_phone' => 'required|numeric|starts_with:62',
-                            'sales_order_rajaongkir_address' => 'required',
                             'cart.*.qty' => 'numeric|min:1',
                             'cart.*.product' => 'required',
                         ],
