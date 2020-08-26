@@ -13429,6 +13429,8 @@
             background-color: RGBA(255,255,255,0.8);
             left:10px;
             top:10px;
+             color: #dc3545;
+            font-weight: bold;
             padding:0px 7px;
         }
         
@@ -13479,11 +13481,8 @@
             }
 
             .flag{
-                position: absolute;
-                background-color: RGBA(255,255,255,0.8);
                 left:30px;
                 top:75px;
-                padding:0px 7px;
             }
         }
         
