@@ -61,6 +61,11 @@
                                             class="menu-img img {{ intval($loop->iteration) % 3 == 0 || intval($loop->iteration) % 4 == 0 ? 'order-md-last' : '' }}"
                                             style="background-image: url(public/files/product/{{ $item_product->item_product_image }});">
                                         </a>
+                                        @if(!empty($item_product->item_product_flag))
+                                        <span class="flag">
+                                            {{ $item_product->item_product_flag }}
+                                        </span>
+                                        @endif
 
                                         <div class="text d-flex align-items-center">
                                             <div class="width100">
@@ -88,13 +93,15 @@
                                                     <div class="row">
                                                         <div class="col-xs-12 d-lg-none">
                                                             <div class="container">
-                                                                <img class="img-fluid" src="{{ Helper::files('product/'.$item_product->item_product_image) }}" alt="">
+                                                                <img class="img-fluid"
+                                                                    src="{{ Helper::files('product/'.$item_product->item_product_image) }}"
+                                                                    alt="">
                                                             </div>
                                                         </div>
                                                         <div class="col-xs-12">
                                                             <div class="container mt-2">
                                                                 <p>
-                                                                {!! $item_product->item_product_description !!}
+                                                                    {!! $item_product->item_product_description !!}
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -102,9 +109,14 @@
                                                     <div class="row">
                                                         <div class="container">
                                                             <h6 class="text-right">
+                                                                @if($item_product->item_product_status == 1)
                                                                 <a href="{{ route('add', ['id' => $item_product->item_product_id ]) }}"
                                                                     class="btn btn-primary add-cart text-right">Order
                                                                     now</a>
+                                                                @else
+                                                                <a href="#"
+                                                                    class="btn btn-primary add-cart text-right">Sold Out</a>
+                                                                @endif
                                                             </h6>
                                                         </div>
                                                     </div>

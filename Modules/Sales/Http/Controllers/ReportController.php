@@ -16,6 +16,7 @@ use Modules\Item\Dao\Repositories\report\ReportRealRepository;
 use Modules\Item\Dao\Repositories\report\ReportStockRepository;
 use Modules\Marketing\Dao\Repositories\PromoRepository;
 use Modules\Sales\Dao\Repositories\OrderRepository;
+use Modules\Sales\Dao\Repositories\report\ReportDetailOrderRepository;
 use Modules\Sales\Dao\Repositories\report\ReportPenjualanRepository;
 use Modules\Sales\Dao\Repositories\report\ReportSummaryOrderRepository;
 
@@ -69,8 +70,7 @@ class ReportController extends Controller
     {
         if (request()->isMethod('POST')) {
             $name = 'report_sales_order_out_' . date('Y_m_d') . '.xlsx';
-            ;
-            return $this->excel->download(new ReportPenjualanRepository(), $name);
+            return $this->excel->download(new ReportDetailOrderRepository(), $name);
         }
         return view(Helper::setViewForm($this->template, __FUNCTION__, config('folder')))->with($this->share());
     }

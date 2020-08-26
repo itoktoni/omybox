@@ -235,7 +235,7 @@
                                                 <input
                                                     class="form-control {{ $errors->has('sales_order_rajaongkir_phone') ? 'error' : ''}}"
                                                     name="sales_order_rajaongkir_phone" type="text"
-                                                    value="{{ old('sales_order_rajaongkir_phone') ?? Auth::user()->phone ?? '' }}"
+                                                    value="{{ old('sales_order_rajaongkir_phone') ?? Auth::user()->phone ?? '62' }}"
                                                     placeholder="Nomor Hp">
 
                                                 {!! $errors->first('sales_order_rajaongkir_phone', '<p

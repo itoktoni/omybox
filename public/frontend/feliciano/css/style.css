@@ -13423,6 +13423,14 @@
         .form-cart {
             margin-bottom: 80px;
         }
+
+        .flag{
+            position: absolute;
+            background-color: RGBA(255,255,255,0.8);
+            left:10px;
+            top:10px;
+            padding:0px 7px;
+        }
         
         @media (max-width:600px) {
             .ftco-footer-social {
@@ -13469,6 +13477,14 @@
                 font-size: 12px;
                 color: black;
             }
+
+            .flag{
+                position: absolute;
+                background-color: RGBA(255,255,255,0.8);
+                left:30px;
+                top:75px;
+                padding:0px 7px;
+            }
         }
         
          ::-webkit-scrollbar-track {
@@ -13505,3 +13521,4 @@
     list-style: none;
     display: inline;
 }
+

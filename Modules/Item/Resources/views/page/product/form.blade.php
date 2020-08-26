@@ -22,14 +22,24 @@
             class="{{ $errors->has($form.'file') ? 'has-error' : ''}} btn btn-default btn-sm btn-block">
         {!! $errors->first($form.'image', '<p class="help-block">:message</p>') !!}
     </div>
-    {!! Form::label('name', 'Active & Homepage', ['class' => 'col-md-2 control-label']) !!}
-    <div class="col-md-2 {{ $errors->has($form.'status') ? 'has-error' : ''}}">
+    {!! Form::label('name', 'Active', ['class' => 'col-md-2 control-label']) !!}
+    <div class="col-md-4 {{ $errors->has($form.'status') ? 'has-error' : ''}}">
         {{ Form::select($form.'status', ['1' => 'Yes', '0' => 'No'], null, ['class'=> 'form-control']) }}
         {!! $errors->first($form.'status', '<p class="help-block">:message</p>') !!}
     </div>
-    <div class="col-md-2 {{ $errors->has($form.'display') ? 'has-error' : ''}}">
+    
+</div>
+<div class="form-group">
+    {!! Form::label('name', 'Homepage', ['class' => 'col-md-2 control-label']) !!}
+    <div class="col-md-4 {{ $errors->has($form.'display') ? 'has-error' : ''}}">
         {{ Form::select($form.'display', ['0' => 'No', '1' => 'Yes'], null, ['class'=> 'form-control']) }}
         {!! $errors->first($form.'display', '<p class="help-block">:message</p>') !!}
+    </div>
+
+    {!! Form::label('name', 'Flag', ['class' => 'col-md-2 control-label']) !!}
+    <div class="col-md-4 {{ $errors->has($form.'flag') ? 'has-error' : ''}}">
+        {!! Form::text($form.'flag', null, ['class' => 'form-control']) !!}
+        {!! $errors->first($form.'flag', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
 {{-- <div class="form-group">

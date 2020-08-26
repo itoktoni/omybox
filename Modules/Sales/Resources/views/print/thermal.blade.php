@@ -305,7 +305,7 @@ a:after, a[href^="javascript:"]:after, a[href^="#"]:after {
             $total = $total + $sub;
             @endphp
             <tr>
-                <td class="name">{{ $item->product->item_product_name }}</td>
+                <td class="name">{{ $item->product->item_product_name ?? 'Product Tidak Ditemukan' }}</td>
                 <td class="qty">{{ $item->sales_order_detail_qty_order }}x</td>
                 <td class="price">{{ number_format( $item->sales_order_detail_price_order ,0,",",".")}}</td>
             </tr>

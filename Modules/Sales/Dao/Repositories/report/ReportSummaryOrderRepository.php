@@ -90,6 +90,7 @@ class ReportSummaryOrderRepository extends Order implements FromCollection, With
     {
         return [
             'B' => NumberFormat::FORMAT_DATE_YYYYMMDD,
+            'E' => NumberFormat::FORMAT_TEXT,
             'F' => NumberFormat::FORMAT_NUMBER,
             'I' => NumberFormat::FORMAT_NUMBER,
             'J' => NumberFormat::FORMAT_NUMBER,

@@ -79,6 +79,11 @@
                         class="menu-img img {{ intval($loop->iteration) % 3 == 0 || intval($loop->iteration) % 4 == 0 ? 'order-md-last' : '' }}"
                         style="background-image: url(public/files/product/{{ $item_product->item_product_image }});">
                     </a>
+                    @if(!empty($item_product->item_product_flag))
+                    <span class="flag">
+                        {{ $item_product->item_product_flag }}
+                    </span>
+                    @endif
 
                     <div class="text d-flex align-items-center">
                         <div class="width100">
@@ -114,9 +119,9 @@
                                     </div>
                                     <div class="col-xs-12">
                                         <div class="container mt-2">
-                                        <p>
-                                            {!! $item_product->item_product_description !!}
-                                        </p>
+                                            <p>
+                                                {!! $item_product->item_product_description !!}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -124,9 +129,13 @@
                                 <div class="row">
                                     <div class="container">
                                         <h6 class="text-right">
+                                            @if($item_product->item_product_status == 1)
                                             <a href="{{ route('add', ['id' => $item_product->item_product_id ]) }}"
                                                 class="btn btn-primary add-cart text-right">Order
                                                 now</a>
+                                            @else
+                                            <a href="#" class="btn btn-primary add-cart text-right">Sold Out</a>
+                                            @endif
                                         </h6>
                                     </div>
                                 </div>
@@ -164,7 +173,8 @@
                 <div class="row">
                     <div class="col-md-12 text-center">
                         @if(session()->has('success'))
-                        <div style="margin-top:-20px;" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <div style="margin-top:-20px;" class="alert alert-success alert-dismissible fade show"
+                            role="alert">
                             <strong>Konfirmasi Pemesanan Success !</strong>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -182,7 +192,7 @@
                         @endif
                     </div>
                 </div>
-               
+
                 {!!Form::open(['route' => 'confirmation', 'class' => 'contact-form', 'files' => true]) !!}
                 <div class="row">
                     <div class="col-md-6">
@@ -288,7 +298,7 @@
                                     rows="3">{{ old('finance_payment_note') ?? '' }}</textarea>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Files</label>
@@ -299,7 +309,7 @@
                         </div>
 
                         <div class="col-md-12 mt-3">
-                           
+
                             <div class="form-group text-right">
                                 <input type="submit" value="Konfirmasi Pembayaran" class="btn btn-primary py-3 px-5">
                             </div>
