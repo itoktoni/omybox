@@ -141,9 +141,10 @@ class SendWa extends Command
                 $data = $order->showRepository($order_item->sales_order_id, ['customer', 'detail', 'detail.product', 'detail.brand']);
                 $brands = $order->brand()->where($order->getKeyName(), $order_item->sales_order_id)->groupBy('item_brand_id')->get();
                 $message = "*NOTIFIKASI PENGIRIMAN* \n \n";
+                $message = "Terimakasih untuk Pembayaran atas Pesanan berikut : \n \n";
                 $message = $message. "No. Order : $data->sales_order_id \n";
                 $message = $message. "Customer : $data->sales_order_rajaongkir_name \n";
-                $message = $message. "Alamat : $data->sales_order_rajaongkir_address \n";
+                $message = $message. "Alamat : $data->sales_order_rajaongkir_address";
 
                 foreach ($brands as $brand) {
                     $message = $message. "\n \nBranch : $brand->item_brand_name - $brand->item_brand_description \n";
@@ -168,8 +169,9 @@ class SendWa extends Command
                 $message = $message.'\nSub Total : '.number_format($total, 0, ',', '.').'\n';
                 $message = $message.'PROMO : '.($data->sales_order_marketing_promo_value ? $data->sales_order_marketing_promo_name.' : -'.number_format($data->sales_order_marketing_promo_value, 0, ',', '.') : '-0').' \n';
                 $message = $message.'ONGKIR : '.number_format($data->sales_order_rajaongkir_ongkir, 0, ',', '.').'\n';
-                $message = $message.'TOTAL : '.number_format($data->sales_order_total + $data->sales_order_rajaongkir_ongkir, 0, ',', '.').'\n';
-    
+                $message = $message.'TOTAL : '.number_format($data->sales_order_total + $data->sales_order_rajaongkir_ongkir, 0, ',', '.').'\n \n';
+                $message = $message."Pesanan dalam proses pengiriman. Mohon di tunggu. Terimakasih";
+
                 $this->sendWa($data->sales_order_rajaongkir_phone, $message);
                 
                 $data->sales_order_delivery_wa = date('Y-m-d H:i:s');
