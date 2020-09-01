@@ -141,7 +141,7 @@ class SendWa extends Command
                 $data = $order->showRepository($order_item->sales_order_id, ['customer', 'detail', 'detail.product', 'detail.brand']);
                 $brands = $order->brand()->where($order->getKeyName(), $order_item->sales_order_id)->groupBy('item_brand_id')->get();
                 $message = "*NOTIFIKASI PENGIRIMAN* \n \n";
-                $message = "Terimakasih untuk Pembayaran atas Pesanan berikut : \n \n";
+                $message = $message."Terimakasih untuk Pembayaran atas Pesanan berikut : \n \n";
                 $message = $message. "No. Order : $data->sales_order_id \n";
                 $message = $message. "Customer : $data->sales_order_rajaongkir_name \n";
                 $message = $message. "Alamat : $data->sales_order_rajaongkir_address";
