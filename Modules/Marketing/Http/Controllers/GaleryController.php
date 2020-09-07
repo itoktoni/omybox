@@ -57,9 +57,14 @@ class GaleryController extends Controller
         if (request()->has('code')) {
             $data = $service->show(self::$model);
             $tag = [];
+            $a = 'How are you?';
+
+            if (strpos($data->marketing_galery_tag, '[') !== false) {
+                $tag = json_decode($data->marketing_galery_tag);
+            }
             return view(Helper::setViewUpdate())->with($this->share([
                 'model'        => $data,
-                'data_tag'           => !empty($data->marketing_galery_tag) ? json_decode($data->marketing_galery_tag) : [],
+                'data_tag'     => $tag,
                 'key'          => self::$model->getKeyName()
             ]));
         }

@@ -38,6 +38,6 @@
 
     {!! Form::label('name', 'Tag', ['class' => 'col-md-2 control-label']) !!}
     <div class="col-md-10 {{ $errors->has($form.'tag') ? 'has-error' : ''}}">
-        {{ Form::select('tag_json[]', $tag, $data_tag, ['class'=> 'form-control choosen', 'multiple']) }}
+        {{ Form::select('tag_json[]', $tag, $data_tag ?? [], ['class'=> 'form-control choosen', 'multiple']) }}
         {!! $errors->first($form.'tag', '<p class="help-block">:message</p>') !!}
     </div>
