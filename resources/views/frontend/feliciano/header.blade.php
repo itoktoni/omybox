@@ -46,14 +46,15 @@
                 <li class="nav-item {{ request()->segment(1) == 'shop' ? 'active' : '' }}">
                     <a href="{{ route('shop') }}" class="nav-link">Menu</a>
                 </li>
-                <li class="nav-item {{ request()->segment(1) == 'about' ? 'active' : '' }}"><a
-                        href="{{ route('about') }}" class="nav-link">About</a></li>
-                {{-- @foreach ($public_page as $page)
-                <li class="nav-item"><a href="{{ $page->marketing_page_slug }}"
-                class="nav-link">{{ $page->marketing_page_name }}</a></li>
-                @endforeach --}}
-                <li class="nav-item {{ request()->segment(1) == 'contact' ? 'active' : '' }}"><a
-                        href="{{ route('contact') }}" class="nav-link">Contact</a></li>
+                <li class="nav-item {{ request()->segment(1) == 'about' ? 'active' : '' }}">
+                    <a href="{{ route('about') }}" class="nav-link">About</a>
+                </li>
+                <li class="nav-item {{ request()->segment(1) == 'galery' ? 'active' : '' }}">
+                    <a href="{{ route('galery') }}" class="nav-link">Galery</a>
+                </li>
+                <li class="nav-item {{ request()->segment(1) == 'contact' ? 'active' : '' }}">
+                    <a href="{{ route('contact') }}" class="nav-link">Contact</a>
+                </li>
             </ul>
         </div>
 

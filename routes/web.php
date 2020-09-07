@@ -112,6 +112,7 @@ Route::match(['get', 'post'], '/product/{slug}', 'PublicController@product')->na
 
 
 Route::get('/about', 'PublicController@about')->name('about');
+Route::get('/galery', 'PublicController@galery')->name('galery');
 Route::get('/jual/{slug}', 'PublicController@product')->name('product');
 Route::get('/add/{id}', 'PublicController@add')->name('add');
 

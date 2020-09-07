@@ -47,6 +47,7 @@ use Modules\Marketing\Dao\Repositories\PageRepository;
 use Modules\Finance\Dao\Repositories\AccountRepository;
 use Modules\Finance\Dao\Repositories\PaymentRepository;
 use Modules\Marketing\Dao\Repositories\PromoRepository;
+use Modules\Marketing\Dao\Repositories\GaleryRepository;
 use Modules\Marketing\Dao\Repositories\SliderRepository;
 use Modules\Marketing\Dao\Repositories\SosmedRepository;
 use Modules\Marketing\Dao\Repositories\ContactRepository;
@@ -103,6 +104,17 @@ class PublicController extends Controller
     public function about()
     {
         return View(Helper::setViewFrontend(__FUNCTION__))->with([]);
+    }
+
+    public function galery()
+    {
+        $tag = Helper::createOption(new TagRepository(), false, true);
+        $galery = Helper::createOption(new GaleryRepository(), false, true);
+
+        return View(Helper::setViewFrontend(__FUNCTION__))->with([
+            'tag' => $tag,
+            'galery' => $galery
+        ]);
     }
 
     public function filters()
