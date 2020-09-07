@@ -35,10 +35,6 @@ $(function() {
                                     aria-selected="true">{{ $t->item_tag_name }}</a>
                                 @endforeach
 
-                                <a class="nav-link ftco-animate fadeInUp ftco-animated" id="v-pills-1-tab"
-                                    data-toggle="pill" href="#data20" role="tab" aria-controls="data20"
-                                    aria-selected="false">Disserts</a>
-
                             </div>
                         </div>
 
