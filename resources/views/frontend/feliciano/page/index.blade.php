@@ -28,37 +28,6 @@
 
 </section>
 
-<section style="height:100%;width:100%;background-color:transparent;position:absolute;bottom:0px"
-    class="ftco-section ftco-no-pt ftco-no-pb">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="featured d-none d-lg-block">
-                    <div class="row block-black">
-                        @foreach ($public_category->where('item_category_homepage', 1) as $item_category)
-                        <div class="col-md-3 col-xs-3">
-                            <a href="{{ route('shop').'#data'.$item_category->item_category_id }}">
-                                <div class="featured-menus ftco-animate">
-                                    <div class="menu-img img"
-                                        style="background-image: url(public/files/category/{{ $item_category->item_category_image }});">
-                                    </div>
-                                    <div class="text text-center">
-                                        <h3>{{ $item_category->item_category_name }}</h3>
-                                        <p>
-                                            {!! $item_category->item_category_description !!}
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
 <section class="ftco-section">
     <div class="container">
         <div class="row no-gutters justify-content-center mb-5 pb-2">
