@@ -92,16 +92,5 @@ class GaleryRepository extends Galery implements MasterInterface
 
 
         });
-
-        parent::deleting(function ($model) {
-            if (request()->has('id')) {
-                $data = $model->getDataIn(request()->get('id'));
-                if ($data) {
-                    foreach ($data as $value) {
-                        Helper::removeImage($value->marketing_galery_image, Helper::getTemplate(__CLASS__));
-                    }
-                }
-            }
-        });
     }
 }
