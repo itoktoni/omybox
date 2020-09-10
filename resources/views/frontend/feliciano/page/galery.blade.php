@@ -36,7 +36,7 @@ $(function() {
                                 @endforeach
                                 <a class="nav-link ftco-animate fadeInUp ftco-animated"
                                     id="v-pills-1-tab" target="_blank" download href="{{ Helper::base_url().'/booklet.pdf' }}" >
-                                Booklet    
+                                BOOKLET    
                                 </a>
                             </div>
                         </div>
