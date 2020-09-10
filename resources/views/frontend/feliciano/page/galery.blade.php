@@ -34,7 +34,10 @@ $(function() {
                                     aria-controls="data{{ $t->item_tag_id }}"
                                     aria-selected="true">{{ $t->item_tag_name }}</a>
                                 @endforeach
-
+                                <a class="nav-link ftco-animate fadeInUp ftco-animated"
+                                    id="v-pills-1-tab" target="_blank" download href="{{ Helper::base_url().'/booklet.pdf' }}" >
+                                Booklet    
+                                </a>
                             </div>
                         </div>
 
