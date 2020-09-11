@@ -36,7 +36,7 @@
                                 <td data-header="Created">{{ $item->item_stock_created_by ?? '' }}</td>
                                 <td data-header="Updated">{{ $item->item_stock_updated_by ?? '' }}</td>
                                 <td align="right" data-header="Barcode">{{ $item->item_stock_barcode }}</td>
-                                <td align="right" data-header="Barcode">{{ number_format($item->item_stock_qty) }}</td>
+                                <td align="right" data-header="Barcode">{{ $item->item_stock_qty }}</td>
                                 <td align="right" data-header="Action">
                                     <a target="__blank" class="btn btn-danger btn-xs" href="{{ route($module.'_print_barcode', ['code' => $item->item_stock_barcode ]) }}">
                                         print
