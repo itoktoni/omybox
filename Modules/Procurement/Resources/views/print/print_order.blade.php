@@ -29,7 +29,7 @@
         <img style="width: 100px;" src="{{ Helper::print('logo/'.config('website.logo')) }}" alt="">
         <div style="margin-left: 10px;font-family:Arial,sans-serif;text-align: left;">
             <h2 style="position: absolute;top: 5px;left: 120px;background-color: white !important">
-                <span style="font-weight: bold">OMYBOX</span>
+                <span style="font-weight: bold">{{ config('website.name') }}</span>
                 <br>
                 <span style="font-weight: normal;font-size: 12px;text-align: left !important;line-height: 20px ">{!! config('website.address') !!}</span>
                 <span style="font-weight: normal;font-size: 12px;margin-top:5px">Email : {{ config('website.email') }}</span>
@@ -50,7 +50,7 @@
                         {{ config('website.name') }}
                     </h2>
                     <h2
-                        style="position:absolute;right:10px;color:#ffffff;line-height:1.5;font-size:15px;top:10px;font-family:Arial,sans-serif;">
+                        style="position:absolute;right:10px;color:#ffffff;line-height:1.5;font-size:15px;top:130px;font-family:Arial,sans-serif;">
                         Purchase Order : {{ $master->purchase_id }}
                     </h2>
                 </th>
