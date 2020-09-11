@@ -27,7 +27,7 @@
 
     <h5 id="logo" style="text-align:left;">
         <img style="width: 100px;" src="{{ Helper::print('logo/'.config('website.logo')) }}" alt="">
-        <div style="margin-left: 10px;font-family:Arial,sans-serif;text-align: left;">
+        <div style="margin-left: 10px;font-family:Arial,sans-serif;text-align: left;margin-top: 10px">
             <h2 style="position: absolute;top: -10px;left: 120px;background-color: white !important">
                 <span style="font-weight: bold">OMYBOX</span>
                 <br>
