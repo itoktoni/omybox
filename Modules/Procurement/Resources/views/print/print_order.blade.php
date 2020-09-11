@@ -16,12 +16,27 @@
     table#border {
         border: 0.5px solid grey;
     }
+
+    
     </style>
 
     <title>Document</title>
 </head>
 
 <body>
+
+    <h5 id="logo" style="text-align:left;">
+        <img style="width: 100px;" src="{{ Helper::print('logo/'.config('website.logo')) }}" alt="">
+        <div style="margin-left: 10px;font-family:Arial,sans-serif;text-align: left;">
+            <h2 style="position: absolute;top: -10px;left: 120px;background-color: white !important">
+                <span style="font-weight: bold">OMYBOX</span>
+                <br>
+                <span style="font-weight: normal;font-size: 12px;text-align: left !important;line-height: 20px ">{!! config('website.address') !!}</span>
+                <span style="font-weight: normal;font-size: 12px;margin-top:5px">Email : {{ config('website.email') }}</span>
+            </h2>
+        </div>    
+    </h5>
+
     <table id="border" align="center" border="0" cellpadding="5" cellspacing="0" id="m_-3784408755349078820templateList"
         width="100%"
         style="border-collapse:collapse;border-spacing:0;font-size:13px;border-bottom-color:#cccccc;border-bottom-width:1px;border-bottom-style:solid;margin:0 0 25px;padding:0"
