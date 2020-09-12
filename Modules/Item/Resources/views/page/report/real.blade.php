@@ -18,6 +18,7 @@
                             {{ Form::select('product', $product, old('product') ?? null, ['class'=> 'form-control']) }}
                             {!! $errors->first($form.'homepage', '<p class="help-block">:message</p>') !!}
                         </div>
+                        
                         {!! Form::label('name', 'Size', ['class' => 'col-md-1 control-label']) !!}
                         <div class="col-md-2 {{ $errors->has($form.'status') ? 'has-error' : ''}}">
                             {{ Form::select('size', $size, old('size') ?? null, ['class'=> 'form-control']) }}

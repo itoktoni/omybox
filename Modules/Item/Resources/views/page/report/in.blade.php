@@ -8,7 +8,7 @@
         {!! Form::open(['route' => $action_code, 'class' => 'form-horizontal', 'files' => true]) !!}
         <div class="panel panel-default">
             <header class="panel-heading">
-                <h2 class="panel-title">Report {{ ucwords(str_replace('_',' ',$template)) }}</h2>
+                <h2 class="panel-title">Report Barang Masuk</h2>
             </header>
 
             <div class="panel-body line">
@@ -21,8 +21,9 @@
                             {!! Form::text('from', null, ['class' => 'date']) !!}
                             {!! $errors->first($form.'homepage', '<p class="help-block">:message</p>') !!}
                         </div>
-                        {!! Form::label('name', 'Date To', ['class' => 'col-md-1 control-label']) !!}
-                        <div class="col-md-5 {{ $errors->has($form.'status') ? 'has-error' : ''}}">
+
+                        {!! Form::label('name', 'Date To', ['class' => 'col-md-2 control-label']) !!}
+                        <div class="col-md-4 {{ $errors->has($form.'status') ? 'has-error' : ''}}">
                             {!! Form::text('from', null, ['class' => 'date']) !!}
                             {!! $errors->first($form.'status', '<p class="help-block">:message</p>') !!}
                         </div>
@@ -30,21 +31,18 @@
 
                     <div class="form-group">
 
+                        {!! Form::label('name', 'Purchase', ['class' => 'col-md-2 control-label']) !!}
+                        <div class="col-md-4 {{ $errors->has($form.'purchase') ? 'has-error' : ''}}">
+                            {{ Form::select('purchase', $purchase, old('product') ?? null, ['class'=> 'form-control']) }}
+                            {!! $errors->first($form.'purchase', '<p class="help-block">:message</p>') !!}
+                        </div>
+                       
                         {!! Form::label('name', 'Product', ['class' => 'col-md-2 control-label']) !!}
                         <div class="col-md-4 {{ $errors->has($form.'homepage') ? 'has-error' : ''}}">
-                            {{ Form::select('product', $product, old('product') ?? null, ['class'=> 'form-control']) }}
+                            {{ Form::select('product', $raw, old('product') ?? null, ['class'=> 'form-control']) }}
                             {!! $errors->first($form.'homepage', '<p class="help-block">:message</p>') !!}
                         </div>
-                        {!! Form::label('name', 'Size', ['class' => 'col-md-1 control-label']) !!}
-                        <div class="col-md-2 {{ $errors->has($form.'status') ? 'has-error' : ''}}">
-                            {{ Form::select('size', $size, old('size') ?? null, ['class'=> 'form-control']) }}
-                            {!! $errors->first($form.'status', '<p class="help-block">:message</p>') !!}
-                        </div>
-                        {!! Form::label('name', 'Color', ['class' => 'col-md-1 control-label']) !!}
-                        <div class="col-md-2 {{ $errors->has($form.'status') ? 'has-error' : ''}}">
-                            {{ Form::select('color', $color, old('color') ?? null, ['class'=> 'form-control']) }}
-                            {!! $errors->first($form.'status', '<p class="help-block">:message</p>') !!}
-                        </div>
+                       
                     </div>
 
                 </div>

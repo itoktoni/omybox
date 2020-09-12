@@ -22,7 +22,6 @@ class StockRepository extends Stock implements MasterInterface
         $list = [
             'item_stock_product',
             'procurement_product_name',
-            'item_stock_barcode',
             'procurement_unit_name',
             DB::raw('sum(item_stock_qty) as qty'),
         ];

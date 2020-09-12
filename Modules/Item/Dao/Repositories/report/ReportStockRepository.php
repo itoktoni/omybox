@@ -21,9 +21,7 @@ class ReportStockRepository extends Stock implements FromCollection, WithHeading
         return [
             'Product ID',
             'Product Name',
-            'Product',
-            'Color',
-            'Size',
+            'Unit',
             'Qty',
         ];
     }
@@ -31,16 +29,11 @@ class ReportStockRepository extends Stock implements FromCollection, WithHeading
     public function collection()
     {
         $model = new StockRepository();
-        $query = $model->dataRepository()->select(['item_product_id', 'item_product_name', 'product', 'hex', 'size', 'qty']);
+        $query = $model->dataRepository();
         if ($product = request()->get('product')) {
-            $query->where('product', $product);
+            $query->where('item_stock_product', $product);
         }
-        if ($color = request()->get('color')) {
-            $query->where('color', $color);
-        }
-        if ($size = request()->get('size')) {
-            $query->where('size', $size);
-        }
+        
         return $query->get();
     }
 }

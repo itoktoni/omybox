@@ -58,7 +58,7 @@ class PurchaseRepository extends Purchase implements MasterInterface
         return DB::table($this->table . '_product')->where($this->table . '_product_vendor_id', $id)->get();
     }
 
-    public function showRepository($id, $relation = null)
+    public function showRepository($id, $relation)
     {
         if ($relation) {
             return $this->with($relation)->findOrFail($id);

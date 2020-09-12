@@ -5,7 +5,7 @@
         {!! Form::open(['route' => $action_code, 'class' => 'form-horizontal', 'files' => true]) !!}
         <div class="panel panel-default">
             <header class="panel-heading">
-                <h2 class="panel-title">Report {{ ucwords(str_replace('_',' ',$template)) }}</h2>
+                <h2 class="panel-title">Report Stock</h2>
             </header>
 
             <div class="panel-body line">
@@ -14,19 +14,9 @@
                     <div class="form-group">
 
                         {!! Form::label('name', 'Product', ['class' => 'col-md-2 control-label']) !!}
-                        <div class="col-md-4 {{ $errors->has($form.'homepage') ? 'has-error' : ''}}">
-                            {{ Form::select('product', $product, old('product') ?? null, ['class'=> 'form-control']) }}
+                        <div class="col-md-10 {{ $errors->has($form.'homepage') ? 'has-error' : ''}}">
+                            {{ Form::select('product', $raw, old('product') ?? null, ['class'=> 'form-control']) }}
                             {!! $errors->first($form.'homepage', '<p class="help-block">:message</p>') !!}
-                        </div>
-                        {!! Form::label('name', 'Size', ['class' => 'col-md-1 control-label']) !!}
-                        <div class="col-md-2 {{ $errors->has($form.'status') ? 'has-error' : ''}}">
-                            {{ Form::select('size', $size, old('size') ?? null, ['class'=> 'form-control']) }}
-                            {!! $errors->first($form.'status', '<p class="help-block">:message</p>') !!}
-                        </div>
-                        {!! Form::label('name', 'Color', ['class' => 'col-md-1 control-label']) !!}
-                        <div class="col-md-2 {{ $errors->has($form.'status') ? 'has-error' : ''}}">
-                            {{ Form::select('color', $color, old('color') ?? null, ['class'=> 'form-control']) }}
-                            {!! $errors->first($form.'status', '<p class="help-block">:message</p>') !!}
                         </div>
                     </div>
 

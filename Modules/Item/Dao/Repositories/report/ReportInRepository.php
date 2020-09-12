@@ -22,54 +22,53 @@ use Modules\Procurement\Dao\Models\PurchaseDetail;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Modules\Procurement\Dao\Repositories\PurchaseRepository;
 
-class ReportInRepository extends Stock implements FromCollection, WithHeadings, ShouldAutoSize, WithColumnFormatting
+class ReportInRepository extends PurchaseRepository implements FromCollection, WithHeadings, ShouldAutoSize, WithColumnFormatting
 {
     public function headings(): array
     {
         return [
             'Purchase ID',
             'Date',
-            'Product Name',
+            'Vendor Name',
             'Product ID',
-            'Color',
-            'Size',
-            'SKU',
+            'Product Name',
             'Qty',
         ];
     }
 
     public function collection()
     {
-        $query = DB::table('view_purchase')
-            ->where('purchase_detail_qty_prepare', '>', 0)
-            ->select(['purchase_id', 'purchase_date','item_product_name', 'item_product_id', 'item_color_name', 'purchase_detail_size', 'purchase_detail_option', 'purchase_detail_qty_prepare']);
+        $query = DB::table($this->getTable())
+            ->leftJoin('procurement_purchase_detail', 'purchase_detail_purchase_id', $this->getKeyName())
+            ->leftJoin('procurement_vendor', 'procurement_vendor_id', 'purchase_procurement_vendor_id')
+            ->leftJoin('procurement_product', 'purchase_detail_item_product_id', 'procurement_product_id')
+            ->where('purchase_detail_qty_receive', '>', 0)
+            ->select(['purchase_id', 'purchase_date', 'procurement_vendor_name', 'procurement_product_id', 'procurement_product_name',  'purchase_detail_qty_receive']);
 
         if ($from = request()->get('from')) {
-            $query->where('sales_order_date', '>=', $from);
+            $query->where('purchase_date', '>=', $from);
         }
 
         if ($to = request()->get('to')) {
-            $query->where('sales_order_date', '<=', $to);
+            $query->where('purchase_date', '<=', $to);
         }
         
-            if ($product = request()->get('product')) {
-            $query->where('item_product_id', $product);
+        if ($product = request()->get('product')) {
+            $query->where('procurement_product_id', $product);
         }
-        if ($color = request()->get('color')) {
-            $query->where('purchase_detail_color_id', $color);
+
+        if ($purchase = request()->get('purchase')) {
+            $query->where('purchase_id', $purchase);
         }
-        if ($size = request()->get('size')) {
-            $query->where('purchase_detail_size', $size);
-        }
+        
         return $query->get();
     }
 
     public function columnFormats(): array
     {
         return [
-            'B' => NumberFormat::FORMAT_DATE_DATETIME,
-            'G' => NumberFormat::FORMAT_NUMBER,
-            'H' => NumberFormat::FORMAT_NUMBER,
+            'B' => NumberFormat::FORMAT_DATE_DMYSLASH,
+            'F' => NumberFormat::FORMAT_NUMBER,
         ];
     }
 }
