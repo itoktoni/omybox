@@ -10,6 +10,7 @@ use Modules\Item\Dao\Models\Color;
 use Modules\Item\Dao\Models\Stock;
 use Modules\Sales\Dao\Models\Order;
 use Modules\Item\Dao\Models\Product;
+use Modules\Item\Dao\Models\Category;
 use App\Dao\Interfaces\MasterInterface;
 use Illuminate\Database\QueryException;
 use Maatwebsite\Excel\Concerns\FromQuery;
@@ -51,6 +52,7 @@ class ReportDetailOrderRepository extends Order implements FromCollection, WithH
             'Branch',
             'Ongkir / Branch',
             'Waybill',
+            'Category Name',
             'Product ID',
             'Product Name',
             'Product Price',
@@ -69,6 +71,7 @@ class ReportDetailOrderRepository extends Order implements FromCollection, WithH
         $this->model = new OrderRepository();
         $this->detail = new OrderDetail();
         $this->product = new Product();
+        $this->category = new Category();
         $this->brand = new Brand();
     }
 
@@ -77,6 +80,7 @@ class ReportDetailOrderRepository extends Order implements FromCollection, WithH
         $query = $this->model
         ->leftJoin($this->detail->getTable(), $this->model->getKeyName(), $this->detail->getKeyName())
         ->leftJoin($this->product->getTable(), 'sales_order_detail_item_product_id', $this->product->getKeyName())
+        ->leftJoin($this->category->getTable(), 'item_product_item_category_id', $this->category->getKeyName())
         ->leftJoin($this->brand->getTable(), 'item_product_item_brand_id', $this->brand->getKeyName())
             ->select([
                 'sales_order_id',
@@ -92,6 +96,7 @@ class ReportDetailOrderRepository extends Order implements FromCollection, WithH
                 'item_brand_name',
                 'sales_order_detail_ongkir',
                 'sales_order_detail_waybill',
+                'item_category_name',
                 'item_product_id',
                 'item_product_name',
                 'item_product_sell',
@@ -133,6 +138,7 @@ class ReportDetailOrderRepository extends Order implements FromCollection, WithH
             $data->item_brand_name,
             $data->sales_order_detail_ongkir,
             $data->sales_order_detail_waybill,
+            $data->item_category_name,
             $data->item_product_id,
             $data->item_product_name,
             $data->item_product_sell,
