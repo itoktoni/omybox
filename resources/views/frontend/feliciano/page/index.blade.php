@@ -28,12 +28,27 @@
 
 </section>
 
+<section style="height:100%;width:100%;background-color:transparent;position:absolute;bottom:0px"
+    class="ftco-section ftco-no-pt ftco-no-pb">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="featured d-none d-lg-block">
+                    <div class="row block-black">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <section class="ftco-section">
     <div class="container">
         <div class="row no-gutters justify-content-center mb-5 pb-2">
             <div class="col-md-12 text-center heading-section ftco-animate">
-                <span class="subheading">Specialties</span>
-                <h2 class="mb-4">Our Menu</h2>
+                <span class="subheading">Signature</span>
+                <h2 class="mb-4">Dishes</h2>
             </div>
         </div>
         <div class="row no-gutters d-flex align-items-stretch">
