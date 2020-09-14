@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Modules\Item\Dao\Models\Brand;
 use Modules\Item\Dao\Models\Color;
 use Modules\Item\Dao\Models\Stock;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
 use Modules\Sales\Dao\Models\Order;
 use Modules\Item\Dao\Models\Product;
 use Modules\Item\Dao\Models\Category;
@@ -27,44 +29,13 @@ use Modules\Sales\Dao\Repositories\OrderRepository;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Modules\Procurement\Dao\Repositories\PurchaseRepository;
 
-class ReportDetailOrderRepository extends Order implements FromCollection, WithHeadings, ShouldAutoSize, WithColumnFormatting, WithMapping
+class ReportDetailOrderRepository extends Order implements FromView, ShouldAutoSize
 {
     public $model;
     public $detail;
     public $product;
     public $brand;
-
-    public function headings(): array
-    {
-        return [
-            'Sales ID',
-            'Create Date',
-            'Customer',
-            'Email',
-            'Phone',
-            'Status',
-            'Total Order',
-            'Promo Code',
-            'Promo Name',
-            'Discount',
-            'Total Ongkir',
-            'Total Data',
-            'Branch',
-            'Ongkir / Branch',
-            'Waybill',
-            'Category Name',
-            'Product ID',
-            'Product Name',
-            'Product Price',
-            'Product Discount',
-            'Product Flag',
-            'Qty Order',
-            'Price Order',
-            'Total Order',
-            'Prepare Order',
-            'Notes',
-        ];
-    }
+    public $key = [];
 
     public function __construct()
     {
@@ -75,7 +46,7 @@ class ReportDetailOrderRepository extends Order implements FromCollection, WithH
         $this->brand = new Brand();
     }
 
-    public function collection()
+    public function view(): View
     {
         $query = $this->model
         ->leftJoin($this->detail->getTable(), $this->model->getKeyName(), $this->detail->getKeyName())
@@ -93,6 +64,7 @@ class ReportDetailOrderRepository extends Order implements FromCollection, WithH
                 'sales_order_marketing_promo_code',
                 'sales_order_marketing_promo_name' ,
                 'sales_order_marketing_promo_value',
+                'item_brand_id',
                 'item_brand_name',
                 'sales_order_detail_ongkir',
                 'sales_order_detail_waybill',
@@ -108,59 +80,24 @@ class ReportDetailOrderRepository extends Order implements FromCollection, WithH
                 'sales_order_detail_total_order',
                 'sales_order_detail_qty_prepare',
                 'sales_order_detail_notes',
-                ]);
-        if ($product = request()->get('product')) {
-            $query->where('item_product_id', $product);
-        }
-        
-        return $query->orderBy($this->model->getKeyName(), 'ASC')->get();
-    }
+            ]);
 
-    public function map($data): array
-    {
-        $diskon = 0;
-        if($data->item_product_discount_value){
-            $diskon = $data->item_product_discount_type == 1 ? $data->item_product_sell - ($data->item_product_discount_value * $data->item_product_sell) : $data->item_product_sell - $data->item_product_discount_value;
+        if ($promo = request()->get('promo')) {
+            $query->where('sales_order_marketing_promo_code', $promo);
         }
-        return [
-           $data->sales_order_id,
-           $data->sales_order_date ? $data->sales_order_date->format('Y-m-d') : '',
-           $data->sales_order_rajaongkir_name,
-           $data->sales_order_email,
-           $data->sales_order_rajaongkir_phone,
-           $data->status[$data->sales_order_status][0] ?? '',
-           $data->sales_order_total,
-           $data->sales_order_marketing_promo_code,
-           $data->sales_order_marketing_promo_name ,
-           $data->sales_order_marketing_promo_value,
-           $data->sales_order_rajaongkir_ongkir ,
-           ($data->sales_order_total - $data->sales_order_rajaongkir_ongkir) - $data->sales_order_marketing_promo_value ,
-            $data->item_brand_name,
-            $data->sales_order_detail_ongkir,
-            $data->sales_order_detail_waybill,
-            $data->item_category_name,
-            $data->item_product_id,
-            $data->item_product_name,
-            $data->item_product_sell,
-            $diskon,
-            $data->item_product_flag,
-            $data->sales_order_detail_qty_order,
-            $data->sales_order_detail_price_order,
-            $data->sales_order_detail_total_order,
-            $data->sales_order_detail_qty_prepare,
-            $data->sales_order_detail_notes,
-        ];
-    }
+        if ($status = request()->get('status')) {
+            $query->where('sales_order_status', $status);
+        }
+        if ($from = request()->get('from')) {
+            $query->where('sales_order_date', '>=', $from);
+        }
+        if ($to = request()->get('to')) {
+            $query->where('sales_order_date','<=', $to);
+        }
 
-    public function columnFormats(): array
-    {
-        return [
-            'B' => NumberFormat::FORMAT_DATE_YYYYMMDD,
-            'E' => NumberFormat::FORMAT_TEXT,
-            'F' => NumberFormat::FORMAT_NUMBER,
-            'I' => NumberFormat::FORMAT_NUMBER,
-            'J' => NumberFormat::FORMAT_NUMBER,
-            'K' => NumberFormat::FORMAT_NUMBER,
-        ];
+        $query = $query->orderBy($this->model->getKeyName(), 'ASC')->orderBy('item_brand_id', 'ASC');
+        return view('Sales::page.report.export_detail', [
+            'export' => $query->get()
+        ]);
     }
 }
