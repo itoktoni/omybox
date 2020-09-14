@@ -50,8 +50,8 @@
                 }
             }
 
-            if(!isset($key[$data->item_brand_id])){
-                $key[$data->item_brand_id] = $data->sales_order_detail_ongkir;
+            if(!isset($key[$data->sales_order_id.$data->item_brand_id])){
+                $key[$data->sales_order_id.$data->item_brand_id] = $data->sales_order_detail_ongkir;
                 $ongkir = $data->sales_order_detail_ongkir;
             }
 
