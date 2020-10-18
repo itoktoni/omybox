@@ -146,6 +146,7 @@ class SendWa extends Command
                 $message = $message. "Customer : $data->sales_order_rajaongkir_name \n";
                 $message = $message. "Alamat : $data->sales_order_rajaongkir_address";
 
+                $total = 0;
                 foreach ($brands as $brand) {
                     $message = $message. "\n \nBranch : $brand->item_brand_name - $brand->item_brand_description \n";
                     $message = $message. "Ongkir : ".number_format($brand->sales_order_detail_ongkir,0,',','.')." \n";
@@ -155,7 +156,6 @@ class SendWa extends Command
                         if ($detail->product->item_product_item_brand_id == $brand->item_brand_id) {
                             $message = $message. "Produk : \n";
                             $number = 1;
-                            $total = 0;
                             
                             $sub = $detail->sales_order_detail_qty_order * $detail->sales_order_detail_price_order;
                             $total = $total + $sub;
